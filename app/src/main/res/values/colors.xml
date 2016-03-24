@@ -7,4 +7,7 @@
     <color name="dayGridNormalBorder">#DEDEDE</color>
     <color name="dayGridSeasonBg">#6CB8FF</color>
     <color name="dayGridOuterSeasonBg">#a9d5ff</color>
+	<color name="btnShadowColor">#88D6D6D6</color>
+	<color name="btnTurquoise">#40e0d0</color>
+	<color name="btnGreen">#17ed68</color>
 </resources>

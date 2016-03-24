@@ -15,6 +15,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@android:color/white"
+		android:id="@+id/whiteStripe"
         android:layout_alignParentTop="true">
     </LinearLayout>
 
@@ -39,22 +40,24 @@
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
+		android:layout_marginTop="10dp"
         android:text="Owoce"
         android:id="@+id/fruitsBtn"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
+		android:layout_alignLeft="@id/whiteStripe"
         android:textSize="40sp"
-        android:background="@drawable/button_turquis"/>
+        android:background="@drawable/button_turquis2"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
+		android:layout_marginTop="10dp"
         android:text="Warzywa"
         android:id="@+id/vegetablesBtn"
         android:layout_below="@+id/fruitsBtn"
-        android:layout_centerHorizontal="true"
+		android:layout_alignLeft="@id/whiteStripe"
         android:textSize="40sp"
-        android:background="@drawable/button_green"/>
+        android:background="@drawable/button_green2"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -68,32 +71,35 @@
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
+		android:layout_marginTop="10dp"
         android:text="Wkrótce sezon na...!"
         android:id="@+id/incomingSeasonBtn"
         android:textSize="40sp"
         android:layout_above="@+id/calendarBtn"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/button_turquis"/>
+		android:layout_alignLeft="@id/whiteStripe"
+        android:background="@drawable/button_turquis2"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
+		android:layout_marginTop="10dp"
         android:text="Kalendarz"
         android:id="@+id/calendarBtn"
         android:textSize="40sp"
         android:layout_above="@+id/shopListBtn"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/button_green"/>
+		android:layout_alignLeft="@id/whiteStripe"
+        android:background="@drawable/button_green2"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
+		android:layout_marginTop="10dp"
         android:text="Lista zakupów"
         android:id="@+id/shopListBtn"
         android:textSize="40sp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+		android:layout_alignLeft="@id/whiteStripe"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/button_green"/>
+        android:background="@drawable/button_green2"/>
 
 </RelativeLayout>
