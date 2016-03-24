@@ -17,6 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -89,6 +92,13 @@ public class ListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("456841FFFB7E3C53875E713E9A638290") // Note 5
+                .addTestDevice("F0E0DF548AD32B9C9DF78977B9079AD2") // S5
+                .build();
+        adView.loadAd(adRequest);
     }
 
     private class FoodItemAdapter extends ArrayAdapter<FoodItem> {
