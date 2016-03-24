@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Sezon na zdrowie</string>
+    <string name="drawer_open">Otwórz</string>
+    <string name="drawer_close">Zamknij</string>
+
+    <string name="january">styczeń %d</string>
+    <string name="february">luty %d</string>
+    <string name="march">marzec %d</string>
+    <string name="april">kwiecień %d</string>
+    <string name="may">maj %d</string>
+    <string name="june">czerwiec %d</string>
+    <string name="july">lipiec %d</string>
+    <string name="august">sierpień %d</string>
+    <string name="september">wrzesień %d</string>
+    <string name="october">październik %d</string>
+    <string name="november">listopad %d</string>
+    <string name="december">grudzień %d</string>
+</resources>
