@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
@@ -95,8 +96,8 @@ public class ListActivity extends AppCompatActivity {
 
         AdView adView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("456841FFFB7E3C53875E713E9A638290") // Note 5
-                .addTestDevice("F0E0DF548AD32B9C9DF78977B9079AD2") // S5
+                .addTestDevice(getString(R.string.adMobTestDeviceNote5))
+                .addTestDevice(getString(R.string.adMobTestDeviceS5))
                 .build();
         adView.loadAd(adRequest);
     }

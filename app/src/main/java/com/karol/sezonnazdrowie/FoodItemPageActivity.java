@@ -21,6 +21,9 @@ import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import org.w3c.dom.Text;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -141,6 +144,13 @@ public class FoodItemPageActivity extends AppCompatActivity {
             mAdditionalTextsLayout.addView(title);
             addSpacer();
         }
+
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.adMobTestDeviceNote5))
+                .addTestDevice(getString(R.string.adMobTestDeviceS5))
+                .build();
+        adView.loadAd(adRequest);
     }
 
     private void addElementView(String title, String value) {

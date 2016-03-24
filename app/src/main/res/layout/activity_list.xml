@@ -34,16 +34,6 @@
                 android:id="@+id/whiteStripe">
             </LinearLayout>
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/listView"
-                android:dividerHeight="1dp"
-                android:divider="@drawable/list_view_divider"
-                android:layout_alignLeft="@+id/whiteStripe"
-                android:layout_alignRight="@+id/whiteStripe"
-                android:layout_marginTop="16dp"/>
-
             <!-- view for AdMob Banner Ad -->
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
@@ -53,6 +43,18 @@
                 android:layout_centerHorizontal="true"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_ad_unit_id"/>
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/listView"
+                android:dividerHeight="1dp"
+                android:divider="@drawable/list_view_divider"
+                android:layout_alignLeft="@id/whiteStripe"
+                android:layout_alignRight="@id/whiteStripe"
+                android:layout_above="@id/adView"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="16dp"/>
         </RelativeLayout>
 
         <!-- The navigation drawer -->
