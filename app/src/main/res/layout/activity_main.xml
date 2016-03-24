@@ -23,7 +23,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1 stycznia"
         android:id="@+id/dateTextView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -41,66 +40,76 @@
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
-		android:layout_marginTop="10dp"
+		android:layout_marginTop="5dp"
         android:text="Owoce"
         android:id="@+id/fruitsBtn"
         android:layout_below="@+id/textView"
 		android:layout_alignLeft="@id/whiteStripe"
+        android:stateListAnimator="@null"
         android:textSize="40sp"
-        android:background="@drawable/button_turquis2"/>
+        android:textColor="@android:color/white"
+        android:background="@drawable/button_turquis"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
-		android:layout_marginTop="10dp"
+		android:layout_marginTop="5dp"
         android:text="Warzywa"
         android:id="@+id/vegetablesBtn"
         android:layout_below="@+id/fruitsBtn"
 		android:layout_alignLeft="@id/whiteStripe"
+        android:stateListAnimator="@null"
         android:textSize="40sp"
-        android:background="@drawable/button_green2"/>
+        android:textColor="@android:color/white"
+        android:background="@drawable/button_green"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vegetablesBtn"
         android:layout_above="@+id/incomingSeasonBtn"
-        android:layout_alignLeft="@+id/vegetablesBtn"
-        android:layout_alignRight="@+id/vegetablesBtn"
+        android:layout_alignLeft="@+id/whiteStripe"
+        android:layout_alignRight="@+id/whiteStripe"
+        android:src="@drawable/truskawka1"
         android:id="@+id/mainLogoImageView"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
-		android:layout_marginTop="10dp"
         android:text="Wkrótce sezon na...!"
         android:id="@+id/incomingSeasonBtn"
         android:textSize="40sp"
+        android:textColor="@android:color/white"
         android:layout_above="@+id/calendarBtn"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:background="@drawable/button_turquis2"/>
+        android:stateListAnimator="@null"
+        android:background="@drawable/button_turquis"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
-		android:layout_marginTop="10dp"
+		android:layout_marginTop="5dp"
         android:text="Kalendarz"
         android:id="@+id/calendarBtn"
         android:textSize="40sp"
+        android:textColor="@android:color/white"
         android:layout_above="@+id/shopListBtn"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:background="@drawable/button_green2"/>
+        android:stateListAnimator="@null"
+        android:background="@drawable/button_green"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
         android:layout_height="70dp"
-		android:layout_marginTop="10dp"
+		android:layout_marginTop="5dp"
         android:text="Lista zakupów"
         android:id="@+id/shopListBtn"
         android:textSize="40sp"
+        android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
 		android:layout_alignLeft="@id/whiteStripe"
+        android:stateListAnimator="@null"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/button_green2"/>
+        android:background="@drawable/button_green"/>
 
 </RelativeLayout>
