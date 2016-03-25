@@ -54,27 +54,5 @@ public class SnzDrawer extends ListView
         list.add("KALENDARZ");
         list.add("LISTA ZAKUPÓW");
         setAdapter(new DrawerAdapter(context, list));
-        setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String text = (String) parent.getItemAtPosition(position);
-                if (text.equals("SEZON NA WARZYWA")) {
-                    Intent intent = new Intent(context, ListActivity.class);
-                    intent.putExtra("WHAT", "VEGETABLES");
-                    context.startActivity(intent);
-                } else if (text.equals("SEZON NA OWOCE")) {
-                    Intent intent = new Intent(context, ListActivity.class);
-                    intent.putExtra("WHAT", "FRUITS");
-                    context.startActivity(intent);
-                } else if (text.equals("WKRÓTCE SEZON NA")) {
-
-                } else if (text.equals("KALENDARZ")) {
-                    Intent intent = new Intent(context, CalendarActivity.class);
-                    context.startActivity(intent);
-                } else if (text.equals("LISTA ZAKUPÓW")) {
-
-                }
-            }
-        });
     }
 }
