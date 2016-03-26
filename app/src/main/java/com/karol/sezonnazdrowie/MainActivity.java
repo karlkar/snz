@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mFruitsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
                 intent.putExtra("WHAT", "FRUITS");
                 startActivity(intent);
             }
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         mVegetablesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
                 intent.putExtra("WHAT", "VEGETABLES");
                 startActivity(intent);
             }
@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
         mCalendarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+                Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
+                intent.putExtra("WHAT", "CALENDAR");
                 startActivity(intent);
             }
         });

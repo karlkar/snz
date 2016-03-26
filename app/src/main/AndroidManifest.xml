@@ -25,17 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ListActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".FoodItemPageActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".CalendarActivity"
+            android:name=".FragmentsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>

@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -17,12 +16,13 @@ import android.widget.TextView;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ListActivity extends AppCompatActivity {
+public class FragmentsActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private TextView mActionBarTitle;
     private SnzDrawer mDrawer;
+    private Toolbar mToolbar;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -32,14 +32,14 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_fragments);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        mActionBarTitle = (TextView)toolbar.findViewById(R.id.action_bar_title);
+        mActionBarTitle = (TextView) mToolbar.findViewById(R.id.action_bar_title);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close) {
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
@@ -53,11 +53,16 @@ public class ListActivity extends AppCompatActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        Fragment fg = new ListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("WHAT", getIntent().getStringExtra("WHAT"));
-        fg.setArguments(bundle);
-        getFragmentManager().beginTransaction().add(R.id.contentView, fg).addToBackStack(null).commit();
+        String what = getIntent().getStringExtra("WHAT");
+        if (what.equals("CALENDAR")) {
+            getFragmentManager().beginTransaction().add(R.id.contentView, new CalendarFragment()).commit();
+        } else {
+            Fragment fg = new ListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("WHAT", what);
+            fg.setArguments(bundle);
+            getFragmentManager().beginTransaction().add(R.id.contentView, fg).addToBackStack(null).commit();
+        }
 
         mDrawer = (SnzDrawer) findViewById(R.id.left_drawer);
         mDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,8 +84,7 @@ public class ListActivity extends AppCompatActivity {
                 } else if (text.equals("WKRÓTCE SEZON NA")) {
 
                 } else if (text.equals("KALENDARZ")) {
-                    Intent intent = new Intent(ListActivity.this, CalendarActivity.class);
-                    startActivity(intent);
+                    replaceFragments(new CalendarFragment());
                 } else if (text.equals("LISTA ZAKUPÓW")) {
 
                 }
@@ -102,11 +106,13 @@ public class ListActivity extends AppCompatActivity {
 
     public void replaceFragments(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        if (fragment instanceof ListFragment)
+        if (fragment instanceof ListFragment || fragment instanceof CalendarFragment)
             getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fragmentTransaction.replace(R.id.contentView, fragment);
-        fragmentTransaction.addToBackStack(null);
+        if (fragment instanceof FoodItemPageFragment)
+            fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        mDrawerLayout.closeDrawers();
     }
 
     public void setActionBarTitle(String text) {

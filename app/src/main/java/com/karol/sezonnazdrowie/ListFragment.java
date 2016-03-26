@@ -34,11 +34,11 @@ public class ListFragment extends Fragment {
         ArrayList<FoodItem> items = null;
         String what = getArguments().getString("WHAT");
         if (what.equals("FRUITS")) {
-            ((ListActivity)getActivity()).setActionBarTitle("SEZON NA OWOCE");
+            ((FragmentsActivity)getActivity()).setActionBarTitle("SEZON NA OWOCE");
             items = Database.getInstance().getCurrentFruits();
 //            items = Database.getInstance().getAllFruits();
         } else if (what.equals("VEGETABLES")) {
-            ((ListActivity)getActivity()).setActionBarTitle("SEZON NA WARZYWA");
+            ((FragmentsActivity)getActivity()).setActionBarTitle("SEZON NA WARZYWA");
             items = Database.getInstance().getCurrentVegetables();
 //            items = Database.getInstance().getAllVegetables();
         }
@@ -54,7 +54,7 @@ public class ListFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("ITEM", (Parcelable) parent.getItemAtPosition(position));
                 fragment.setArguments(bundle);
-                ((ListActivity) getActivity()).replaceFragments(fragment);
+                ((FragmentsActivity) getActivity()).replaceFragments(fragment);
             }
         });
 

@@ -28,7 +28,7 @@ public class FoodItemPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food_item_page, null);
         mItem = getArguments().getParcelable("ITEM");
-        ((ListActivity) getActivity()).setActionBarTitle(mItem.getName());
+        ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
 
         mPagePreviewImageView = (ImageView) view.findViewById(R.id.pagePreviewImageView);
         if (!mItem.getImage().isEmpty())

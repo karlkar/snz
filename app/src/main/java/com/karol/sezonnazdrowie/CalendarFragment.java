@@ -1,23 +1,21 @@
 package com.karol.sezonnazdrowie;
 
+import android.app.Fragment;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,25 +31,24 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+/**
+ * Created by Karol on 26.03.2016.
+ */
+public class CalendarFragment extends Fragment {
 
-public class CalendarActivity extends AppCompatActivity {
-
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
     private ScrollView mCalendarScrollView;
+    private ExpandableGridView mFruitsGridView;
+    private FoodItemAdapter mFruitAdapter;
+    private ExpandableGridView mVegetablesGridView;
+    private FoodItemAdapter mVegetableAdapter;
+    private ColorMatrixColorFilter mGrayScaleFilter;
     private View mCalendarArrowLeft;
     private View mCalendarArrowRight;
     private TextView mCalendarHeaderTextView;
     private MaterialCalendarView mCalendarView;
-    private ExpandableGridView mFruitsGridView;
-    private ExpandableGridView mVegetablesGridView;
 
-    private FoodItem mSelectedFoodItem = null;
     private int mCurrentMonth;
-
-    private ColorMatrixColorFilter mGrayScaleFilter;
+    private FoodItem mSelectedFoodItem;
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
@@ -63,7 +60,7 @@ public class CalendarActivity extends AppCompatActivity {
             mVegetableAdapter.enableItemAt(mSelectedFoodItem.isFruit() ? -1 : position);
             mVegetableAdapter.sortItems();
 
-            Toast.makeText(CalendarActivity.this, mSelectedFoodItem.getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), mSelectedFoodItem.getName(), Toast.LENGTH_SHORT).show();
             mCalendarScrollView.fullScroll(ScrollView.FOCUS_UP);
 
             CalendarDay currentDay = mCalendarView.getCurrentDate();
@@ -88,69 +85,42 @@ public class CalendarActivity extends AppCompatActivity {
         }
     };
 
-    FoodItemAdapter mFruitAdapter;
-    FoodItemAdapter mVegetableAdapter;
-    private BorderDayDecorator mBorderDayDecorator;
-
+    @Nullable
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_calendar, null);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
+        mCalendarScrollView = (ScrollView) view.findViewById(R.id.calendarScrollView);
 
-        mCalendarScrollView = (ScrollView) findViewById(R.id.calendarScrollView);
-
-        mFruitsGridView = (ExpandableGridView) findViewById(R.id.fruitsGridView);
-        mFruitAdapter = new FoodItemAdapter(this, Database.getInstance().getAllFruits());
+        mFruitsGridView = (ExpandableGridView) view.findViewById(R.id.fruitsGridView);
+        mFruitAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllFruits());
         mFruitsGridView.setAdapter(mFruitAdapter);
         mFruitsGridView.setFocusable(false);
         mFruitsGridView.setOnItemClickListener(mOnItemClickListener);
 
-        mVegetablesGridView = (ExpandableGridView) findViewById(R.id.vegetablesGridView);
-        mVegetableAdapter = new FoodItemAdapter(this, Database.getInstance().getAllVegetables());
+        mVegetablesGridView = (ExpandableGridView) view.findViewById(R.id.vegetablesGridView);
+        mVegetableAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllVegetables());
         mVegetablesGridView.setAdapter(mVegetableAdapter);
         mVegetablesGridView.setFocusable(false);
         mVegetablesGridView.setOnItemClickListener(mOnItemClickListener);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        TextView actionBarTitle = (TextView)toolbar.findViewById(R.id.action_bar_title);
-        actionBarTitle.setText("Kalendarz");
-
-        prepareCalendarView();
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        ((FragmentsActivity) getActivity()).setActionBarTitle("KALENDARZ");
 
         ColorMatrix matrix = new ColorMatrix();
         matrix.setSaturation(0);
         mGrayScaleFilter = new ColorMatrixColorFilter(matrix);
+
+        prepareCalendarView(view);
+        return view;
     }
 
-    private void prepareCalendarView() {
-        mCalendarArrowLeft = findViewById(R.id.caledarArrowLeft);
-        mCalendarArrowRight = findViewById(R.id.caledarArrowRight);
-        mCalendarHeaderTextView = (TextView) findViewById(R.id.calendarHeader);
+    private void prepareCalendarView(View view) {
+        mCalendarArrowLeft = view.findViewById(R.id.caledarArrowLeft);
+        mCalendarArrowRight = view.findViewById(R.id.caledarArrowRight);
+        mCalendarHeaderTextView = (TextView) view.findViewById(R.id.calendarHeader);
         mCalendarHeaderTextView.setText(String.format(getResources().getStringArray(R.array.monthsWithYear)[Calendar.getInstance().get(Calendar.MONTH)], Calendar.getInstance().get(Calendar.YEAR)));
 
-        mCalendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
+        mCalendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
         mCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
         mCalendarView.setTopbarVisible(false);
         mCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -184,8 +154,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        mBorderDayDecorator = new BorderDayDecorator();
-        mCalendarView.addDecorator(mBorderDayDecorator);
+        mCalendarView.addDecorator(new BorderDayDecorator());
         mCalendarView.addDecorator(new SeasonDayDecorator());
         mCalendarView.addDecorator(new SeasonOuterDayDecorator());
         mCalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_SINGLE);
@@ -256,21 +225,39 @@ public class CalendarActivity extends AppCompatActivity {
             }
 
             FoodItem item = getItem(position);
+            ImageLoader loadTask = new ImageLoader(viewHolder.mGridImage);
+            loadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, item);
 
+            return view;
+        }
+    }
+
+    private class ImageLoader extends AsyncTask<FoodItem, Void, Drawable> {
+
+        private ImageView mImageView;
+
+        public ImageLoader(ImageView view) {
+            mImageView = view;
+        }
+
+        @Override
+        protected Drawable doInBackground(FoodItem... params) {
             Drawable image = null;
             try {
-                image = getDrawable(getResources().getIdentifier("mini_" + item.getImage(), "drawable", getPackageName()));
+                image = ContextCompat.getDrawable(getActivity(), getResources().getIdentifier("mini_" + params[0].getImage(), "drawable", getActivity().getPackageName()));
             } catch (Resources.NotFoundException ex) {
-                image = getDrawable(android.R.drawable.ic_menu_gallery);
+                image = ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_menu_gallery);
             }
-
-            if (item.isEnabled())
+            if (params[0].isEnabled())
                 image.setColorFilter(null);
             else
                 image.setColorFilter(mGrayScaleFilter);
-            viewHolder.mGridImage.setImageDrawable(image);
+            return image;
+        }
 
-            return view;
+        @Override
+        protected void onPostExecute(Drawable drawable) {
+            mImageView.setImageDrawable(drawable);
         }
     }
 
@@ -283,7 +270,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.setSelectionDrawable(getDrawable(R.drawable.day_normal_selector));
+            view.setSelectionDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.day_normal_selector));
         }
     }
 
@@ -296,7 +283,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.setSelectionDrawable(getDrawable(R.drawable.day_season_selector));
+            view.setSelectionDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.day_season_selector));
         }
     }
 
@@ -309,19 +296,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.setSelectionDrawable(getDrawable(R.drawable.day_outer_season_selector));
+            view.setSelectionDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.day_outer_season_selector));
         }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 }
