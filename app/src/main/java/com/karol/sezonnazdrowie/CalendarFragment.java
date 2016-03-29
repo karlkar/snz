@@ -8,6 +8,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -85,6 +86,18 @@ public class CalendarFragment extends Fragment {
         }
     };
 
+    private AdapterView.OnItemLongClickListener mOnItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            Fragment fragment = new FoodItemPageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(FragmentsActivity.INTENT_ITEM, (Parcelable) parent.getItemAtPosition(position));
+            fragment.setArguments(bundle);
+            ((FragmentsActivity) getActivity()).replaceFragments(fragment);
+            return true;
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,12 +110,14 @@ public class CalendarFragment extends Fragment {
         mFruitsGridView.setAdapter(mFruitAdapter);
         mFruitsGridView.setFocusable(false);
         mFruitsGridView.setOnItemClickListener(mOnItemClickListener);
+        mFruitsGridView.setOnItemLongClickListener(mOnItemLongClickListener);
 
         mVegetablesGridView = (ExpandableGridView) view.findViewById(R.id.vegetablesGridView);
         mVegetableAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllVegetables());
         mVegetablesGridView.setAdapter(mVegetableAdapter);
         mVegetablesGridView.setFocusable(false);
         mVegetablesGridView.setOnItemClickListener(mOnItemClickListener);
+        mVegetablesGridView.setOnItemLongClickListener(mOnItemLongClickListener);
 
         ((FragmentsActivity) getActivity()).setActionBarTitle("KALENDARZ");
 
