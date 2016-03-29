@@ -35,6 +35,19 @@
                 android:layout_marginRight="16dp"
                 android:layout_centerHorizontal="true"/>
 
+            <Button
+                android:layout_width="@dimen/main_button_width"
+                android:layout_height="70dp"
+                android:text="DODAJ DO LISTY ZAKUPÓW"
+                android:id="@+id/addToShoppingListButton"
+                android:layout_marginTop="16dp"
+                android:layout_centerHorizontal="true"
+                android:stateListAnimator="@null"
+                android:textSize="40sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_turquis"/>
+
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
@@ -42,6 +55,7 @@
                 android:layout_gravity="center_vertical"
                 android:id="@+id/additionalTextsLayout"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
             </LinearLayout>

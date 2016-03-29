@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -21,6 +23,7 @@ public class FoodItemPageFragment extends Fragment {
     private FoodItem mItem;
 
     private ImageView mPagePreviewImageView;
+    private Button mAddToShoppingListBtn;
     private LinearLayout mAdditionalTextsLayout;
 
     @Nullable
@@ -35,6 +38,14 @@ public class FoodItemPageFragment extends Fragment {
             mPagePreviewImageView.setImageResource(getResources().getIdentifier(mItem.getImage(), "drawable", getActivity().getPackageName()));
         else
             mPagePreviewImageView.setImageResource(android.R.drawable.ic_menu_gallery);
+
+        mAddToShoppingListBtn = (Button) view.findViewById(R.id.addToShoppingListButton);
+        mAddToShoppingListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "DODANO DO LISTY ZAKUPÓW!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mAdditionalTextsLayout = (LinearLayout) view.findViewById(R.id.additionalTextsLayout);
         TextView tmp = new TextView(getActivity());

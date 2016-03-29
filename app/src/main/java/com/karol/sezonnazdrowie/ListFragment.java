@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class ListFragment extends Fragment {
 
     ListView mListView = null;
-    FoodItemAdapter mAdapter = null;
+    ArrayAdapter mAdapter = null;
 
     @Nullable
     @Override
@@ -44,7 +44,7 @@ public class ListFragment extends Fragment {
         }
 
         mListView = (ListView) view.findViewById(R.id.listView);
-        mAdapter = new FoodItemAdapter(getActivity(), items);
+        mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);
         mListView.setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

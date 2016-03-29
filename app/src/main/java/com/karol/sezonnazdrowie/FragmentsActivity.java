@@ -18,6 +18,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FragmentsActivity extends AppCompatActivity {
 
+    public static final String INTENT_WHAT = "WHAT";
+    public static final String INTENT_WHAT_VEGETABLES = "VEGETABLES";
+    public static final String INTENT_WHAT_FRUITS = "FRUITS";
+    public static final String INTENT_WHAT_CALENDAR = "CALENDAR";
+
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private TextView mActionBarTitle;
@@ -53,13 +58,13 @@ public class FragmentsActivity extends AppCompatActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        String what = getIntent().getStringExtra("WHAT");
-        if (what.equals("CALENDAR")) {
+        String what = getIntent().getStringExtra(INTENT_WHAT);
+        if (what.equals(INTENT_WHAT_CALENDAR)) {
             getFragmentManager().beginTransaction().add(R.id.contentView, new CalendarFragment()).commit();
         } else {
             Fragment fg = new ListFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("WHAT", what);
+            bundle.putString(INTENT_WHAT, what);
             fg.setArguments(bundle);
             getFragmentManager().beginTransaction().add(R.id.contentView, fg).addToBackStack(null).commit();
         }
@@ -72,13 +77,13 @@ public class FragmentsActivity extends AppCompatActivity {
                 if (text.equals("SEZON NA WARZYWA")) {
                     Fragment fragment = new ListFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("WHAT", "VEGETABLES");
+                    bundle.putString(INTENT_WHAT, INTENT_WHAT_VEGETABLES);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
                 } else if (text.equals("SEZON NA OWOCE")) {
                     Fragment fragment = new ListFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("WHAT", "FRUITS");
+                    bundle.putString(INTENT_WHAT, INTENT_WHAT_FRUITS);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
                 } else if (text.equals("WKRÓTCE SEZON NA")) {
