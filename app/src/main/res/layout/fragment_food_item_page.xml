@@ -38,7 +38,7 @@
             <Button
                 android:layout_width="@dimen/main_button_width"
                 android:layout_height="70dp"
-                android:text="DODAJ DO LISTY ZAKUPÓW"
+                android:text="@string/add_to_shopping_list_btn"
                 android:id="@+id/addToShoppingListButton"
                 android:layout_marginTop="16dp"
                 android:layout_centerHorizontal="true"

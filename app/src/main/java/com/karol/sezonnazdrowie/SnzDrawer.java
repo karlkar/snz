@@ -26,11 +26,11 @@ public class SnzDrawer extends ListView {
 
     private void init(final Context context) {
         ArrayList<String> list = new ArrayList<>();
-        list.add("SEZON NA WARZYWA");
-        list.add("SEZON NA OWOCE");
-        list.add("WKRÓTCE SEZON NA");
-        list.add("KALENDARZ");
-        list.add("LISTA ZAKUPÓW");
+        list.add(context.getString(R.string.season_vegetables));
+        list.add(context.getString(R.string.season_fruits));
+        list.add(context.getString(R.string.season_incoming));
+        list.add(context.getString(R.string.calendar));
+        list.add(context.getString(R.string.shopping_list));
 		setAdapter(new ArrayAdapter<>(context, R.layout.drawer_row_layout, R.id.rowText, list));
     }
 }

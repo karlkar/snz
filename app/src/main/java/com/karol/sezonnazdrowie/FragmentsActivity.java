@@ -78,23 +78,24 @@ public class FragmentsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String text = (String) parent.getItemAtPosition(position);
-                if (text.equals("SEZON NA WARZYWA")) {
+                if (text.equals(getString(R.string.season_vegetables))) {
                     Fragment fragment = new ListFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(INTENT_WHAT, INTENT_WHAT_VEGETABLES);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
-                } else if (text.equals("SEZON NA OWOCE")) {
+                } else if (text.equals(getString(R.string.season_fruits))) {
                     Fragment fragment = new ListFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(INTENT_WHAT, INTENT_WHAT_FRUITS);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
-                } else if (text.equals("WKRÓTCE SEZON NA")) {
+                } else if (text.equals(getString(R.string.season_incoming))) {
 
-                } else if (text.equals("KALENDARZ")) {
+                } else if (text.equals(getString(R.string.calendar)
+                )) {
                     replaceFragments(new CalendarFragment());
-                } else if (text.equals("LISTA ZAKUPÓW")) {
+                } else if (text.equals(getString(R.string.shopping_list))) {
                     replaceFragments(new ShoppingListFragment());
                 }
             }

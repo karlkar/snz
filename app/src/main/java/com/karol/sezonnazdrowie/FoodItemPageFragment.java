@@ -35,7 +35,7 @@ public class FoodItemPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food_item_page, null);
-        mItem = getArguments().getParcelable("ITEM");
+        mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
         ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
 
         mPagePreviewImageView = (ImageView) view.findViewById(R.id.pagePreviewImageView);
@@ -52,7 +52,7 @@ public class FoodItemPageFragment extends Fragment {
                 Set<String> stringSet = prefs.getStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, new HashSet<String>(1));
                 stringSet.add(mItem.getName());
                 prefs.edit().putStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, stringSet).commit();
-                Toast.makeText(getActivity(), "DODANO DO LISTY ZAKUPÓW!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.added_to_shopping_list, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -64,56 +64,56 @@ public class FoodItemPageFragment extends Fragment {
         if (mItem.hasProximates()) {
             // add wartość odżywcza
             TextView title = new TextView(getActivity());
-            title.setText("Wartość odżywcza (100g)");
+            title.setText(R.string.proximates);
             mAdditionalTextsLayout.addView(title);
 
-            addElementView("woda", mItem.getWater());
-            addElementView("kalorie", mItem.getEnergy());
-            addElementView("białka", mItem.getProtein());
-            addElementView("tłuszcze", mItem.getFat());
-            addElementView("węglowodany", mItem.getCarbohydrates());
-            addElementView("błonnik", mItem.getFiber());
-            addElementView("cukry", mItem.getSugars());
+            addElementView(getString(R.string.proximate_water), mItem.getWater());
+            addElementView(getString(R.string.proximate_energy), mItem.getEnergy());
+            addElementView(getString(R.string.proximate_protein), mItem.getProtein());
+            addElementView(getString(R.string.proximate_fat), mItem.getFat());
+            addElementView(getString(R.string.proximate_carbohydrates), mItem.getCarbohydrates());
+            addElementView(getString(R.string.proximate_fiber), mItem.getFiber());
+            addElementView(getString(R.string.proximate_sugars), mItem.getSugars());
             addSpacer();
         }
 
         if (mItem.hasMinerals()) {
             // add zawartość minerałów
             TextView title = new TextView(getActivity());
-            title.setText("Zawartość mikro- i makroelementów (100g)");
+            title.setText(R.string.minerals);
             mAdditionalTextsLayout.addView(title);
 
-            addElementView("wapń", mItem.getCalcium());
-            addElementView("żelazo", mItem.getIron());
-            addElementView("magnez", mItem.getMagnesium());
-            addElementView("fosfor", mItem.getPhosphorus());
-            addElementView("potas", mItem.getPotassium());
-            addElementView("sód", mItem.getSodium());
-            addElementView("cynk", mItem.getZinc());
+            addElementView(getString(R.string.minerals_calcium), mItem.getCalcium());
+            addElementView(getString(R.string.minerals_iron), mItem.getIron());
+            addElementView(getString(R.string.minerals_magnesium), mItem.getMagnesium());
+            addElementView(getString(R.string.minerals_phosphorus), mItem.getPhosphorus());
+            addElementView(getString(R.string.minerals_potassium), mItem.getPotassium());
+            addElementView(getString(R.string.minerals_sodium), mItem.getSodium());
+            addElementView(getString(R.string.minerals_zinc), mItem.getZinc());
             addSpacer();
         }
 
         if (mItem.hasVitamins()) {
             // add zawartość witamin
             TextView title = new TextView(getActivity());
-            title.setText("Witaminy (100g)");
+            title.setText(R.string.vitamins);
             mAdditionalTextsLayout.addView(title);
 
-            addElementView("witamina A", mItem.getVitA());
-            addElementView("witamina C", mItem.getVitC());
-            addElementView("witamina E", mItem.getVitE());
-            addElementView("witamina B1 (tiamina)", mItem.getThiamin());
-            addElementView("witamina B2 (ryboflawina)", mItem.getRiboflavin());
-            addElementView("witamina B3 (niacyna)", mItem.getNiacin());
-            addElementView("witamina B6", mItem.getVitB6());
-            addElementView("witamina K", mItem.getVitK());
-            addElementView("kwas foliowy", mItem.getFolate());
+            addElementView(getString(R.string.vitamins_A), mItem.getVitA());
+            addElementView(getString(R.string.vitamins_C), mItem.getVitC());
+            addElementView(getString(R.string.vitamins_E), mItem.getVitE());
+            addElementView(getString(R.string.vitamins_B1), mItem.getThiamin());
+            addElementView(getString(R.string.vitamins_B2), mItem.getRiboflavin());
+            addElementView(getString(R.string.vitamins_B3), mItem.getNiacin());
+            addElementView(getString(R.string.vitamins_B6), mItem.getVitB6());
+            addElementView(getString(R.string.vitamins_K), mItem.getVitK());
+            addElementView(getString(R.string.vitamins_folate), mItem.getFolate());
             addSpacer();
         }
 
         if (mItem.hasProximates() || mItem.hasMinerals() || mItem.hasVitamins()) {
             TextView title = new TextView(getActivity());
-            title.setText("Źródło: USDA National Nutrient Database");
+            title.setText(R.string.food_data_source);
             mAdditionalTextsLayout.addView(title);
             addSpacer();
         }
@@ -130,7 +130,7 @@ public class FoodItemPageFragment extends Fragment {
     private void addElementView(String title, String value) {
         if (!value.isEmpty()) {
             TextView tmp = new TextView(getActivity());
-            tmp.setText(title + " - " + value);
+            tmp.setText(getString(R.string.food_detail_item, title, value));
             mAdditionalTextsLayout.addView(tmp);
         }
     }

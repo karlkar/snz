@@ -40,7 +40,7 @@ public class ShoppingListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shopping_list, null);
 
-        ((FragmentsActivity)getActivity()).setActionBarTitle("LISTA ZAKUPÓW");
+        ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.shopping_list));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Set<String> shoppingSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
@@ -62,7 +62,7 @@ public class ShoppingListFragment extends Fragment {
                 Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
                 stringSet.remove(item);
                 prefs.edit().putStringSet(PREF_SHOPPING_LIST, stringSet).commit();
-                Toast.makeText(getActivity(), "Usunięto produkt `" + item + "`", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.removed_product_name, item), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -71,28 +71,28 @@ public class ShoppingListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Dodawanie do listy zakupów");
-                builder.setMessage("Wpisz nazwę produktu do dodania");
+                builder.setTitle(getString(R.string.shopping_list_add_dialog_title));
+                builder.setMessage(getString(R.string.shopping_list_add_dialog_message));
                 final EditText editText = new EditText(getActivity());
                 builder.setView(editText);
-                builder.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
-                builder.setPositiveButton("Dodaj", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (editText.getText().toString().isEmpty()) {
-                            Toast.makeText(getActivity(), "Musisz wpisać nazwę produktu", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), R.string.empty_product_name_message, Toast.LENGTH_LONG).show();
                         } else {
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                             Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
                             stringSet.add(editText.getText().toString());
                             mAdapter.add(editText.getText().toString());
                             prefs.edit().putStringSet(PREF_SHOPPING_LIST, stringSet).commit();
-                            Toast.makeText(getActivity(), "Dodano do listy zakupów", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), getString(R.string.added_to_shopping_list), Toast.LENGTH_LONG).show();
                         }
                     }
                 });

@@ -119,7 +119,7 @@ public class CalendarFragment extends Fragment {
         mVegetablesGridView.setOnItemClickListener(mOnItemClickListener);
         mVegetablesGridView.setOnItemLongClickListener(mOnItemLongClickListener);
 
-        ((FragmentsActivity) getActivity()).setActionBarTitle("KALENDARZ");
+        ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
 
         ColorMatrix matrix = new ColorMatrix();
         matrix.setSaturation(0);
