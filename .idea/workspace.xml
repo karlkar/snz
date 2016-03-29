@@ -31,9 +31,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dc1c801f-bc33-4701-aa7f-5816c215474a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/FoodItemPageFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/FoodItemPageFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Sezon na zdrowie.iws" />
@@ -67,29 +66,29 @@
       <file leaf-file-name="ShoppingListFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.54382825">
-              <caret line="128" column="38" selection-start-line="128" selection-start-column="38" selection-end-line="128" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.45259392">
+              <caret line="73" column="54" selection-start-line="73" selection-start-column="54" selection-end-line="73" selection-end-column="54" />
               <folding>
                 <element signature="e#1394#1427#0" expanded="true" />
-                <element signature="e#2399#2452#0" expanded="true" />
-                <element signature="e#2490#2559#0" expanded="true" />
-                <element signature="e#2604#2619#0" expanded="true" />
-                <element signature="e#2621#2849#0" expanded="true" />
-                <element signature="e#2848#2849#0" expanded="true" />
-                <element signature="e#2894#2920#0" expanded="true" />
-                <element signature="e#2922#3720#0" expanded="true" />
-                <element signature="e#3556#3610#0" expanded="true" />
-                <element signature="e#3719#3720#0" expanded="true" />
-                <element signature="e#4123#4173#0" expanded="true" />
-                <element signature="e#4211#4263#0" expanded="true" />
-                <element signature="e#4422#4448#0" expanded="true" />
-                <element signature="e#4723#4746#0" expanded="true" />
-                <element signature="e#5024#5059#0" expanded="true" />
-                <element signature="e#5660#5702#0" expanded="true" />
-                <element signature="e#6055#6095#0" expanded="true" />
-                <element signature="e#6128#6165#0" expanded="true" />
-                <element signature="e#6222#6453#0" expanded="true" />
-                <element signature="e#6452#6453#0" expanded="true" />
+                <element signature="e#2426#2479#0" expanded="true" />
+                <element signature="e#2517#2586#0" expanded="true" />
+                <element signature="e#2631#2646#0" expanded="true" />
+                <element signature="e#2648#2876#0" expanded="true" />
+                <element signature="e#2875#2876#0" expanded="true" />
+                <element signature="e#2921#2947#0" expanded="true" />
+                <element signature="e#2949#3747#0" expanded="true" />
+                <element signature="e#3583#3637#0" expanded="true" />
+                <element signature="e#3746#3747#0" expanded="true" />
+                <element signature="e#4177#4227#0" expanded="true" />
+                <element signature="e#4265#4317#0" expanded="true" />
+                <element signature="e#4476#4502#0" expanded="true" />
+                <element signature="e#4777#4800#0" expanded="true" />
+                <element signature="e#5078#5113#0" expanded="true" />
+                <element signature="e#5714#5756#0" expanded="true" />
+                <element signature="e#6109#6149#0" expanded="true" />
+                <element signature="e#6182#6219#0" expanded="true" />
+                <element signature="e#6276#6507#0" expanded="true" />
+                <element signature="e#6506#6507#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1731,7 +1730,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values-mdpi/dimens.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values-ldpi/dimens.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values-hdpi/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/button_green2.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/button_turquis2.xml" />
@@ -1759,8 +1757,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_shopping_list.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/FoodItemPageFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
       </list>
     </option>
   </component>
@@ -1829,6 +1828,24 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sezon na zdrowie" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2344,14 +2361,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CustomApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21288015">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/Database.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.70304114">
@@ -2410,14 +2419,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.8142076">
           <caret line="25" column="52" selection-start-line="25" selection-start-column="52" selection-end-line="25" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.5956285">
-          <caret line="84" column="38" selection-start-line="84" selection-start-column="38" selection-end-line="84" selection-end-column="38" />
           <folding />
         </state>
       </provider>
@@ -2727,31 +2728,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39534885">
+          <caret line="24" column="4" selection-start-line="24" selection-start-column="4" selection-end-line="27" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CustomApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.48658317">
+          <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5206767">
+          <caret line="19" column="47" selection-start-line="19" selection-start-column="47" selection-end-line="19" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.54382825">
-          <caret line="128" column="38" selection-start-line="128" selection-start-column="38" selection-end-line="128" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.45259392">
+          <caret line="73" column="54" selection-start-line="73" selection-start-column="54" selection-end-line="73" selection-end-column="54" />
           <folding>
             <element signature="e#1394#1427#0" expanded="true" />
-            <element signature="e#2399#2452#0" expanded="true" />
-            <element signature="e#2490#2559#0" expanded="true" />
-            <element signature="e#2604#2619#0" expanded="true" />
-            <element signature="e#2621#2849#0" expanded="true" />
-            <element signature="e#2848#2849#0" expanded="true" />
-            <element signature="e#2894#2920#0" expanded="true" />
-            <element signature="e#2922#3720#0" expanded="true" />
-            <element signature="e#3556#3610#0" expanded="true" />
-            <element signature="e#3719#3720#0" expanded="true" />
-            <element signature="e#4123#4173#0" expanded="true" />
-            <element signature="e#4211#4263#0" expanded="true" />
-            <element signature="e#4422#4448#0" expanded="true" />
-            <element signature="e#4723#4746#0" expanded="true" />
-            <element signature="e#5024#5059#0" expanded="true" />
-            <element signature="e#5660#5702#0" expanded="true" />
-            <element signature="e#6055#6095#0" expanded="true" />
-            <element signature="e#6128#6165#0" expanded="true" />
-            <element signature="e#6222#6453#0" expanded="true" />
-            <element signature="e#6452#6453#0" expanded="true" />
+            <element signature="e#2426#2479#0" expanded="true" />
+            <element signature="e#2517#2586#0" expanded="true" />
+            <element signature="e#2631#2646#0" expanded="true" />
+            <element signature="e#2648#2876#0" expanded="true" />
+            <element signature="e#2875#2876#0" expanded="true" />
+            <element signature="e#2921#2947#0" expanded="true" />
+            <element signature="e#2949#3747#0" expanded="true" />
+            <element signature="e#3583#3637#0" expanded="true" />
+            <element signature="e#3746#3747#0" expanded="true" />
+            <element signature="e#4177#4227#0" expanded="true" />
+            <element signature="e#4265#4317#0" expanded="true" />
+            <element signature="e#4476#4502#0" expanded="true" />
+            <element signature="e#4777#4800#0" expanded="true" />
+            <element signature="e#5078#5113#0" expanded="true" />
+            <element signature="e#5714#5756#0" expanded="true" />
+            <element signature="e#6109#6149#0" expanded="true" />
+            <element signature="e#6182#6219#0" expanded="true" />
+            <element signature="e#6276#6507#0" expanded="true" />
+            <element signature="e#6506#6507#0" expanded="true" />
           </folding>
         </state>
       </provider>
