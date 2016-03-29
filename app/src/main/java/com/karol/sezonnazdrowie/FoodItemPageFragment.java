@@ -1,7 +1,9 @@
 package com.karol.sezonnazdrowie;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Karol on 25.03.2016.
@@ -43,6 +48,10 @@ public class FoodItemPageFragment extends Fragment {
         mAddToShoppingListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                Set<String> stringSet = prefs.getStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, new HashSet<String>(1));
+                stringSet.add(mItem.getName());
+                prefs.edit().putStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, stringSet).commit();
                 Toast.makeText(getActivity(), "DODANO DO LISTY ZAKUPÓW!", Toast.LENGTH_SHORT).show();
             }
         });

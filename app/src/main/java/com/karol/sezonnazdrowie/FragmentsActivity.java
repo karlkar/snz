@@ -22,6 +22,8 @@ public class FragmentsActivity extends AppCompatActivity {
     public static final String INTENT_WHAT_VEGETABLES = "VEGETABLES";
     public static final String INTENT_WHAT_FRUITS = "FRUITS";
     public static final String INTENT_WHAT_CALENDAR = "CALENDAR";
+    public static final String INTENT_WHAT_SHOPPING_LIST = "SHOPPING_LIST";
+    public static final String INTENT_ITEM = "ITEM";
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -60,7 +62,9 @@ public class FragmentsActivity extends AppCompatActivity {
 
         String what = getIntent().getStringExtra(INTENT_WHAT);
         if (what.equals(INTENT_WHAT_CALENDAR)) {
-            getFragmentManager().beginTransaction().add(R.id.contentView, new CalendarFragment()).commit();
+            getFragmentManager().beginTransaction().add(R.id.contentView, new CalendarFragment()).addToBackStack(null).commit();
+        } else if (what.equals(INTENT_WHAT_SHOPPING_LIST)) {
+            getFragmentManager().beginTransaction().add(R.id.contentView, new ShoppingListFragment()).commit();
         } else {
             Fragment fg = new ListFragment();
             Bundle bundle = new Bundle();
@@ -91,7 +95,7 @@ public class FragmentsActivity extends AppCompatActivity {
                 } else if (text.equals("KALENDARZ")) {
                     replaceFragments(new CalendarFragment());
                 } else if (text.equals("LISTA ZAKUPÓW")) {
-
+                    replaceFragments(new ShoppingListFragment());
                 }
             }
         });
@@ -114,7 +118,7 @@ public class FragmentsActivity extends AppCompatActivity {
         if (fragment instanceof ListFragment || fragment instanceof CalendarFragment)
             getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fragmentTransaction.replace(R.id.contentView, fragment);
-        if (fragment instanceof FoodItemPageFragment)
+        if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment)
             fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         mDrawerLayout.closeDrawers();

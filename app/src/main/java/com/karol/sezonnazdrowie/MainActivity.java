@@ -80,7 +80,9 @@ public class MainActivity extends AppCompatActivity {
         mShopListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
+                intent.putExtra(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_SHOPPING_LIST);
+                startActivity(intent);
             }
         });
     }

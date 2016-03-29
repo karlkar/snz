@@ -32,12 +32,12 @@ public class ListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, null);
 
         ArrayList<FoodItem> items = null;
-        String what = getArguments().getString("WHAT");
-        if (what.equals("FRUITS")) {
+        String what = getArguments().getString(FragmentsActivity.INTENT_WHAT);
+        if (what.equals(FragmentsActivity.INTENT_WHAT_FRUITS)) {
             ((FragmentsActivity)getActivity()).setActionBarTitle("SEZON NA OWOCE");
             items = Database.getInstance().getCurrentFruits();
 //            items = Database.getInstance().getAllFruits();
-        } else if (what.equals("VEGETABLES")) {
+        } else if (what.equals(FragmentsActivity.INTENT_WHAT_VEGETABLES)) {
             ((FragmentsActivity)getActivity()).setActionBarTitle("SEZON NA WARZYWA");
             items = Database.getInstance().getCurrentVegetables();
 //            items = Database.getInstance().getAllVegetables();
@@ -52,7 +52,7 @@ public class ListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = new FoodItemPageFragment();
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("ITEM", (Parcelable) parent.getItemAtPosition(position));
+                bundle.putParcelable(FragmentsActivity.INTENT_ITEM, (Parcelable) parent.getItemAtPosition(position));
                 fragment.setArguments(bundle);
                 ((FragmentsActivity) getActivity()).replaceFragments(fragment);
             }
@@ -65,36 +65,5 @@ public class ListFragment extends Fragment {
                 .build();
         adView.loadAd(adRequest);
         return view;
-    }
-
-    private class FoodItemAdapter extends ArrayAdapter<FoodItem> {
-
-        private class ViewHolder {
-            TextView mText;
-        }
-
-        public FoodItemAdapter(Context context, ArrayList<FoodItem> objects) {
-            super(context, R.layout.row_layout, objects);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view;
-            ViewHolder viewHolder;
-            if (convertView == null) {
-                view = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, parent, false);
-                viewHolder = new ViewHolder();
-                viewHolder.mText = (TextView) view.findViewById(R.id.rowText);
-                view.setTag(viewHolder);
-            } else {
-                view = convertView;
-                viewHolder = (ViewHolder) view.getTag();
-            }
-
-            FoodItem item = getItem(position);
-            viewHolder.mText.setText(item.getName());
-
-            return view;
-        }
     }
 }

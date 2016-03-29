@@ -1,21 +1,111 @@
 package com.karol.sezonnazdrowie;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Karol on 28.03.2016.
  */
 public class ShoppingListFragment extends Fragment {
+
+    public static final String PREF_SHOPPING_LIST = "SHOPPING_LIST";
+
+    ListView mListView = null;
+    ArrayAdapter mAdapter = null;
+    Button mAddToListButton = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shopping_list, null);
 
+        ((FragmentsActivity)getActivity()).setActionBarTitle("LISTA ZAKUPÓW");
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Set<String> shoppingSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
+        ArrayList shoppingList;
+        if (shoppingSet == null)
+            shoppingList = new ArrayList();
+        else
+            shoppingList = new ArrayList(shoppingSet);
+        mListView = (ListView) view.findViewById(R.id.listView);
+        mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, shoppingList);
+        mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = (String) parent.getItemAtPosition(position);
+                mAdapter.remove(item);
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
+                stringSet.remove(item);
+                prefs.edit().putStringSet(PREF_SHOPPING_LIST, stringSet).commit();
+                Toast.makeText(getActivity(), "Usunięto produkt `" + item + "`", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        mAddToListButton = (Button) view.findViewById(R.id.addToShoppingListButton);
+        mAddToListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Dodawanie do listy zakupów");
+                builder.setMessage("Wpisz nazwę produktu do dodania");
+                final EditText editText = new EditText(getActivity());
+                builder.setView(editText);
+                builder.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setPositiveButton("Dodaj", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (editText.getText().toString().isEmpty()) {
+                            Toast.makeText(getActivity(), "Musisz wpisać nazwę produktu", Toast.LENGTH_LONG).show();
+                        } else {
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
+                            stringSet.add(editText.getText().toString());
+                            mAdapter.add(editText.getText().toString());
+                            prefs.edit().putStringSet(PREF_SHOPPING_LIST, stringSet).commit();
+                            Toast.makeText(getActivity(), "Dodano do listy zakupów", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        AdView adView = (AdView) view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.adMobTestDeviceNote5))
+                .addTestDevice(getString(R.string.adMobTestDeviceS5))
+                .build();
+        adView.loadAd(adRequest);
         return view;
     }
 }
