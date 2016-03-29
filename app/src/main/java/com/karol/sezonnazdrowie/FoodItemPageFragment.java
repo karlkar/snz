@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -34,7 +36,7 @@ public class FoodItemPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_food_item_page, null);
+        final View view = inflater.inflate(R.layout.fragment_food_item_page, null);
         mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
         ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
 
@@ -118,11 +120,19 @@ public class FoodItemPageFragment extends Fragment {
             addSpacer();
         }
 
-        AdView adView = (AdView) view.findViewById(R.id.adView);
+        final AdView adView = (AdView) view.findViewById(R.id.adView);
+        adView.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceNote5))
                 .addTestDevice(getString(R.string.adMobTestDeviceS5))
                 .build();
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                TransitionManager.beginDelayedTransition((ViewGroup) view);
+                adView.setVisibility(View.VISIBLE);
+            }
+        });
         adView.loadAd(adRequest);
         return view;
     }

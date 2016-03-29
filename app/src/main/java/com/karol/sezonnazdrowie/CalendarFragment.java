@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -101,7 +105,7 @@ public class CalendarFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_calendar, null);
+        final View view = inflater.inflate(R.layout.fragment_calendar, null);
 
         mCalendarScrollView = (ScrollView) view.findViewById(R.id.calendarScrollView);
 
@@ -126,6 +130,22 @@ public class CalendarFragment extends Fragment {
         mGrayScaleFilter = new ColorMatrixColorFilter(matrix);
 
         prepareCalendarView(view);
+
+
+        final AdView adView = (AdView) view.findViewById(R.id.adView);
+        adView.setVisibility(View.GONE);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.adMobTestDeviceNote5))
+                .addTestDevice(getString(R.string.adMobTestDeviceS5))
+                .build();
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                TransitionManager.beginDelayedTransition((ViewGroup)view);
+                adView.setVisibility(View.VISIBLE);
+            }
+        });
+        adView.loadAd(adRequest);
         return view;
     }
 
