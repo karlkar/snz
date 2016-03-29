@@ -16,17 +16,18 @@
         ads:adUnitId="@string/banner_ad_unit_id"/>
 
     <Button
-        android:layout_width="@dimen/main_button_width"
-        android:layout_height="70dp"
-        android:text="@string/add_to_shopping_list_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="+"
         android:id="@+id/addToShoppingListButton"
         android:layout_marginTop="16dp"
         android:layout_above="@+id/adView"
-        android:layout_centerHorizontal="true"
+
         android:stateListAnimator="@null"
         android:textSize="40sp"
         android:textColor="@android:color/white"
-        android:background="@drawable/button_turquis"/>
+        android:background="@drawable/round_button"
+        android:layout_alignRight="@+id/listView"/>
 
     <ListView
         android:layout_width="@dimen/main_middle_bar_width"
