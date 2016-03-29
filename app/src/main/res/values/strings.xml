@@ -76,4 +76,7 @@
     <string name="fruits_capitals">OWOCE</string>
     <string name="vegetables_capitals">WARZYWA</string>
     <string name="add_to_shopping_list_btn">DODAJ DO LISTY ZAKUPÓW</string>
+    <string name="delete">Usuń</string>
+    <string name="shopping_list_delete_dialog_title">Czy chcesz usunąć?</string>
+    <string name="shopping_list_delete_dialog_message">Czy chcesz usunąć produkt `%1$s`</string>
 </resources>

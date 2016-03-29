@@ -58,13 +58,29 @@ public class ShoppingListFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = (String) parent.getItemAtPosition(position);
-                mAdapter.remove(item);
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
-                stringSet.remove(item);
-                prefs.edit().putStringSet(PREF_SHOPPING_LIST, stringSet).commit();
-                Toast.makeText(getActivity(), getString(R.string.removed_product_name, item), Toast.LENGTH_LONG).show();
+                final String selectedItem = (String) parent.getItemAtPosition(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(getString(R.string.shopping_list_delete_dialog_title));
+                builder.setMessage(getString(R.string.shopping_list_delete_dialog_message, selectedItem));
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAdapter.remove(selectedItem);
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
+                        stringSet.remove(selectedItem);
+                        prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
+                        Toast.makeText(getActivity(), getString(R.string.removed_product_name, selectedItem), Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -93,7 +109,7 @@ public class ShoppingListFragment extends Fragment {
                             Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
                             stringSet.add(editText.getText().toString());
                             mAdapter.add(editText.getText().toString());
-                            prefs.edit().putStringSet(PREF_SHOPPING_LIST, stringSet).commit();
+                            prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
                             Toast.makeText(getActivity(), getString(R.string.added_to_shopping_list), Toast.LENGTH_LONG).show();
                         }
                     }
