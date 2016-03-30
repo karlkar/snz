@@ -60,6 +60,7 @@ public class CalendarFragment extends Fragment {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            mCalendarView.setSelectedDate((CalendarDay)null);
             mSelectedFoodItem = (FoodItem) parent.getItemAtPosition(position);
 
             mFruitAdapter.enableItemAt(mSelectedFoodItem.isFruit() ? position : -1);
@@ -107,6 +108,8 @@ public class CalendarFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
+
         if (mRoot != null)
             return mRoot;
 
@@ -127,8 +130,6 @@ public class CalendarFragment extends Fragment {
         mVegetablesGridView.setFocusable(false);
         mVegetablesGridView.setOnItemClickListener(mOnItemClickListener);
         mVegetablesGridView.setOnItemLongClickListener(mOnItemLongClickListener);
-
-        ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
 
         ColorMatrix matrix = new ColorMatrix();
         matrix.setSaturation(0);

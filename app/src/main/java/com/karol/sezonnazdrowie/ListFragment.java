@@ -33,19 +33,22 @@ public class ListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        String what = getArguments().getString(FragmentsActivity.INTENT_WHAT);
+        if (what.equals(FragmentsActivity.INTENT_WHAT_FRUITS))
+            ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.season_fruits));
+        else if (what.equals(FragmentsActivity.INTENT_WHAT_VEGETABLES))
+            ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.season_vegetables));
+
         if (mRoot != null)
             return mRoot;
 
         mRoot = inflater.inflate(R.layout.fragment_list, null);
 
         ArrayList<FoodItem> items = null;
-        String what = getArguments().getString(FragmentsActivity.INTENT_WHAT);
         if (what.equals(FragmentsActivity.INTENT_WHAT_FRUITS)) {
-            ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.season_fruits));
             items = Database.getInstance().getCurrentFruits();
 //            items = Database.getInstance().getAllFruits();
         } else if (what.equals(FragmentsActivity.INTENT_WHAT_VEGETABLES)) {
-            ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.season_vegetables));
             items = Database.getInstance().getCurrentVegetables();
 //            items = Database.getInstance().getAllVegetables();
         }

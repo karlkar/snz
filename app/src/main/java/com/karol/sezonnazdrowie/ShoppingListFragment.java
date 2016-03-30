@@ -42,12 +42,12 @@ public class ShoppingListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.shopping_list));
+
         if (mRoot != null)
             return mRoot;
 
         mRoot = inflater.inflate(R.layout.fragment_shopping_list, null);
-
-        ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.shopping_list));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Set<String> shoppingSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);

@@ -38,8 +38,10 @@ public class FoodItemPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mRoot != null)
+        if (mRoot != null && mItem != null) {
+            ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
             return mRoot;
+        }
 
         mRoot = inflater.inflate(R.layout.fragment_food_item_page, null);
         mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
