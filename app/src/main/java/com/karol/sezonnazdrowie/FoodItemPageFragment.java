@@ -33,20 +33,25 @@ public class FoodItemPageFragment extends Fragment {
     private Button mAddToShoppingListBtn;
     private LinearLayout mAdditionalTextsLayout;
 
+    private View mRoot = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_food_item_page, null);
+        if (mRoot != null)
+            return mRoot;
+
+        mRoot = inflater.inflate(R.layout.fragment_food_item_page, null);
         mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
         ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
 
-        mPagePreviewImageView = (ImageView) view.findViewById(R.id.pagePreviewImageView);
+        mPagePreviewImageView = (ImageView) mRoot.findViewById(R.id.pagePreviewImageView);
         if (!mItem.getImage().isEmpty())
             mPagePreviewImageView.setImageResource(getResources().getIdentifier(mItem.getImage(), "drawable", getActivity().getPackageName()));
         else
             mPagePreviewImageView.setImageResource(android.R.drawable.ic_menu_gallery);
 
-        mAddToShoppingListBtn = (Button) view.findViewById(R.id.addToShoppingListButton);
+        mAddToShoppingListBtn = (Button) mRoot.findViewById(R.id.addToShoppingListButton);
         mAddToShoppingListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +63,7 @@ public class FoodItemPageFragment extends Fragment {
             }
         });
 
-        mAdditionalTextsLayout = (LinearLayout) view.findViewById(R.id.additionalTextsLayout);
+        mAdditionalTextsLayout = (LinearLayout) mRoot.findViewById(R.id.additionalTextsLayout);
         TextView tmp = new TextView(getActivity());
         tmp.setText(mItem.getDesc());
         mAdditionalTextsLayout.addView(tmp);
@@ -120,7 +125,7 @@ public class FoodItemPageFragment extends Fragment {
             addSpacer();
         }
 
-        final AdView adView = (AdView) view.findViewById(R.id.adView);
+        final AdView adView = (AdView) mRoot.findViewById(R.id.adView);
         adView.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceNote5))
@@ -129,12 +134,19 @@ public class FoodItemPageFragment extends Fragment {
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                TransitionManager.beginDelayedTransition((ViewGroup) view);
+                TransitionManager.beginDelayedTransition((ViewGroup) mRoot);
                 adView.setVisibility(View.VISIBLE);
             }
         });
         adView.loadAd(adRequest);
-        return view;
+        return mRoot;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mRoot != null && mRoot.getParent() != null)
+            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
     }
 
     private void addElementView(String title, String value) {

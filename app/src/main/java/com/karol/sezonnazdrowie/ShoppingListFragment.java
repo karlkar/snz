@@ -33,14 +33,19 @@ public class ShoppingListFragment extends Fragment {
 
     public static final String PREF_SHOPPING_LIST = "SHOPPING_LIST";
 
-    ListView mListView = null;
-    ArrayAdapter mAdapter = null;
-    Button mAddToListButton = null;
+    private ListView mListView = null;
+    private ArrayAdapter mAdapter = null;
+    private Button mAddToListButton = null;
+
+    private View mRoot = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_shopping_list, null);
+        if (mRoot != null)
+            return mRoot;
+
+        mRoot = inflater.inflate(R.layout.fragment_shopping_list, null);
 
         ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.shopping_list));
 
@@ -51,7 +56,7 @@ public class ShoppingListFragment extends Fragment {
             shoppingList = new ArrayList();
         else
             shoppingList = new ArrayList(shoppingSet);
-        mListView = (ListView) view.findViewById(R.id.listView);
+        mListView = (ListView) mRoot.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, shoppingList);
         mListView.setAdapter(mAdapter);
 
@@ -84,7 +89,7 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        mAddToListButton = (Button) view.findViewById(R.id.addToShoppingListButton);
+        mAddToListButton = (Button) mRoot.findViewById(R.id.addToShoppingListButton);
         mAddToListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +123,7 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        final AdView adView = (AdView) view.findViewById(R.id.adView);
+        final AdView adView = (AdView) mRoot.findViewById(R.id.adView);
         adView.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceNote5))
@@ -127,11 +132,18 @@ public class ShoppingListFragment extends Fragment {
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                TransitionManager.beginDelayedTransition((ViewGroup) view);
+                TransitionManager.beginDelayedTransition((ViewGroup) mRoot);
                 adView.setVisibility(View.VISIBLE);
             }
         });
         adView.loadAd(adRequest);
-        return view;
+        return mRoot;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mRoot != null && mRoot.getParent() != null)
+            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
     }
 }

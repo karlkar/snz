@@ -25,13 +25,18 @@ import java.util.ArrayList;
  */
 public class ListFragment extends Fragment {
 
-    ListView mListView = null;
-    ArrayAdapter mAdapter = null;
+    private ListView mListView = null;
+    private ArrayAdapter mAdapter = null;
+
+    private View mRoot = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_list, null);
+        if (mRoot != null)
+            return mRoot;
+
+        mRoot = inflater.inflate(R.layout.fragment_list, null);
 
         ArrayList<FoodItem> items = null;
         String what = getArguments().getString(FragmentsActivity.INTENT_WHAT);
@@ -45,7 +50,7 @@ public class ListFragment extends Fragment {
 //            items = Database.getInstance().getAllVegetables();
         }
 
-        mListView = (ListView) view.findViewById(R.id.listView);
+        mListView = (ListView) mRoot.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);
         mListView.setAdapter(mAdapter);
 
@@ -60,7 +65,7 @@ public class ListFragment extends Fragment {
             }
         });
 
-        final AdView adView = (AdView) view.findViewById(R.id.adView);
+        final AdView adView = (AdView) mRoot.findViewById(R.id.adView);
         adView.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceNote5))
@@ -69,11 +74,18 @@ public class ListFragment extends Fragment {
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                TransitionManager.beginDelayedTransition((ViewGroup) view);
+                TransitionManager.beginDelayedTransition((ViewGroup) mRoot);
                 adView.setVisibility(View.VISIBLE);
             }
         });
         adView.loadAd(adRequest);
-        return view;
+        return mRoot;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mRoot != null && mRoot.getParent() != null)
+            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
     }
 }

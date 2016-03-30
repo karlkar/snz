@@ -52,6 +52,8 @@ public class CalendarFragment extends Fragment {
     private TextView mCalendarHeaderTextView;
     private MaterialCalendarView mCalendarView;
 
+    private View mRoot = null;
+
     private int mCurrentMonth;
     private FoodItem mSelectedFoodItem;
 
@@ -105,18 +107,21 @@ public class CalendarFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_calendar, null);
+        if (mRoot != null)
+            return mRoot;
 
-        mCalendarScrollView = (ScrollView) view.findViewById(R.id.calendarScrollView);
+        mRoot = inflater.inflate(R.layout.fragment_calendar, null);
 
-        mFruitsGridView = (ExpandableGridView) view.findViewById(R.id.fruitsGridView);
+        mCalendarScrollView = (ScrollView) mRoot.findViewById(R.id.calendarScrollView);
+
+        mFruitsGridView = (ExpandableGridView) mRoot.findViewById(R.id.fruitsGridView);
         mFruitAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllFruits());
         mFruitsGridView.setAdapter(mFruitAdapter);
         mFruitsGridView.setFocusable(false);
         mFruitsGridView.setOnItemClickListener(mOnItemClickListener);
         mFruitsGridView.setOnItemLongClickListener(mOnItemLongClickListener);
 
-        mVegetablesGridView = (ExpandableGridView) view.findViewById(R.id.vegetablesGridView);
+        mVegetablesGridView = (ExpandableGridView) mRoot.findViewById(R.id.vegetablesGridView);
         mVegetableAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllVegetables());
         mVegetablesGridView.setAdapter(mVegetableAdapter);
         mVegetablesGridView.setFocusable(false);
@@ -129,10 +134,9 @@ public class CalendarFragment extends Fragment {
         matrix.setSaturation(0);
         mGrayScaleFilter = new ColorMatrixColorFilter(matrix);
 
-        prepareCalendarView(view);
+        prepareCalendarView(mRoot);
 
-
-        final AdView adView = (AdView) view.findViewById(R.id.adView);
+        final AdView adView = (AdView) mRoot.findViewById(R.id.adView);
         adView.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceNote5))
@@ -141,12 +145,19 @@ public class CalendarFragment extends Fragment {
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                TransitionManager.beginDelayedTransition((ViewGroup)view);
+                TransitionManager.beginDelayedTransition((ViewGroup)mRoot);
                 adView.setVisibility(View.VISIBLE);
             }
         });
         adView.loadAd(adRequest);
-        return view;
+        return mRoot;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mRoot != null && mRoot.getParent() != null)
+            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
     }
 
     private void prepareCalendarView(View view) {
