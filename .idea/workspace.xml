@@ -31,10 +31,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dc1c801f-bc33-4701-aa7f-5816c215474a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CalendarFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CalendarFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/FoodItemPageFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/FoodItemPageFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java" />
+      <change type="DELETED" beforePath="C:\Users\Karol\StudioProjects\Sezonnazdrowie\app\src\main\res\raw\fruits.csv" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Karol\StudioProjects\Sezonnazdrowie\app\src\main\res\raw\vegetables.csv" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Sezon na zdrowie.iws" />
@@ -75,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CalendarFragment.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CalendarFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CalendarFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="153" column="5" selection-start-line="153" selection-start-column="5" selection-end-line="160" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.5474061">
+              <caret line="282" column="37" selection-start-line="282" selection-start-column="37" selection-end-line="282" selection-end-column="37" />
               <folding>
                 <element signature="docComment;class#CalendarFragment#0" expanded="false" />
                 <element signature="e#3754#4289#0" expanded="true" />
@@ -148,11 +146,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ShoppingListFragment.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ShoppingListFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.57423973">
-              <caret line="141" column="0" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
               <folding>
                 <element signature="e#1494#1527#0" expanded="true" />
                 <element signature="e#2527#2580#0" expanded="true" />
@@ -1835,10 +1833,10 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CustomApplication.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/FragmentsActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CalendarFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/FoodItemPageFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CalendarFragment.java" />
       </list>
     </option>
   </component>
@@ -2007,6 +2005,42 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sezon na zdrowie" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sezon na zdrowie" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="raw" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -2040,6 +2074,16 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sezon na zdrowie" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -2065,8 +2109,8 @@
       <recent name="layout" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Karol\StudioProjects\Sezonnazdrowie\app\src\main\res\layout" />
       <recent name="C:\Users\Karol\StudioProjects\Sezonnazdrowie\app\src\main\res\raw" />
+      <recent name="C:\Users\Karol\StudioProjects\Sezonnazdrowie\app\src\main\res\layout" />
       <recent name="C:\Users\Karol\StudioProjects\Sezonnazdrowie\app\src\main\res\drawable" />
       <recent name="C:\Users\Karol\StudioProjects\Sezonnazdrowie\app\src\main\assets\fonts" />
     </key>
@@ -2728,20 +2772,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CalendarFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="153" column="5" selection-start-line="153" selection-start-column="5" selection-end-line="160" selection-end-column="5" />
-          <folding>
-            <element signature="docComment;class#CalendarFragment#0" expanded="false" />
-            <element signature="e#3754#4289#0" expanded="true" />
-            <element signature="e#4288#4289#0" expanded="true" />
-            <element signature="e#6177#6408#0" expanded="true" />
-            <element signature="e#6407#6408#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/FoodItemPageFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2797,8 +2827,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/ShoppingListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.57423973">
-          <caret line="141" column="0" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
           <folding>
             <element signature="e#1494#1527#0" expanded="true" />
             <element signature="e#2527#2580#0" expanded="true" />
@@ -2814,6 +2844,28 @@
             <element signature="e#5816#5858#0" expanded="true" />
             <element signature="e#6212#6252#0" expanded="true" />
             <element signature="e#6285#6322#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/raw/vegetables.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/karol/sezonnazdrowie/CalendarFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5474061">
+          <caret line="282" column="37" selection-start-line="282" selection-start-column="37" selection-end-line="282" selection-end-column="37" />
+          <folding>
+            <element signature="docComment;class#CalendarFragment#0" expanded="false" />
+            <element signature="e#3754#4289#0" expanded="true" />
+            <element signature="e#4288#4289#0" expanded="true" />
+            <element signature="e#6177#6408#0" expanded="true" />
+            <element signature="e#6407#6408#0" expanded="true" />
           </folding>
         </state>
       </provider>
