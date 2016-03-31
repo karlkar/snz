@@ -31,6 +31,8 @@ public class FragmentsActivity extends AppCompatActivity {
     private SnzDrawer mDrawer;
     private Toolbar mToolbar;
 
+	private Fragment mCurrentFragment = null;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -80,23 +82,28 @@ public class FragmentsActivity extends AppCompatActivity {
                 String text = (String) parent.getItemAtPosition(position);
                 if (text.equals(getString(R.string.season_vegetables))) {
                     Fragment fragment = new ListFragment();
+					mCurrentFragment = fragment;
                     Bundle bundle = new Bundle();
                     bundle.putString(INTENT_WHAT, INTENT_WHAT_VEGETABLES);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
                 } else if (text.equals(getString(R.string.season_fruits))) {
                     Fragment fragment = new ListFragment();
+					mCurrentFragment = fragment;
                     Bundle bundle = new Bundle();
                     bundle.putString(INTENT_WHAT, INTENT_WHAT_FRUITS);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
                 } else if (text.equals(getString(R.string.season_incoming))) {
 
-                } else if (text.equals(getString(R.string.calendar)
-                )) {
-                    replaceFragments(new CalendarFragment());
+                } else if (text.equals(getString(R.string.calendar))) {
+                    Fragment fragment = new CalendarFragment();
+					mCurrentFragment = fragment;
+                    replaceFragments(fragment);
                 } else if (text.equals(getString(R.string.shopping_list))) {
-                    replaceFragments(new ShoppingListFragment());
+					Fragment fragment = new ShoppingListFragment();
+					mCurrentFragment = fragment;
+                    replaceFragments(fragment);
                 }
             }
         });
@@ -115,13 +122,16 @@ public class FragmentsActivity extends AppCompatActivity {
     }
 
     public void replaceFragments(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        if (fragment instanceof ListFragment || fragment instanceof CalendarFragment)
-            getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fragmentTransaction.replace(R.id.contentView, fragment);
-        if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment)
-            fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+		if (!(fragment instanceof CalendarFragment) || !(mCurrentFragment instanceof CalendarFragment)) {
+        	FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        	if (fragment instanceof ListFragment || fragment instanceof CalendarFragment)
+            	getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+ 	        fragmentTransaction.replace(R.id.contentView, fragment);
+	        if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment)
+	            fragmentTransaction.addToBackStack(null);
+        	fragmentTransaction.commit();
+			mCurrentFragment = fragment;
+		}
         mDrawerLayout.closeDrawers();
     }
 
