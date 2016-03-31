@@ -21,6 +21,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/adView"
         android:layout_centerHorizontal="true"
+        android:scrollbars="none"
         android:id="@+id/calendarScrollView">
 
         <RelativeLayout
@@ -114,7 +115,7 @@
 
                     <com.karol.sezonnazdrowie.ExpandableGridView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:id="@+id/fruitsGridView"
                         android:gravity="center"
@@ -127,7 +128,7 @@
 
                     <com.karol.sezonnazdrowie.ExpandableGridView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:id="@+id/vegetablesGridView"
                         android:layout_gravity="center"
