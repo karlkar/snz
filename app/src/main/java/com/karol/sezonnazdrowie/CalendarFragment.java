@@ -55,12 +55,14 @@ public class CalendarFragment extends Fragment {
     private View mRoot = null;
 
     private int mCurrentMonth;
+    private CalendarDay mSelectedDate = null;
     private FoodItem mSelectedFoodItem;
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            mCalendarView.setSelectedDate((CalendarDay)null);
+            mSelectedDate = null;
+            mCalendarView.setSelectedDate(mSelectedDate);
             mSelectedFoodItem = (FoodItem) parent.getItemAtPosition(position);
 
             mFruitAdapter.enableItemAt(mSelectedFoodItem.isFruit() ? position : -1);
@@ -161,6 +163,13 @@ public class CalendarFragment extends Fragment {
             ((ViewGroup)mRoot.getParent()).removeView(mRoot);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Fix for selection of grid, when coming back to calendarfragment from other fragment
+        mCalendarView.setSelectedDate(mSelectedDate);
+    }
+
     private void prepareCalendarView(View view) {
         mCalendarArrowLeft = view.findViewById(R.id.caledarArrowLeft);
         mCalendarArrowRight = view.findViewById(R.id.caledarArrowRight);
@@ -214,6 +223,7 @@ public class CalendarFragment extends Fragment {
     }
 
     private void onSelectedDateChanged(CalendarDay date) {
+        mSelectedDate = date;
         mSelectedFoodItem = null;
         mFruitAdapter.enableItemsAt(date);
         mVegetableAdapter.enableItemsAt(date);
