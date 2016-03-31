@@ -37,6 +37,12 @@ import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Karol on 26.03.2016.
@@ -288,11 +294,22 @@ public class CalendarFragment extends Fragment {
             viewHolder.position = position;
             FoodItem item = getItem(position);
             ImageLoader loadTask = new ImageLoader(viewHolder, position);
-            loadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, item);
+            loadTask.executeOnExecutor(sExecutor, item);
 
             return view;
         }
     }
+
+    private static final ThreadFactory sThreadFactory = new ThreadFactory() {
+        private final AtomicInteger mCount = new AtomicInteger(1);
+
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "AsyncTask #" + mCount.getAndIncrement());
+        }
+    };
+
+    private static int sCpuCount = Runtime.getRuntime().availableProcessors();
+    private static final Executor sExecutor = new ThreadPoolExecutor(sCpuCount + 1, sCpuCount * 2 + 1, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), sThreadFactory);
 
     private class ImageLoader extends AsyncTask<FoodItem, Void, Drawable> {
 
