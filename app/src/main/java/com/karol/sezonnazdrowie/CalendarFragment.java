@@ -12,11 +12,13 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -42,9 +44,9 @@ import java.util.Comparator;
 public class CalendarFragment extends Fragment {
 
     private ScrollView mCalendarScrollView;
-    private ExpandableGridView mFruitsGridView;
+    private GridView mFruitsGridView;
     private FoodItemAdapter mFruitAdapter;
-    private ExpandableGridView mVegetablesGridView;
+    private GridView mVegetablesGridView;
     private FoodItemAdapter mVegetableAdapter;
     private ColorMatrixColorFilter mGrayScaleFilter;
     private View mCalendarArrowLeft;
@@ -119,14 +121,14 @@ public class CalendarFragment extends Fragment {
 
         mCalendarScrollView = (ScrollView) mRoot.findViewById(R.id.calendarScrollView);
 
-        mFruitsGridView = (ExpandableGridView) mRoot.findViewById(R.id.fruitsGridView);
+        mFruitsGridView = (GridView) mRoot.findViewById(R.id.fruitsGridView);
         mFruitAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllFruits());
         mFruitsGridView.setAdapter(mFruitAdapter);
         mFruitsGridView.setFocusable(false);
         mFruitsGridView.setOnItemClickListener(mOnItemClickListener);
         mFruitsGridView.setOnItemLongClickListener(mOnItemLongClickListener);
 
-        mVegetablesGridView = (ExpandableGridView) mRoot.findViewById(R.id.vegetablesGridView);
+        mVegetablesGridView = (GridView) mRoot.findViewById(R.id.vegetablesGridView);
         mVegetableAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllVegetables());
         mVegetablesGridView.setAdapter(mVegetableAdapter);
         mVegetablesGridView.setFocusable(false);
@@ -259,7 +261,8 @@ public class CalendarFragment extends Fragment {
         }
 
         private class ViewHolder {
-            private ImageView mGridImage;
+            private ImageView gridImage;
+            private int position;
         }
 
         public FoodItemAdapter(Context context, ArrayList<FoodItem> objects) {
@@ -269,20 +272,22 @@ public class CalendarFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            Log.i("KURWA", "getView: " + position);
             View view;
             final ViewHolder viewHolder;
             if (convertView == null) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.grid_layout, parent, false);
                 viewHolder = new ViewHolder();
-                viewHolder.mGridImage = (ImageView) view.findViewById(R.id.gridImageView);
+                viewHolder.gridImage = (ImageView) view.findViewById(R.id.gridImageView);
                 view.setTag(viewHolder);
             } else {
                 view = convertView;
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
+            viewHolder.position = position;
             FoodItem item = getItem(position);
-            ImageLoader loadTask = new ImageLoader(viewHolder.mGridImage);
+            ImageLoader loadTask = new ImageLoader(viewHolder, position);
             loadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, item);
 
             return view;
@@ -291,10 +296,12 @@ public class CalendarFragment extends Fragment {
 
     private class ImageLoader extends AsyncTask<FoodItem, Void, Drawable> {
 
-        private ImageView mImageView;
+        private FoodItemAdapter.ViewHolder mViewHolder;
+        private int mPosition;
 
-        public ImageLoader(ImageView view) {
-            mImageView = view;
+        public ImageLoader(FoodItemAdapter.ViewHolder viewHolder, int position) {
+            mViewHolder = viewHolder;
+            mPosition = position;
         }
 
         @Override
@@ -314,7 +321,8 @@ public class CalendarFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Drawable drawable) {
-            mImageView.setImageDrawable(drawable);
+            if (mPosition == mViewHolder.position)
+                mViewHolder.gridImage.setImageDrawable(drawable);
         }
     }
 
