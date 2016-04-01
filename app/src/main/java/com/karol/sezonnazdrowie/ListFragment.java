@@ -38,8 +38,10 @@ public class ListFragment extends Fragment {
             ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.season_fruits));
         else if (what.equals(FragmentsActivity.INTENT_WHAT_VEGETABLES))
             ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.season_vegetables));
-
-        if (mRoot != null)
+		else if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING))
+			((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.season_incoming));
+			
+		if (mRoot != null)
             return mRoot;
 
         mRoot = inflater.inflate(R.layout.fragment_list, null);
@@ -51,7 +53,8 @@ public class ListFragment extends Fragment {
         } else if (what.equals(FragmentsActivity.INTENT_WHAT_VEGETABLES)) {
             items = Database.getInstance().getCurrentVegetables();
 //            items = Database.getInstance().getAllVegetables();
-        }
+        } else if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING))
+			items = Database.getInstance().getIncomingItems();
 
         mListView = (ListView) mRoot.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);

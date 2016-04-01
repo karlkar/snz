@@ -1,12 +1,8 @@
 package com.karol.sezonnazdrowie;
 
 import android.content.Context;
-
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-
+import com.prolificinteractive.materialcalendarview.*;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Karol on 16.03.2016.
@@ -50,6 +46,35 @@ public class Database {
         return mCurrentVegetables;
     }
 
+	public ArrayList<FoodItem> getIncomingItems() {
+		ArrayList<FoodItem> list = new ArrayList<FoodItem>();
+		CalendarDay today = CalendarDay.today();
+		for (FoodItem item : getAllFruits()) {
+			if (!item.existsAt(today)) {
+				CalendarDay startDay1 = item.getStartDay1();
+				CalendarDay startDay2 = item.getStartDay2();
+				if (startDay1.isAfter(today) && startDay1.getMonth() - today.getMonth() <= 1) {
+					list.add(item);
+				} else if (startDay2 != null && startDay2.isAfter(today) && startDay2.getMonth() - today.getMonth() <= 1) {
+					list.add(item);
+				}
+			}
+		}
+		for (FoodItem item : getAllVegetables()) {
+			if (!item.existsAt(today)) {
+				CalendarDay startDay1 = item.getStartDay1();
+				CalendarDay startDay2 = item.getStartDay2();
+				if (startDay1.isAfter(today) && startDay1.getMonth() - today.getMonth() <= 1) {
+					list.add(item);
+				} else if (startDay2 != null && startDay2.isAfter(today) && startDay2.getMonth() - today.getMonth() <= 1) {
+					list.add(item);
+				}
+			}
+		}
+
+		return list;
+	}
+	
     public void loadData(Context ctx) {
         Holder.instance.mFruits = FoodItem.createItems(ctx, R.raw.fruits, true);
         Holder.instance.mVegetables = FoodItem.createItems(ctx, R.raw.vegetables, false);

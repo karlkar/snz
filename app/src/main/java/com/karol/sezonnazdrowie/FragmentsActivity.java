@@ -21,6 +21,7 @@ public class FragmentsActivity extends AppCompatActivity {
     public static final String INTENT_WHAT = "WHAT";
     public static final String INTENT_WHAT_VEGETABLES = "VEGETABLES";
     public static final String INTENT_WHAT_FRUITS = "FRUITS";
+	public static final String INTENT_WHAT_INCOMING = "INCOMING";
     public static final String INTENT_WHAT_CALENDAR = "CALENDAR";
     public static final String INTENT_WHAT_SHOPPING_LIST = "SHOPPING_LIST";
     public static final String INTENT_ITEM = "ITEM";
@@ -95,7 +96,12 @@ public class FragmentsActivity extends AppCompatActivity {
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
                 } else if (text.equals(getString(R.string.season_incoming))) {
-
+					Fragment fragment = new ListFragment();
+					mCurrentFragment = fragment;
+                    Bundle bundle = new Bundle();
+                    bundle.putString(INTENT_WHAT, INTENT_WHAT_INCOMING);
+                    fragment.setArguments(bundle);
+                    replaceFragments(fragment);
                 } else if (text.equals(getString(R.string.calendar))) {
                     Fragment fragment = new CalendarFragment();
 					mCurrentFragment = fragment;
