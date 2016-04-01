@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mShopListBtn = (Button) findViewById(R.id.shopListBtn);
 
         Date today = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("dd MMMM");
+        SimpleDateFormat format = new SimpleDateFormat("d MMMM");
         mDateTextView.setText(format.format(today));
 
         mFruitsBtn.setOnClickListener(new View.OnClickListener() {
