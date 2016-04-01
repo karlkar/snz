@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="40sp"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:id="@+id/rowText"/>
 

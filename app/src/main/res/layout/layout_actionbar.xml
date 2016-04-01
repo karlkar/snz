@@ -10,6 +10,7 @@
         android:layout_gravity="center"
         android:textColor="#ffffff"
         android:id="@+id/action_bar_title"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textSize="40sp"/>
 
 </android.support.v7.widget.Toolbar>

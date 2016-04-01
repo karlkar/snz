@@ -15,7 +15,6 @@ public class CustomApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/Amatic-Bold.ttf")
                         .build()
         );
     }

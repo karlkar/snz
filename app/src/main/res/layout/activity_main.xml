@@ -26,6 +26,7 @@
         android:id="@+id/dateTextView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textSize="40sp"/>
 
     <TextView
@@ -35,6 +36,7 @@
         android:id="@+id/textView"
         android:layout_below="@+id/dateTextView"
         android:layout_centerHorizontal="true"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textSize="40sp"/>
 
     <Button
@@ -47,6 +49,7 @@
 		android:layout_alignLeft="@id/whiteStripe"
         android:stateListAnimator="@null"
         android:textSize="40sp"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:background="@drawable/button_turquis"/>
 
@@ -60,6 +63,7 @@
 		android:layout_alignLeft="@id/whiteStripe"
         android:stateListAnimator="@null"
         android:textSize="40sp"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:background="@drawable/button_green"/>
 
@@ -79,6 +83,7 @@
         android:text="@string/incoming_season_btn"
         android:id="@+id/incomingSeasonBtn"
         android:textSize="40sp"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:layout_above="@+id/calendarBtn"
 		android:layout_alignLeft="@id/whiteStripe"
@@ -92,6 +97,7 @@
         android:text="@string/calendar_btn"
         android:id="@+id/calendarBtn"
         android:textSize="40sp"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:layout_above="@+id/shopListBtn"
 		android:layout_alignLeft="@id/whiteStripe"
@@ -105,6 +111,7 @@
         android:text="@string/shopping_list_btn"
         android:id="@+id/shopListBtn"
         android:textSize="40sp"
+		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
 		android:layout_alignLeft="@id/whiteStripe"

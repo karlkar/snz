@@ -64,7 +64,7 @@ public class ShoppingListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String selectedItem = (String) parent.getItemAtPosition(position);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(getString(R.string.shopping_list_delete_dialog_title));
                 builder.setMessage(getString(R.string.shopping_list_delete_dialog_message, selectedItem));
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -93,7 +93,7 @@ public class ShoppingListFragment extends Fragment {
         mAddToListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(getString(R.string.shopping_list_add_dialog_title));
                 builder.setMessage(getString(R.string.shopping_list_add_dialog_message));
                 final EditText editText = new EditText(getActivity());

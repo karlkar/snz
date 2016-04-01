@@ -47,6 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/calendarHeader"
+					fontPath="fonts/Amatic-Bold.ttf"
                     android:textSize="40sp"/>
 
                 <TextView
@@ -84,6 +85,7 @@
                         android:gravity="center"
                         android:layout_weight="1"
                         android:text="@string/fruits_capitals"
+						fontPath="fonts/Amatic-Bold.ttf"
                         android:textSize="40sp"/>
 
                     <View
@@ -98,6 +100,7 @@
                         android:gravity="center"
                         android:layout_weight="1"
                         android:text="@string/vegetables_capitals"
+						fontPath="fonts/Amatic-Bold.ttf"
                         android:textSize="40sp"/>
 
                 </LinearLayout>
