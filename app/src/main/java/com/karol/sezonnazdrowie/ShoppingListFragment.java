@@ -1,6 +1,7 @@
 package com.karol.sezonnazdrowie;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,6 +40,7 @@ public class ShoppingListFragment extends Fragment {
     private Button mAddToListButton = null;
 
     private View mRoot = null;
+    private InputMethodManager mInputMethodManager;
 
     @Nullable
     @Override
@@ -46,6 +49,8 @@ public class ShoppingListFragment extends Fragment {
 
         if (mRoot != null)
             return mRoot;
+
+        mInputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mRoot = inflater.inflate(R.layout.fragment_shopping_list, null);
 
@@ -120,6 +125,7 @@ public class ShoppingListFragment extends Fragment {
                     }
                 });
                 builder.show();
+                mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         });
 
