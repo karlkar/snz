@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import java.util.Stack;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FragmentsActivity extends AppCompatActivity {
@@ -32,7 +34,7 @@ public class FragmentsActivity extends AppCompatActivity {
     private SnzDrawer mDrawer;
     private Toolbar mToolbar;
 
-	private Fragment mCurrentFragment = null;
+	private Stack<Fragment> mFragmentBackStack = new Stack<>();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -65,17 +67,20 @@ public class FragmentsActivity extends AppCompatActivity {
 
         String what = getIntent().getStringExtra(INTENT_WHAT);
         if (what.equals(INTENT_WHAT_CALENDAR)) {
-            mCurrentFragment = new CalendarFragment();
-            getFragmentManager().beginTransaction().add(R.id.contentView, mCurrentFragment).addToBackStack(null).commit();
+            Fragment fragment = new CalendarFragment();
+            mFragmentBackStack.push(fragment);
+            getFragmentManager().beginTransaction().add(R.id.contentView, fragment).addToBackStack(null).commit();
         } else if (what.equals(INTENT_WHAT_SHOPPING_LIST)) {
-            mCurrentFragment = new ShoppingListFragment();
-            getFragmentManager().beginTransaction().add(R.id.contentView, mCurrentFragment).commit();
+            Fragment fragment = new ShoppingListFragment();
+            mFragmentBackStack.push(fragment);
+            getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
         } else {
-            mCurrentFragment = new ListFragment();
+            Fragment fragment = new ListFragment();
+            mFragmentBackStack.push(fragment);
             Bundle bundle = new Bundle();
             bundle.putString(INTENT_WHAT, what);
-            mCurrentFragment.setArguments(bundle);
-            getFragmentManager().beginTransaction().add(R.id.contentView, mCurrentFragment).addToBackStack(null).commit();
+            fragment.setArguments(bundle);
+            getFragmentManager().beginTransaction().add(R.id.contentView, fragment).addToBackStack(null).commit();
         }
 
         mDrawer = (SnzDrawer) findViewById(R.id.left_drawer);
@@ -124,11 +129,12 @@ public class FragmentsActivity extends AppCompatActivity {
 
     public void replaceFragments(Fragment fragment) {
         boolean isSameAsCurrent = false;
+        Fragment currentFragment = mFragmentBackStack.peek();
         if (fragment.getClass().equals(ListFragment.class)) {
-            isSameAsCurrent = mCurrentFragment.getClass().equals(ListFragment.class)
-                    && fragment.getArguments().getString(INTENT_WHAT).equals(mCurrentFragment.getArguments().getString(INTENT_WHAT));
+            isSameAsCurrent = currentFragment.getClass().equals(ListFragment.class)
+                    && fragment.getArguments().getString(INTENT_WHAT).equals(currentFragment.getArguments().getString(INTENT_WHAT));
         } else
-            isSameAsCurrent = mCurrentFragment.getClass().equals(fragment.getClass());
+            isSameAsCurrent = currentFragment.getClass().equals(fragment.getClass());
 
         if (!isSameAsCurrent) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -137,8 +143,10 @@ public class FragmentsActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.contentView, fragment);
             if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment)
                 fragmentTransaction.addToBackStack(null);
+            else
+                mFragmentBackStack.pop();
             fragmentTransaction.commit();
-            mCurrentFragment = fragment;
+            mFragmentBackStack.push(fragment);
         }
         mDrawerLayout.closeDrawers();
     }
@@ -149,9 +157,10 @@ public class FragmentsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 1)
+        if (getFragmentManager().getBackStackEntryCount() > 1) {
             getFragmentManager().popBackStack();
-        else
+            mFragmentBackStack.pop();
+        } else
             super.onBackPressed();
     }
 }
