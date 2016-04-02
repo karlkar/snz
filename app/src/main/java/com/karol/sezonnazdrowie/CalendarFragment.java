@@ -278,7 +278,7 @@ public class CalendarFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.i("KURWA", "getView: " + position);
+            Log.i("CALENDARFRAGMENT", "getView: " + position);
             View view;
             final ViewHolder viewHolder;
             if (convertView == null) {
