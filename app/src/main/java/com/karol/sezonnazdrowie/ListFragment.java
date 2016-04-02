@@ -5,18 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 
@@ -70,21 +64,6 @@ public class ListFragment extends Fragment {
                 ((FragmentsActivity) getActivity()).replaceFragments(fragment);
             }
         });
-
-        final AdView adView = (AdView) mRoot.findViewById(R.id.adView);
-        adView.setVisibility(View.GONE);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.adMobTestDeviceNote5))
-                .addTestDevice(getString(R.string.adMobTestDeviceS5))
-                .build();
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                TransitionManager.beginDelayedTransition((ViewGroup) mRoot);
-                adView.setVisibility(View.VISIBLE);
-            }
-        });
-        adView.loadAd(adRequest);
         return mRoot;
     }
 

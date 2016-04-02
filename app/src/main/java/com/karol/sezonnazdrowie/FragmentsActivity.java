@@ -10,9 +10,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.Stack;
 
@@ -113,6 +119,21 @@ public class FragmentsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        final AdView adView = (AdView) findViewById(R.id.adView);
+        adView.setVisibility(View.GONE);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.adMobTestDeviceNote5))
+                .addTestDevice(getString(R.string.adMobTestDeviceS5))
+                .build();
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootView));
+                adView.setVisibility(View.VISIBLE);
+            }
+        });
+        adView.loadAd(adRequest);
     }
 
     @Override

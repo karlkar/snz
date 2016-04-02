@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -128,21 +123,6 @@ public class ShoppingListFragment extends Fragment {
                 mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         });
-
-        final AdView adView = (AdView) mRoot.findViewById(R.id.adView);
-        adView.setVisibility(View.GONE);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.adMobTestDeviceNote5))
-                .addTestDevice(getString(R.string.adMobTestDeviceS5))
-                .build();
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                TransitionManager.beginDelayedTransition((ViewGroup) mRoot);
-                adView.setVisibility(View.VISIBLE);
-            }
-        });
-        adView.loadAd(adRequest);
         return mRoot;
     }
 
