@@ -42,13 +42,15 @@
                 android:layout_height="50dp"
                 android:text="+"
                 android:id="@+id/addToShoppingListButton"
-                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="-16dp"
                 android:layout_centerHorizontal="true"
                 android:stateListAnimator="@null"
-                android:textSize="40sp"
+                android:textSize="30sp"
                 android:textColor="@android:color/white"
                 android:background="@drawable/round_button"
-                android:layout_gravity="right"/>
+                android:layout_gravity="right"
+                />
 
 
             <LinearLayout
