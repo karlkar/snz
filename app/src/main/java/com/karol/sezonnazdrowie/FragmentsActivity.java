@@ -65,15 +65,17 @@ public class FragmentsActivity extends AppCompatActivity {
 
         String what = getIntent().getStringExtra(INTENT_WHAT);
         if (what.equals(INTENT_WHAT_CALENDAR)) {
-            getFragmentManager().beginTransaction().add(R.id.contentView, new CalendarFragment()).addToBackStack(null).commit();
+            mCurrentFragment = new CalendarFragment();
+            getFragmentManager().beginTransaction().add(R.id.contentView, mCurrentFragment).addToBackStack(null).commit();
         } else if (what.equals(INTENT_WHAT_SHOPPING_LIST)) {
-            getFragmentManager().beginTransaction().add(R.id.contentView, new ShoppingListFragment()).commit();
+            mCurrentFragment = new ShoppingListFragment();
+            getFragmentManager().beginTransaction().add(R.id.contentView, mCurrentFragment).commit();
         } else {
-            Fragment fg = new ListFragment();
+            mCurrentFragment = new ListFragment();
             Bundle bundle = new Bundle();
             bundle.putString(INTENT_WHAT, what);
-            fg.setArguments(bundle);
-            getFragmentManager().beginTransaction().add(R.id.contentView, fg).addToBackStack(null).commit();
+            mCurrentFragment.setArguments(bundle);
+            getFragmentManager().beginTransaction().add(R.id.contentView, mCurrentFragment).addToBackStack(null).commit();
         }
 
         mDrawer = (SnzDrawer) findViewById(R.id.left_drawer);
@@ -83,33 +85,26 @@ public class FragmentsActivity extends AppCompatActivity {
                 String text = (String) parent.getItemAtPosition(position);
                 if (text.equals(getString(R.string.season_vegetables))) {
                     Fragment fragment = new ListFragment();
-					mCurrentFragment = fragment;
                     Bundle bundle = new Bundle();
                     bundle.putString(INTENT_WHAT, INTENT_WHAT_VEGETABLES);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
                 } else if (text.equals(getString(R.string.season_fruits))) {
                     Fragment fragment = new ListFragment();
-					mCurrentFragment = fragment;
                     Bundle bundle = new Bundle();
                     bundle.putString(INTENT_WHAT, INTENT_WHAT_FRUITS);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
                 } else if (text.equals(getString(R.string.season_incoming))) {
 					Fragment fragment = new ListFragment();
-					mCurrentFragment = fragment;
                     Bundle bundle = new Bundle();
                     bundle.putString(INTENT_WHAT, INTENT_WHAT_INCOMING);
                     fragment.setArguments(bundle);
                     replaceFragments(fragment);
                 } else if (text.equals(getString(R.string.calendar))) {
-                    Fragment fragment = new CalendarFragment();
-					mCurrentFragment = fragment;
-                    replaceFragments(fragment);
+                    replaceFragments(new CalendarFragment());
                 } else if (text.equals(getString(R.string.shopping_list))) {
-					Fragment fragment = new ShoppingListFragment();
-					mCurrentFragment = fragment;
-                    replaceFragments(fragment);
+                    replaceFragments(new ShoppingListFragment());
                 }
             }
         });
@@ -128,16 +123,23 @@ public class FragmentsActivity extends AppCompatActivity {
     }
 
     public void replaceFragments(Fragment fragment) {
-		if (!(fragment instanceof CalendarFragment) || !(mCurrentFragment instanceof CalendarFragment)) {
-        	FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        	if (fragment instanceof ListFragment || fragment instanceof CalendarFragment)
-            	getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
- 	        fragmentTransaction.replace(R.id.contentView, fragment);
-	        if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment)
-	            fragmentTransaction.addToBackStack(null);
-        	fragmentTransaction.commit();
-			mCurrentFragment = fragment;
-		}
+        boolean isSameAsCurrent = false;
+        if (fragment.getClass().equals(ListFragment.class)) {
+            isSameAsCurrent = mCurrentFragment.getClass().equals(ListFragment.class)
+                    && fragment.getArguments().getString(INTENT_WHAT).equals(mCurrentFragment.getArguments().getString(INTENT_WHAT));
+        } else
+            isSameAsCurrent = mCurrentFragment.getClass().equals(fragment.getClass());
+
+        if (!isSameAsCurrent) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            if (!(fragment instanceof FoodItemPageFragment))
+                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentTransaction.replace(R.id.contentView, fragment);
+            if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment)
+                fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+            mCurrentFragment = fragment;
+        }
         mDrawerLayout.closeDrawers();
     }
 
