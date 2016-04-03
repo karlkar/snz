@@ -41,7 +41,7 @@
 
     <Button
         android:layout_width="@dimen/main_button_width"
-        android:layout_height="70dp"
+        android:layout_height="@dimen/main_button_height"
 		android:layout_marginTop="5dp"
         android:text="@string/fruits_btn"
         android:id="@+id/fruitsBtn"
@@ -55,7 +55,7 @@
 
     <Button
         android:layout_width="@dimen/main_button_width"
-        android:layout_height="70dp"
+        android:layout_height="@dimen/main_button_height"
 		android:layout_marginTop="5dp"
         android:text="@string/vegetables_btn"
         android:id="@+id/vegetablesBtn"
@@ -79,7 +79,7 @@
 
     <Button
         android:layout_width="@dimen/main_button_width"
-        android:layout_height="70dp"
+        android:layout_height="@dimen/main_button_height"
         android:text="@string/incoming_season_btn"
         android:id="@+id/incomingSeasonBtn"
         android:textSize="40sp"
@@ -92,7 +92,7 @@
 
     <Button
         android:layout_width="@dimen/main_button_width"
-        android:layout_height="70dp"
+        android:layout_height="@dimen/main_button_height"
 		android:layout_marginTop="5dp"
         android:text="@string/calendar_btn"
         android:id="@+id/calendarBtn"
@@ -106,7 +106,7 @@
 
     <Button
         android:layout_width="@dimen/main_button_width"
-        android:layout_height="70dp"
+        android:layout_height="@dimen/main_button_height"
 		android:layout_marginTop="5dp"
         android:text="@string/shopping_list_btn"
         android:id="@+id/shopListBtn"

@@ -5,4 +5,5 @@
     <dimen name="title_background_width">285dp</dimen>
     <dimen name="title_background_height">52dp</dimen>
     <dimen name="preview_image_height">160dp</dimen>
+    <dimen name="main_button_height">70dp</dimen>
 </resources>
