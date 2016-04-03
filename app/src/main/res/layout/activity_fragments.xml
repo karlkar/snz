@@ -48,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/contentView"
                 android:layout_above="@id/adView"
-                android:gravity="center"/>
+                android:gravity="center_horizontal"/>
 
         </RelativeLayout>
 
