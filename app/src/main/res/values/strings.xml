@@ -3,23 +3,18 @@
     <string name="drawer_open">Otwórz</string>
     <string name="drawer_close">Zamknij</string>
 
-    <string name="january">styczeń %d</string>
-    <string name="february">luty %d</string>
-    <string name="march">marzec %d</string>
-    <string name="april">kwiecień %d</string>
-    <string name="may">maj %d</string>
-    <string name="june">czerwiec %d</string>
-    <string name="july">lipiec %d</string>
-    <string name="august">sierpień %d</string>
-    <string name="september">wrzesień %d</string>
-    <string name="october">październik %d</string>
-    <string name="november">listopad %d</string>
-    <string name="december">grudzień %d</string>
-    <string name="title_activity_main2">Main2Activity</string>
-
-    <string name="action_settings">Settings</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="january">STYCZEŃ %d</string>
+    <string name="february">LUTY %d</string>
+    <string name="march">MARZEC %d</string>
+    <string name="april">KWIECIEŃ %d</string>
+    <string name="may">MAJ %d</string>
+    <string name="june">CZERWIEC %d</string>
+    <string name="july">LIPIEC %d</string>
+    <string name="august">SIERPIEŃ %d</string>
+    <string name="september">WRZESIEŃ %d</string>
+    <string name="october">PAŹDZIERNIK %d</string>
+    <string name="november">LISTOPAD %d</string>
+    <string name="december">GRUDZIEŃ %d</string>
     <!-- -
         This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
         For more information, see https://support.google.com/admob/answer/3052638
