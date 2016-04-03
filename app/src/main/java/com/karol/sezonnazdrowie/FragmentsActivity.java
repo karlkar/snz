@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -129,7 +130,8 @@ public class FragmentsActivity extends AppCompatActivity {
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootView));
+                if (Build.VERSION.SDK_INT >= 19)
+                    TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootView));
                 adView.setVisibility(View.VISIBLE);
             }
         });
