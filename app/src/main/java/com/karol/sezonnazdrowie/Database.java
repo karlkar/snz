@@ -57,23 +57,20 @@ public class Database {
         ArrayList<FoodItem> list = new ArrayList<>();
         CalendarDay today = CalendarDay.today();
         Calendar todayDate = Calendar.getInstance();
-        todayDate.set(Calendar.YEAR, 0);
-        Calendar comparisonDay = Calendar.getInstance();
+        todayDate.set(Calendar.YEAR, 1970);
         for (FoodItem item : getAllFruits()) {
             if (!item.existsAt(today)) {
                 CalendarDay startDay1 = item.getStartDay1();
-                comparisonDay.set(0, startDay1.getMonth(), startDay1.getDay());
 
-                if (comparisonDay.after(todayDate) && TimeUnit.DAYS.convert(
-                        comparisonDay.getTimeInMillis() - todayDate.getTimeInMillis(),
+                if (startDay1.getCalendar().after(todayDate) && TimeUnit.DAYS.convert(
+                        startDay1.getCalendar().getTimeInMillis() - todayDate.getTimeInMillis(),
                         TimeUnit.MILLISECONDS) < INCOMING_SEASON_DAYS_DIFF)
                     list.add(item);
                 else {
                     CalendarDay startDay2 = item.getStartDay2();
                     if (startDay2 != null) {
-                        comparisonDay.set(0, startDay2.getMonth(), startDay2.getDay());
-                        if (comparisonDay.after(todayDate) && TimeUnit.DAYS.convert(
-                                comparisonDay.getTimeInMillis() - todayDate.getTimeInMillis(),
+                        if (startDay2.getCalendar().after(todayDate) && TimeUnit.DAYS.convert(
+                                startDay2.getCalendar().getTimeInMillis() - todayDate.getTimeInMillis(),
                                 TimeUnit.MILLISECONDS) < INCOMING_SEASON_DAYS_DIFF)
                         list.add(item);
                     }
@@ -83,18 +80,16 @@ public class Database {
         for (FoodItem item : getAllVegetables()) {
             if (!item.existsAt(today)) {
                 CalendarDay startDay1 = item.getStartDay1();
-                comparisonDay.set(0, startDay1.getMonth(), startDay1.getDay());
 
-                if (comparisonDay.after(todayDate) && TimeUnit.DAYS.convert(
-                        comparisonDay.getTimeInMillis() - todayDate.getTimeInMillis(),
+                if (startDay1.getCalendar().after(todayDate) && TimeUnit.DAYS.convert(
+                        startDay1.getCalendar().getTimeInMillis() - todayDate.getTimeInMillis(),
                         TimeUnit.MILLISECONDS) < INCOMING_SEASON_DAYS_DIFF)
                     list.add(item);
                 else {
                     CalendarDay startDay2 = item.getStartDay2();
                     if (startDay2 != null) {
-                        comparisonDay.set(0, startDay2.getMonth(), startDay2.getDay());
-                        if (comparisonDay.after(todayDate) && TimeUnit.DAYS.convert(
-                                comparisonDay.getTimeInMillis() - todayDate.getTimeInMillis(),
+                        if (startDay2.getCalendar().after(todayDate) && TimeUnit.DAYS.convert(
+                                startDay2.getCalendar().getTimeInMillis() - todayDate.getTimeInMillis(),
                                 TimeUnit.MILLISECONDS) < INCOMING_SEASON_DAYS_DIFF)
                             list.add(item);
                     }
