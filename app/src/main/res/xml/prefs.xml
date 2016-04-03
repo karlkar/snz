@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:title="@string/notification">
+
+        <PreferenceScreen
+            android:title="@string/notification_fruit"
+            android:key="pref_notification_fruit"
+            android:summary=""/>
+
+        <PreferenceScreen
+            android:title="@string/notification_vegetable"
+            android:key="pref_notification_vegetable"
+            android:summary=""/>
+
+        <MultiSelectListPreference
+            android:key="pref_season_start"
+            android:title="@string/notification_season_start"
+            android:entries="@array/noti_dates_start"
+            android:entryValues="@array/noti_dates_start"
+            android:defaultValue="@array/noti_dates_default"/>
+
+        <MultiSelectListPreference
+            android:key="pref_season_end"
+            android:title="@string/notification_season_end"
+            android:entries="@array/noti_dates_end"
+            android:entryValues="@array/noti_dates_end"
+            android:defaultValue="@array/noti_dates_default"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

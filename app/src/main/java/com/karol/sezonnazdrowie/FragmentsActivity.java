@@ -117,6 +117,8 @@ public class FragmentsActivity extends AppCompatActivity {
                     replaceFragments(new CalendarFragment());
                 } else if (text.equals(getString(R.string.shopping_list))) {
                     replaceFragments(new ShoppingListFragment());
+                } else if (text.equals(getString(R.string.settings))) {
+                    replaceFragments(new SettingsFragment());
                 }
             }
         });

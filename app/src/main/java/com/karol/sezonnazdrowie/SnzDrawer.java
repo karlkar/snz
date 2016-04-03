@@ -31,6 +31,7 @@ public class SnzDrawer extends ListView {
         list.add(context.getString(R.string.season_incoming));
         list.add(context.getString(R.string.calendar));
         list.add(context.getString(R.string.shopping_list));
+        list.add(context.getString(R.string.settings));
 		setAdapter(new ArrayAdapter<>(context, R.layout.drawer_row_layout, R.id.rowText, list));
     }
 }

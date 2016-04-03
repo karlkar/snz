@@ -6,8 +6,18 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/holo_red_light</item>
         <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="MyToolbarStyle">
+        <item name="android:minHeight">?actionBarSize</item>
+        <item name="android:background">?colorPrimary</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="theme">@style/MyToolbarTheme</item>
+
+    </style><style name="MyToolbarTheme">
+        <item name="colorControlNormal">#FFF</item>
     </style>
 
     <style name="TableDivider">
