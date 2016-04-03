@@ -78,4 +78,6 @@
     <string name="delete">Usuń</string>
     <string name="shopping_list_delete_dialog_title">Czy chcesz usunąć?</string>
     <string name="shopping_list_delete_dialog_message">Czy chcesz usunąć produkt `%1$s`</string>
+    <string name="season">Sezon</string>
+    <string name="all_year">całoroczne</string>
 </resources>

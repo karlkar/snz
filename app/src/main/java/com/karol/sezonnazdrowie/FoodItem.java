@@ -442,12 +442,26 @@ public class FoodItem implements Parcelable, Comparable {
     }
 
     public CalendarDay getStartDay1() {
+        if (mStartDay1 == null)
+            return null;
         return CalendarDay.from(CalendarDay.today().getYear(), mStartDay1.getMonth(), mStartDay1.getDay());
+    }
+
+    public CalendarDay getEndDay1() {
+        if (mEndDay1 == null)
+            return null;
+        return CalendarDay.from(CalendarDay.today().getYear(), mEndDay1.getMonth(), mEndDay1.getDay());
     }
 
     public CalendarDay getStartDay2() {
         if (mStartDay2 == null)
             return null;
         return CalendarDay.from(CalendarDay.today().getYear(), mStartDay2.getMonth(), mStartDay2.getDay());
+    }
+
+    public CalendarDay getEndDay2() {
+        if (mEndDay2 == null)
+            return null;
+        return CalendarDay.from(CalendarDay.today().getYear(), mEndDay2.getMonth(), mEndDay2.getDay());
     }
 }
