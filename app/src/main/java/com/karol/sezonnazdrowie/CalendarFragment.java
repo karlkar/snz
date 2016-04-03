@@ -56,7 +56,7 @@ public class CalendarFragment extends Fragment {
     private TextView mCalendarHeaderTextView;
     private MaterialCalendarView mCalendarView;
 
-    private View mRoot = null;
+    private View mRootView = null;
 
     private int mCurrentMonth;
     private CalendarDay mSelectedDate = null;
@@ -116,21 +116,21 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
 
-        if (mRoot != null)
-            return mRoot;
+        if (mRootView != null)
+            return mRootView;
 
-        mRoot = inflater.inflate(R.layout.fragment_calendar, null);
+        mRootView = inflater.inflate(R.layout.fragment_calendar, null);
 
-        mCalendarScrollView = (ScrollView) mRoot.findViewById(R.id.calendarScrollView);
+        mCalendarScrollView = (ScrollView) mRootView.findViewById(R.id.calendarScrollView);
 
-        mFruitsGridView = (GridView) mRoot.findViewById(R.id.fruitsGridView);
+        mFruitsGridView = (GridView) mRootView.findViewById(R.id.fruitsGridView);
         mFruitAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllFruits());
         mFruitsGridView.setAdapter(mFruitAdapter);
         mFruitsGridView.setFocusable(false);
         mFruitsGridView.setOnItemClickListener(mOnItemClickListener);
         mFruitsGridView.setOnItemLongClickListener(mOnItemLongClickListener);
 
-        mVegetablesGridView = (GridView) mRoot.findViewById(R.id.vegetablesGridView);
+        mVegetablesGridView = (GridView) mRootView.findViewById(R.id.vegetablesGridView);
         mVegetableAdapter = new FoodItemAdapter(getActivity(), Database.getInstance().getAllVegetables());
         mVegetablesGridView.setAdapter(mVegetableAdapter);
         mVegetablesGridView.setFocusable(false);
@@ -141,15 +141,15 @@ public class CalendarFragment extends Fragment {
         matrix.setSaturation(0);
         mGrayScaleFilter = new ColorMatrixColorFilter(matrix);
 
-        prepareCalendarView(mRoot);
-        return mRoot;
+        prepareCalendarView(mRootView);
+        return mRootView;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mRoot != null && mRoot.getParent() != null)
-            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
+        if (mRootView != null && mRootView.getParent() != null)
+            ((ViewGroup) mRootView.getParent()).removeView(mRootView);
     }
 
     @Override
