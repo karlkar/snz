@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.*;
 
 /**
  * Created by Karol on 13.03.2016.
@@ -460,4 +461,40 @@ public class FoodItem implements Parcelable, Comparable {
     public CalendarDay getEndDay2() {
         return mEndDay2;
     }
+	
+	public CalendarDay getNearestSeasonStart(CalendarDay rel) {
+		if (mStartDay1 == null)
+			return null;
+		Calendar relCal = rel.getCalendar();
+		relCal.set(Calendar.YEAR, mStartDay1.getYear());
+		if (mStartDay2 == null) {
+			if (relCal.before(mEndDay1))
+				return CalendarDay.from(rel.getYear(), mStartDay1.getMonth(), mStartDay1.getDay());
+			else
+				return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
+		}
+		if (relCal.before(mEndDay1.getCalendar()))
+			return CalendarDay.from(rel.getYear(), mStartDay1.getMonth(), mStartDay1.getDay());
+		else if (relCal.before(mEndDay2.getCalendar()))
+			return CalendarDay.from(rel.getYear(), mStartDay2.getMonth(), mStartDay2.getDay());
+		return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
+	}
+	
+	public CalendarDay getNearestSeasonEnd(CalendarDay rel) {
+		if (mEndDay1 == null)
+			return null;
+		Calendar relCal = rel.getCalendar();
+		relCal.set(Calendar.YEAR, mStartDay1.getYear());
+		if (mEndDay2 == null) {
+			if (relCal.before(mEndDay1))
+				return CalendarDay.from(rel.getYear(), mEndDay1.getMonth(), mEndDay1.getDay());
+			else
+				return CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
+		}
+		if (relCal.before(mEndDay1.getCalendar()))
+			return CalendarDay.from(rel.getYear(), mEndDay1.getMonth(), mEndDay1.getDay());
+		else if (relCal.before(mEndDay2.getCalendar()))
+			return CalendarDay.from(rel.getYear(), mEndDay2.getMonth(), mEndDay2.getDay());
+		return CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
+	}
 }
