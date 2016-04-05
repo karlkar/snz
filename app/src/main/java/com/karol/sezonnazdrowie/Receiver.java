@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.os.Bundle;
 import android.app.AlarmManager;
 import java.util.Calendar;
+import android.app.TaskStackBuilder;
 
 public class Receiver extends BroadcastReceiver {
 
@@ -23,7 +24,16 @@ public class Receiver extends BroadcastReceiver {
 		builder.setContentTitle(title);
 		builder.setContentText(text);
 		builder.setSmallIcon(R.mipmap.ic_launcher);
+		builder.setAutoCancel(true);
 		builder.setStyle(new Notification.BigTextStyle().bigText(text));
+		
+		Intent notiIntent = new Intent(context, FragmentsActivity.class);
+		notiIntent.putExtra(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_INCOMING);
+		TaskStackBuilder stackBuidler = TaskStackBuilder.create(context);
+		stackBuidler.addParentStack(FragmentsActivity.class);
+		stackBuidler.addNextIntent(notiIntent);
+		PendingIntent pIntent = stackBuidler.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		builder.setContentIntent(pIntent);
 		
 		NotificationManager	notiMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		notiMgr.notify(type.equals("start") ? 0 : 1, builder.build());

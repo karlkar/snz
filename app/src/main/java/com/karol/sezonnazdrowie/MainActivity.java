@@ -99,7 +99,17 @@ public class MainActivity extends AppCompatActivity {
 			builder.setContentTitle("Juz wkrótce zaczyna się sezon na");
 			builder.setContentText(text);
 			builder.setSmallIcon(R.mipmap.ic_launcher);
+			builder.setAutoCancel(true);
 			builder.setStyle(new Notification.BigTextStyle().bigText(text));
+
+			Intent notiIntent = new Intent(this, FragmentsActivity.class);
+			notiIntent.putExtra(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_INCOMING);
+			TaskStackBuilder stackBuidler = TaskStackBuilder.create(this);
+			stackBuidler.addParentStack(FragmentsActivity.class);
+			stackBuidler.addNextIntent(notiIntent);
+			PendingIntent pIntent = stackBuidler.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+			builder.setContentIntent(pIntent);
+			
 			NotificationManager	notiMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			notiMgr.notify(2, builder.build());
 			

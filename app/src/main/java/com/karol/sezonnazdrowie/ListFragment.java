@@ -40,6 +40,9 @@ public class ListFragment extends Fragment {
 
         mRoot = inflater.inflate(R.layout.fragment_list, null);
 
+		if (Database.getInstance().getAllFruits() == null)
+			Database.getInstance().loadData(getActivity());
+		
         ArrayList<FoodItem> items = null;
         if (what.equals(FragmentsActivity.INTENT_WHAT_FRUITS)) {
             items = Database.getInstance().getCurrentFruits();
