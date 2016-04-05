@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Karol on 25.03.2016.
@@ -53,6 +55,15 @@ public class ListFragment extends Fragment {
         } else if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING))
 			items = Database.getInstance().getIncomingItems();
 
+		Collections.sort(items, new Comparator<FoodItem>() {
+			@Override
+			public int compare(FoodItem lhs, FoodItem rhs) {
+				if (lhs.getStartDay1().equals(rhs.getStartDay1()))
+					return lhs.compareTo(rhs);
+				return lhs.getStartDay1().isBefore(rhs.getStartDay1()) ? -1 : 1;
+			}
+		});
+				
         mListView = (ListView) mRoot.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);
         mListView.setAdapter(mAdapter);
