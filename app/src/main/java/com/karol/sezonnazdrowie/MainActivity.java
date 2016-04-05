@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Database.getInstance().loadData(this);
+		if (Database.getInstance().getAllFruits() == null)
+        	Database.getInstance().loadData(this);
         super.onResume();
     }
 }
