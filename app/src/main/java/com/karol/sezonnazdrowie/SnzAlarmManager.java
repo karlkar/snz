@@ -86,7 +86,7 @@ public class SnzAlarmManager {
 
         for (CalendarDay day : endMap.keySet()) {
 			ArrayList<String> items = new ArrayList<>();
-			for (FoodItem item : startMap.get(day)) {
+			for (FoodItem item : endMap.get(day)) {
 				if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), false))
 					items.add(item.getName());
 			}
