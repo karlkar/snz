@@ -277,12 +277,26 @@ public class FoodItem implements Parcelable, Comparable {
         if ((mStartDay1.getMonth() == date.getMonth() && mStartDay1.getDay() <= date.getDay())
                 || (mEndDay1.getMonth() == date.getMonth() && mEndDay1.getDay() >= date.getDay()))
             return true;
+        if (mEndDay1.isBefore(mStartDay1)) {
+            if (date.getMonth() > mStartDay1.getMonth() || date.getMonth() < mEndDay1.getMonth())
+                return true;
+            if ((date.getMonth() == mStartDay1.getMonth() && date.getDay() >= date.getDay())
+                    || (date.getMonth() == mEndDay1.getMonth() && date.getDay() <= mEndDay1.getDay()))
+                return true;
+        }
         if (mStartDay2 != null && mEndDay2 != null) {
             if (mStartDay2.getMonth() < date.getMonth() && mEndDay2.getMonth() > date.getMonth())
                 return true;
             if ((mStartDay2.getMonth() == date.getMonth() && mStartDay2.getDay() <= date.getDay())
                     || (mEndDay2.getMonth() == date.getMonth()) && mEndDay2.getDay() >= date.getDay())
                 return true;
+            if (mEndDay2.isBefore(mStartDay2)) {
+                if (date.getMonth() > mStartDay2.getMonth() || date.getMonth() < mEndDay2.getMonth())
+                    return true;
+                if ((date.getMonth() == mStartDay2.getMonth() && date.getDay() >= date.getDay())
+                        || (date.getMonth() == mEndDay2.getMonth() && date.getDay() <= mEndDay2.getDay()))
+                    return true;
+            }
         }
         return false;
     }
@@ -461,40 +475,86 @@ public class FoodItem implements Parcelable, Comparable {
     public CalendarDay getEndDay2() {
         return mEndDay2;
     }
-	
+
+    public CalendarDay getNearestSeasonDay(CalendarDay rel) {
+        if (mStartDay1 == null)
+            return rel;
+
+        if (existsAt(rel))
+            return rel;
+
+        return getNearestSeasonStart(rel);
+    }
+
 	public CalendarDay getNearestSeasonStart(CalendarDay rel) {
-		if (mStartDay1 == null)
-			return null;
-		Calendar relCal = rel.getCalendar();
-		relCal.set(Calendar.YEAR, mStartDay1.getYear());
-		if (mStartDay2 == null) {
-			if (relCal.before(mEndDay1.getCalendar()))
-				return CalendarDay.from(rel.getYear(), mStartDay1.getMonth(), mStartDay1.getDay());
-			else
-				return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
-		}
-		if (relCal.before(mEndDay1.getCalendar()))
-			return CalendarDay.from(rel.getYear(), mStartDay1.getMonth(), mStartDay1.getDay());
-		else if (relCal.before(mEndDay2.getCalendar()))
-			return CalendarDay.from(rel.getYear(), mStartDay2.getMonth(), mStartDay2.getDay());
-		return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
+        if (mStartDay1 == null)
+            return null;
+        int relInDays = rel.getMonth() * 30 + rel.getDay();
+        int start1InDays = mStartDay1.getMonth() * 30 + mStartDay1.getDay();
+
+        CalendarDay retVal1;
+        if (start1InDays >= relInDays)
+            retVal1 = CalendarDay.from(rel.getYear(), mStartDay1.getMonth(), mStartDay1.getDay());
+        else
+            retVal1 = CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
+
+        if (mStartDay2 == null)
+            return retVal1;
+
+        int start2InDays = mStartDay2.getMonth() * 30 + mStartDay2.getDay();
+        CalendarDay retVal2;
+        if (start2InDays >= relInDays)
+            retVal2 = CalendarDay.from(rel.getYear(), mStartDay2.getMonth(), mStartDay2.getDay());
+        else
+            retVal2 = CalendarDay.from(rel.getYear() + 1, mStartDay2.getMonth(), mStartDay2.getDay());
+
+        int start1Diff = start1InDays - relInDays;
+        int start2Diff = start2InDays - relInDays;
+
+        if (start1Diff >= 0 && start2Diff >= 0) {
+            if (start1Diff < start2Diff)
+                return retVal1;
+            else
+                return retVal2;
+        } else if (start1Diff < 0 && start2Diff >= 0)
+            return retVal2;
+        else
+            return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
 	}
 	
 	public CalendarDay getNearestSeasonEnd(CalendarDay rel) {
-		if (mEndDay1 == null)
-			return null;
-		Calendar relCal = rel.getCalendar();
-		relCal.set(Calendar.YEAR, mStartDay1.getYear());
-		if (mEndDay2 == null) {
-			if (relCal.before(mEndDay1.getCalendar()))
-				return CalendarDay.from(rel.getYear(), mEndDay1.getMonth(), mEndDay1.getDay());
-			else
-				return CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
-		}
-		if (relCal.before(mEndDay1.getCalendar()))
-			return CalendarDay.from(rel.getYear(), mEndDay1.getMonth(), mEndDay1.getDay());
-		else if (relCal.before(mEndDay2.getCalendar()))
-			return CalendarDay.from(rel.getYear(), mEndDay2.getMonth(), mEndDay2.getDay());
-		return CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
+        if (mEndDay1 == null)
+            return null;
+        int relInDays = rel.getMonth() * 30 + rel.getDay();
+        int end1InDays = mEndDay1.getMonth() * 30 + mEndDay1.getDay();
+
+        CalendarDay retVal1;
+        if (end1InDays >= relInDays)
+            retVal1 = CalendarDay.from(rel.getYear(), mEndDay1.getMonth(), mEndDay1.getDay());
+        else
+            retVal1 = CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
+
+        if (mEndDay2 == null)
+            return retVal1;
+
+        int end2InDays = mEndDay2.getMonth() * 30 + mEndDay2.getDay();
+        CalendarDay retVal2;
+        if (end2InDays >= relInDays)
+            retVal2 = CalendarDay.from(rel.getYear(), mEndDay2.getMonth(), mEndDay2.getDay());
+        else
+            retVal2 = CalendarDay.from(rel.getYear() + 1, mEndDay2.getMonth(), mEndDay2.getDay());
+
+        int start1Diff = end1InDays - relInDays;
+        int start2Diff = end2InDays - relInDays;
+
+        if (start1Diff >= 0 && start2Diff >= 0) {
+            if (start1Diff < start2Diff)
+                return retVal1;
+            else
+                return retVal2;
+        } else if (start1Diff < 0 && start2Diff >= 0)
+            return retVal2;
+        else
+            return CalendarDay.from(rel.getYear() + 1, mEndDay2.getMonth(), mEndDay2.getDay());
 	}
 }

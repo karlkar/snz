@@ -12,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,9 +60,12 @@ public class ListFragment extends Fragment {
 		Collections.sort(items, new Comparator<FoodItem>() {
 			@Override
 			public int compare(FoodItem lhs, FoodItem rhs) {
-				if (lhs.getStartDay1().equals(rhs.getStartDay1()))
+                CalendarDay today = CalendarDay.today();
+                CalendarDay lhsDay = lhs.getNearestSeasonStart(today);
+                CalendarDay rhsDay = rhs.getNearestSeasonStart(today);
+				if (lhsDay.equals(rhsDay))
 					return lhs.compareTo(rhs);
-				return lhs.getStartDay1().isBefore(rhs.getStartDay1()) ? -1 : 1;
+				return lhsDay.isBefore(rhsDay) ? -1 : 1;
 			}
 		});
 				

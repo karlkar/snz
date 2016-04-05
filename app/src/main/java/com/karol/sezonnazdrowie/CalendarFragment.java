@@ -78,32 +78,8 @@ public class CalendarFragment extends Fragment {
             mCalendarScrollView.fullScroll(ScrollView.FOCUS_UP);
 
             CalendarDay currentDay = mCalendarView.getCurrentDate();
-            CalendarDay properDay = null;
-            if (!mSelectedFoodItem.existsAt(currentDay)) {
-                CalendarDay startDay1 = mSelectedFoodItem.getStartDay1();
-                startDay1 = CalendarDay.from(currentDay.getYear(), startDay1.getMonth(), startDay1.getDay());
-                CalendarDay endDay1 = mSelectedFoodItem.getEndDay1();
-                endDay1 = CalendarDay.from(currentDay.getYear(), endDay1.getMonth(), endDay1.getDay());
-                CalendarDay startDay2 = mSelectedFoodItem.getStartDay2();
-                CalendarDay endDay2 = mSelectedFoodItem.getEndDay2();
-                if (startDay2 == null) {
-                    if (currentDay.isBefore(startDay1))
-                        properDay = startDay1;
-                    else
-                        properDay = CalendarDay.from(startDay1.getYear() + 1, startDay1.getMonth(), startDay1.getDay());
-                } else {
-                    startDay2 = CalendarDay.from(currentDay.getYear(), startDay2.getMonth(), startDay2.getDay());
-                    endDay2 = CalendarDay.from(currentDay.getYear(), endDay2.getMonth(), endDay2.getDay());
-                    if (currentDay.isBefore(startDay1))
-                        properDay = startDay1;
-                    else if (currentDay.isAfter(endDay2)) {
-                        properDay = CalendarDay.from(startDay1.getYear() + 1, startDay1.getMonth(), startDay1.getDay());
-                    } else
-                        properDay = startDay2;
-                }
-            }
-
-            if (properDay == null)
+            CalendarDay properDay = mSelectedFoodItem.getNearestSeasonDay(currentDay);
+            if (properDay == null || currentDay.equals(properDay))
                 mCalendarView.invalidateDecorators();
             else
                 mCalendarView.setCurrentDate(properDay, true);
