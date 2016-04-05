@@ -468,7 +468,7 @@ public class FoodItem implements Parcelable, Comparable {
 		Calendar relCal = rel.getCalendar();
 		relCal.set(Calendar.YEAR, mStartDay1.getYear());
 		if (mStartDay2 == null) {
-			if (relCal.before(mEndDay1))
+			if (relCal.before(mEndDay1.getCalendar()))
 				return CalendarDay.from(rel.getYear(), mStartDay1.getMonth(), mStartDay1.getDay());
 			else
 				return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
@@ -486,7 +486,7 @@ public class FoodItem implements Parcelable, Comparable {
 		Calendar relCal = rel.getCalendar();
 		relCal.set(Calendar.YEAR, mStartDay1.getYear());
 		if (mEndDay2 == null) {
-			if (relCal.before(mEndDay1))
+			if (relCal.before(mEndDay1.getCalendar()))
 				return CalendarDay.from(rel.getYear(), mEndDay1.getMonth(), mEndDay1.getDay());
 			else
 				return CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
