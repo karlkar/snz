@@ -123,8 +123,9 @@ public class FragmentsActivity extends AppCompatActivity {
             }
         });
 
-        final AdView adView = (AdView) findViewById(R.id.adView);
-        adView.setVisibility(View.GONE);
+		final View adBackground = findViewById(R.id.adBackground);
+        AdView adView = (AdView) findViewById(R.id.adView);
+        adBackground.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceNote5))
                 .addTestDevice(getString(R.string.adMobTestDeviceS5))
@@ -134,7 +135,7 @@ public class FragmentsActivity extends AppCompatActivity {
             public void onAdLoaded() {
                 if (Build.VERSION.SDK_INT >= 19)
                     TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootView));
-                adView.setVisibility(View.VISIBLE);
+                adBackground.setVisibility(View.VISIBLE);
             }
         });
         adView.loadAd(adRequest);
