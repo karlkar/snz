@@ -47,17 +47,27 @@ public class SnzAlarmManager {
 		
         Calendar today = Calendar.getInstance();
         for (CalendarDay day : startMap.keySet()) {
-			ArrayList<String> items = new ArrayList<>();
+			StringBuilder strBuilder = new StringBuilder();
 			for (FoodItem item : startMap.get(day)) {
-				if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), false))
-					items.add(item.getName());
+				if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), false)) {
+					if (strBuilder.length() > 0)
+						strBuilder.append(", ");
+					strBuilder.append(item.getConjugatedName());
+				}
 			}
-			if (items.size() > 0) {
+			if (strBuilder.length() > 0) {
 	            for (Integer dayDiff : startDays) {
+					String title = "";
+					if (dayDiff == 0)
+						title = "Wkrótce zacznie się sezon na";
+					else if (dayDiff == 7)
+						title = "Za tydzień zacznie się sezon na";
+					else if (dayDiff == 30)
+						title = "Za miesiąc zacznie się sezon na";
 					intent = new Intent(ctx, Receiver.class);
 					intent.putExtra("type", "start");
-					intent.putExtra("items", items);
-					intent.putExtra("days", dayDiff);
+					intent.putExtra("title", title);
+					intent.putExtra("text", strBuilder.toString());
 					alarmIntent = PendingIntent.getBroadcast(ctx, 0, intent, 0);
     	            Calendar calendar = day.getCalendar();
         	        calendar.set(Calendar.YEAR, today.get(Calendar.YEAR));
@@ -85,17 +95,25 @@ public class SnzAlarmManager {
         }
 
         for (CalendarDay day : endMap.keySet()) {
-			ArrayList<String> items = new ArrayList<>();
+			StringBuilder strBuilder = new StringBuilder();
 			for (FoodItem item : endMap.get(day)) {
-				if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), false))
-					items.add(item.getName());
+				if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), false)) {
+					if (strBuilder.length() > 0)
+						strBuilder.append(", ");
+					strBuilder.append(item.getConjugatedName());
+				}
 			}
-			if (items.size() > 0) {
+			if (strBuilder.length() > 0) {
 	            for (Integer dayDiff : endDays) {
+					String title = "";
+					if (dayDiff == 0)
+						title = "Wkrótce skończy się sezon na";
+					else if (dayDiff == 7)
+						title = "Za tydzień skończy się sezon na";
 					intent = new Intent(ctx, Receiver.class);
 					intent.putExtra("type", "end");
-					intent.putExtra("items", items);
-					intent.putExtra("days", dayDiff);
+					intent.putExtra("title", title);
+					intent.putExtra("text", strBuilder.toString());
 					alarmIntent = PendingIntent.getBroadcast(ctx, 0, intent, 0);
     	            Calendar calendar = day.getCalendar();
         	        calendar.set(Calendar.YEAR, today.get(Calendar.YEAR));

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import android.app.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,8 +92,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-		if (Database.getInstance().getAllFruits() == null)
+		if (Database.getInstance().getAllFruits() == null) {
         	Database.getInstance().loadData(this);
+			String text = "pomidory, gruszki, sliwki, endywie, truskawki, brokuly, banany, porzeczke, rzodkiew korzen, fasole, marchew";
+			Notification.Builder builder = new Notification.Builder(this);
+			builder.setContentTitle("Juz wkrótce zaczyna się sezon na");
+			builder.setContentText(text);
+			builder.setSmallIcon(R.mipmap.ic_launcher);
+			builder.setStyle(new Notification.BigTextStyle().bigText(text));
+			NotificationManager	notiMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			notiMgr.notify(2, builder.build());
+			
+		}
         super.onResume();
     }
 }

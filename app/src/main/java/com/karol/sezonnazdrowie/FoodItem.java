@@ -289,6 +289,10 @@ public class FoodItem implements Parcelable, Comparable {
     public String getName() {
         return mName;
     }
+	
+	public String getConjugatedName() {
+		return mName.toLowerCase();
+	}
 
     public String getImage() {
         return mImageResourceId;
