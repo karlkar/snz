@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.*;
 
 /**
  * Created by Karol on 13.03.2016.
@@ -26,6 +25,7 @@ public class FoodItem implements Parcelable, Comparable {
     private static final String TAG = "FoodItem";
 
     private String mName;
+	private String mConjugatedName;
     private CalendarDay mStartDay1 = null;
     private CalendarDay mEndDay1 = null;
     private CalendarDay mStartDay2 = null;
@@ -63,17 +63,10 @@ public class FoodItem implements Parcelable, Comparable {
     private String mVitK;
 
     private boolean mEnabled = false;
-    private boolean mIsSubItem = false;
-
-    private ArrayList<FoodItem> mSubItems = null;
 
     public FoodItem(String[] row, boolean isFruit) {
-        if (!row[0].isEmpty())
-            mName = row[0];
-        else {
-            mIsSubItem = true;
-            mName = row[1];
-        }
+		mName = row[0];
+		mConjugatedName = row[1];
         mImageResourceId = row[2];
         String startDate1 = row[3];
         String endDate1 = row[4];
@@ -154,14 +147,6 @@ public class FoodItem implements Parcelable, Comparable {
         mVitA = in.readString();
         mVitE = in.readString();
         mVitK = in.readString();
-        mIsSubItem = in.readByte() != 0x00;
-        mSubItems = in.readArrayList(FoodItem.class.getClassLoader());
-        if (in.readByte() == 0x01) {
-            mSubItems = new ArrayList<FoodItem>();
-            in.readList(mSubItems, FoodItem.class.getClassLoader());
-        } else {
-            mSubItems = null;
-        }
     }
 
     public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
@@ -215,13 +200,6 @@ public class FoodItem implements Parcelable, Comparable {
         dest.writeString(mVitA);
         dest.writeString(mVitE);
         dest.writeString(mVitK);
-        dest.writeByte((byte) (mIsSubItem ? 0x01 : 0x00));
-        if (mSubItems == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(mSubItems);
-        }
     }
 
     public static ArrayList<FoodItem> createItems(Context context, int resId, boolean isFruit) {
@@ -231,18 +209,11 @@ public class FoodItem implements Parcelable, Comparable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String line;
             int cnt = 0;
-            FoodItem lastItem = null;
             while ((line = reader.readLine()) != null) {
                 if (cnt++ < 2)
                     continue;
                 String[] rowData = line.split("#", -1);
-                FoodItem curItem = new FoodItem(rowData, isFruit);
-                if (curItem.isSubItem() && lastItem != null && !lastItem.isSubItem())
-                    lastItem.addSubItem(curItem);
-                else {
-                    items.add(curItem);
-                    lastItem = curItem;
-                }
+				items.add(new FoodItem(rowData, isFruit));
             }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
@@ -261,12 +232,6 @@ public class FoodItem implements Parcelable, Comparable {
         }
         Collections.sort(items);
         return items;
-    }
-
-    private void addSubItem(FoodItem item) {
-        if (mSubItems == null)
-            mSubItems = new ArrayList<>();
-        mSubItems.add(item);
     }
 
     public boolean existsAt(CalendarDay date) {
@@ -306,7 +271,7 @@ public class FoodItem implements Parcelable, Comparable {
     }
 	
 	public String getConjugatedName() {
-		return mName.toLowerCase();
+		return mConjugatedName;
 	}
 
     public String getImage() {
@@ -424,11 +389,7 @@ public class FoodItem implements Parcelable, Comparable {
     public void setEnabled(boolean enabled) {
         mEnabled = enabled;
     }
-
-    public boolean isSubItem() {
-        return mIsSubItem;
-    }
-
+	
     @Override
     public String toString() {
         return mName;
