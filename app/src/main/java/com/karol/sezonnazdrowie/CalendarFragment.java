@@ -79,7 +79,7 @@ public class CalendarFragment extends Fragment {
 
             CalendarDay currentDay = mCalendarView.getCurrentDate();
             CalendarDay properDay = mSelectedFoodItem.getNearestSeasonDay(currentDay);
-            if (properDay == null || currentDay.equals(properDay))
+            if (properDay == null || currentDay.getMonth() == properDay.getMonth())
                 mCalendarView.invalidateDecorators();
             else
                 mCalendarView.setCurrentDate(properDay, true);
