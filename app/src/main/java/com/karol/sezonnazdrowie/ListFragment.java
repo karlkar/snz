@@ -54,20 +54,9 @@ public class ListFragment extends Fragment {
         } else if (what.equals(FragmentsActivity.INTENT_WHAT_VEGETABLES)) {
             items = Database.getInstance().getCurrentVegetables();
 //            items = Database.getInstance().getAllVegetables();
-        } else if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING))
+        } else if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING)) {
 			items = Database.getInstance().getIncomingItems();
-
-		Collections.sort(items, new Comparator<FoodItem>() {
-			@Override
-			public int compare(FoodItem lhs, FoodItem rhs) {
-                CalendarDay today = CalendarDay.today();
-                CalendarDay lhsDay = lhs.getNearestSeasonStart(today);
-                CalendarDay rhsDay = rhs.getNearestSeasonStart(today);
-				if (lhsDay.equals(rhsDay))
-					return lhs.compareTo(rhs);
-				return lhsDay.isBefore(rhsDay) ? -1 : 1;
-			}
-		});
+		}
 				
         mListView = (ListView) mRoot.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);

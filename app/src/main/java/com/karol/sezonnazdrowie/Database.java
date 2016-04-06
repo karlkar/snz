@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-import android.preference.*;
+import android.preference.PreferenceManager;
+import java.util.Comparator;
 
 /**
  * Created by Karol on 16.03.2016.
@@ -98,7 +99,21 @@ public class Database {
             }
         }
 
-        Collections.sort(list);
+        Collections.sort(list, new Comparator<FoodItem>() {
+			@Override
+			public int compare(FoodItem lhs, FoodItem rhs) {
+        	    CalendarDay today = CalendarDay.today();
+        	    CalendarDay lhsDay = lhs.getNearestSeasonStart(today);
+        	    CalendarDay rhsDay = rhs.getNearestSeasonStart(today);
+				if (lhsDay == null && rhsDay != null)
+					return -1;
+				if (lhsDay != null && rhsDay == null)
+					return 1;
+				if (lhsDay == null && rhsDay == null || lhsDay.equals(rhsDay))
+					return lhs.compareTo(rhs);
+				return lhsDay.isBefore(rhsDay) ? -1 : 1;
+			}
+		});
         return list;
     }
 
