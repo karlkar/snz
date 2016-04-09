@@ -38,10 +38,11 @@ public class SettingsItemsFragment extends PreferenceFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
-
-        ViewGroup.LayoutParams params = layout.getLayoutParams();
-        params.width = (int) getActivity().getResources().getDimension(R.dimen.main_middle_bar_width);
-        layout.setLayoutParams(params);
+        if (layout != null) {
+            ViewGroup.LayoutParams params = layout.getLayoutParams();
+            params.width = (int) getActivity().getResources().getDimension(R.dimen.main_middle_bar_width);
+            layout.setLayoutParams(params);
+        }
 
         return layout;
     }

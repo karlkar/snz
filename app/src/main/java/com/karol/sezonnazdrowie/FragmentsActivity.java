@@ -171,10 +171,10 @@ public class FragmentsActivity extends AppCompatActivity {
 
         if (!isSameAsCurrent) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            if (!(fragment instanceof FoodItemPageFragment))
+            if (!(fragment instanceof FoodItemPageFragment) && !(fragment instanceof SettingsFragment) && !(fragment instanceof SettingsItemsFragment))
                 getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentTransaction.replace(R.id.contentView, fragment);
-            if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment)
+            if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment || fragment instanceof SettingsFragment || fragment instanceof SettingsItemsFragment)
                 fragmentTransaction.addToBackStack(null);
             else
                 mFragmentBackStack.pop();
