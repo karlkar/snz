@@ -3,11 +3,11 @@ package com.karol.sezonnazdrowie;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,52 +15,49 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
+import java.util.Locale;
 
-/**
- * Created by Karol on 13.03.2016.
- */
-public class FoodItem implements Parcelable, Comparable {
+public class FoodItem implements Parcelable, Comparable<FoodItem> {
 
     private static final String TAG = "FoodItem";
 
-    private String mName;
+    private final String mName;
 	private String mConjugatedName;
     private CalendarDay mStartDay1 = null;
     private CalendarDay mEndDay1 = null;
     private CalendarDay mStartDay2 = null;
     private CalendarDay mEndDay2 = null;
 
-    private String mImageResourceId;
-    private String mDesc;
-    private String mLink;
-    private boolean mIsFruit;
+    private final String mImageResourceId;
+    private final String mDesc;
+    private final String mLink;
+    private final boolean mIsFruit;
 
-    private String mWater;
-    private String mEnergy;
-    private String mProtein;
-    private String mFat;
-    private String mCarbohydrates;
-    private String mFiber;
-    private String mSugars;
+    private final String mWater;
+    private final String mEnergy;
+    private final String mProtein;
+    private final String mFat;
+    private final String mCarbohydrates;
+    private final String mFiber;
+    private final String mSugars;
 
-    private String mCalcium;
-    private String mIron;
-    private String mMagnesium;
-    private String mPhosphorus;
-    private String mPotassium;
-    private String mSodium;
-    private String mZinc;
+    private final String mCalcium;
+    private final String mIron;
+    private final String mMagnesium;
+    private final String mPhosphorus;
+    private final String mPotassium;
+    private final String mSodium;
+    private final String mZinc;
 
-    private String mVitC;
-    private String mThiamin;
-    private String mRiboflavin;
-    private String mNiacin;
-    private String mVitB6;
-    private String mFolate;
-    private String mVitA;
-    private String mVitE;
-    private String mVitK;
+    private final String mVitC;
+    private final String mThiamin;
+    private final String mRiboflavin;
+    private final String mNiacin;
+    private final String mVitB6;
+    private final String mFolate;
+    private final String mVitA;
+    private final String mVitE;
+    private final String mVitK;
 
     private boolean mEnabled = false;
 
@@ -99,7 +96,7 @@ public class FoodItem implements Parcelable, Comparable {
         mVitE = row[30];
         mVitK = row[31];
 
-        SimpleDateFormat format = new SimpleDateFormat("d.MM");
+        SimpleDateFormat format = new SimpleDateFormat("d.MM", Locale.getDefault());
         try {
             if (!startDate1.isEmpty() && !endDate1.isEmpty() && !startDate1.equals("-")) {
                 mStartDay1 = CalendarDay.from(format.parse(startDate1));
@@ -114,7 +111,7 @@ public class FoodItem implements Parcelable, Comparable {
         }
     }
 
-    protected FoodItem(Parcel in) {
+    private FoodItem(Parcel in) {
         mName = in.readString();
         mStartDay1 = (CalendarDay) in.readValue(CalendarDay.class.getClassLoader());
         mEndDay1 = (CalendarDay) in.readValue(CalendarDay.class.getClassLoader());
@@ -215,10 +212,7 @@ public class FoodItem implements Parcelable, Comparable {
                 String[] rowData = line.split("#", -1);
 				items.add(new FoodItem(rowData, isFruit));
             }
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         finally {
@@ -396,11 +390,8 @@ public class FoodItem implements Parcelable, Comparable {
     }
 
     @Override
-    public int compareTo(Object another) {
-        if (!(another instanceof FoodItem))
-            return 1;
-        FoodItem other = (FoodItem) another;
-        return getName().compareTo(other.getName());
+    public int compareTo(@NonNull FoodItem another) {
+        return getName().compareTo(another.getName());
     }
 
     public boolean hasProximates() {

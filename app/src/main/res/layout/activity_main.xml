@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="missingPrefix"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -26,8 +27,9 @@
         android:id="@+id/dateTextView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-		fontPath="fonts/Amatic-Bold.ttf"
-        android:textSize="40sp"/>
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,7 +49,6 @@
         android:id="@+id/fruitsBtn"
         android:layout_below="@+id/textView"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:stateListAnimator="@null"
         android:textSize="40sp"
 		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
@@ -61,7 +62,6 @@
         android:id="@+id/vegetablesBtn"
         android:layout_below="@+id/fruitsBtn"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:stateListAnimator="@null"
         android:textSize="40sp"
 		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
@@ -74,6 +74,7 @@
         android:layout_above="@+id/incomingSeasonBtn"
         android:layout_alignLeft="@+id/whiteStripe"
         android:layout_alignRight="@+id/whiteStripe"
+		android:contentDescription="@string/app_logo"
         android:src="@drawable/truskawka1"
         android:id="@+id/mainLogoImageView"/>
 
@@ -87,7 +88,6 @@
         android:textColor="@android:color/white"
         android:layout_above="@+id/calendarBtn"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:stateListAnimator="@null"
         android:background="@drawable/button_turquis"/>
 
     <Button
@@ -101,7 +101,6 @@
         android:textColor="@android:color/white"
         android:layout_above="@+id/shopListBtn"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:stateListAnimator="@null"
         android:background="@drawable/button_green"/>
 
     <Button
@@ -115,7 +114,6 @@
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:stateListAnimator="@null"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_green"/>
 

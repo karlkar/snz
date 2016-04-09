@@ -1,12 +1,8 @@
 package com.karol.sezonnazdrowie;
-import android.content.Intent;
-import android.graphics.Color;
-import android.widget.ListView;
 import android.content.Context;
 import android.util.*;
 import android.widget.*;
 import java.util.*;
-import android.view.*;
 
 public class SnzDrawer extends ListView {
 	public SnzDrawer(Context context) {

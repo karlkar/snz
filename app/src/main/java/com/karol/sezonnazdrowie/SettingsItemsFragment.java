@@ -11,9 +11,6 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-/**
- * Created by Karol on 03.04.2016.
- */
 public class SettingsItemsFragment extends PreferenceFragment {
 
     @Override

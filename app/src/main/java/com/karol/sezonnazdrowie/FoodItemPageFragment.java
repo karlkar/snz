@@ -16,11 +16,9 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
-/**
- * Created by Karol on 25.03.2016.
- */
 public class FoodItemPageFragment extends Fragment {
 
     private FoodItem mItem;
@@ -65,7 +63,7 @@ public class FoodItemPageFragment extends Fragment {
         if (mItem.getStartDay1() == null) {
             addElementView(getString(R.string.season), getString(R.string.all_year));
         } else {
-            SimpleDateFormat format = new SimpleDateFormat("d MMMM");
+            SimpleDateFormat format = new SimpleDateFormat("d MMMM", Locale.getDefault());
             String from = format.format(mItem.getStartDay1().getDate());
             String to = format.format(mItem.getEndDay1().getDate());
             addElementView(getString(R.string.season), getString(R.string.food_detail_item, from, to));

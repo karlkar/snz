@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/MyToolbarStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,7 +12,8 @@
         android:layout_gravity="center"
         android:textColor="#ffffff"
         android:id="@+id/action_bar_title"
-		fontPath="fonts/Amatic-Bold.ttf"
-        android:textSize="40sp"/>
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix"/>
 
 </android.support.v7.widget.Toolbar>

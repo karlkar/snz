@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.AlarmManager;
 import java.util.Calendar;
@@ -25,18 +26,27 @@ public class Receiver extends BroadcastReceiver {
 		builder.setContentText(text);
 		builder.setSmallIcon(R.mipmap.ic_launcher);
 		builder.setAutoCancel(true);
-		builder.setStyle(new Notification.BigTextStyle().bigText(text));
-		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+			builder.setStyle(new Notification.BigTextStyle().bigText(text));
+
 		Intent notiIntent = new Intent(context, FragmentsActivity.class);
 		notiIntent.putExtra(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_INCOMING);
-		TaskStackBuilder stackBuidler = TaskStackBuilder.create(context);
-		stackBuidler.addParentStack(FragmentsActivity.class);
-		stackBuidler.addNextIntent(notiIntent);
-		PendingIntent pIntent = stackBuidler.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pIntent;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+			stackBuilder.addParentStack(FragmentsActivity.class);
+			stackBuilder.addNextIntent(notiIntent);
+			pIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		} else
+			pIntent = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		builder.setContentIntent(pIntent);
-		
+
 		NotificationManager	notiMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		notiMgr.notify(type.equals("start") ? 0 : 1, builder.build());
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+			notiMgr.notify(type.equals("start") ? 0 : 1, builder.build());
+		else
+			notiMgr.notify(type.equals("start") ? 0 : 1, builder.getNotification());
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, 1);

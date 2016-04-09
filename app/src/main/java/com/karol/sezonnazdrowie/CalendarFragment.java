@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -40,9 +41,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by Karol on 26.03.2016.
- */
 public class CalendarFragment extends Fragment {
 
     private ScrollView mCalendarScrollView;
@@ -51,8 +49,6 @@ public class CalendarFragment extends Fragment {
     private GridView mVegetablesGridView;
     private FoodItemAdapter mVegetableAdapter;
     private ColorMatrixColorFilter mGrayScaleFilter;
-    private View mCalendarArrowLeft;
-    private View mCalendarArrowRight;
     private TextView mCalendarHeaderTextView;
     private MaterialCalendarView mCalendarView;
 
@@ -62,7 +58,7 @@ public class CalendarFragment extends Fragment {
     private CalendarDay mSelectedDate = null;
     private FoodItem mSelectedFoodItem;
 
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             mSelectedDate = null;
@@ -86,7 +82,7 @@ public class CalendarFragment extends Fragment {
         }
     };
 
-    private AdapterView.OnItemLongClickListener mOnItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+    private final AdapterView.OnItemLongClickListener mOnItemLongClickListener = new AdapterView.OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             Fragment fragment = new FoodItemPageFragment();
@@ -147,8 +143,8 @@ public class CalendarFragment extends Fragment {
     }
 
     private void prepareCalendarView(View view) {
-        mCalendarArrowLeft = view.findViewById(R.id.caledarArrowLeft);
-        mCalendarArrowRight = view.findViewById(R.id.caledarArrowRight);
+        View calendarArrowLeft = view.findViewById(R.id.caledarArrowLeft);
+        View calendarArrowRight = view.findViewById(R.id.caledarArrowRight);
         mCalendarHeaderTextView = (TextView) view.findViewById(R.id.calendarHeader);
         mCalendarHeaderTextView.setText(String.format(getResources().getStringArray(R.array.monthsWithYear)[Calendar.getInstance().get(Calendar.MONTH)], Calendar.getInstance().get(Calendar.YEAR)));
 
@@ -157,7 +153,7 @@ public class CalendarFragment extends Fragment {
         mCalendarView.setTopbarVisible(false);
         mCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 onSelectedDateChanged(date);
             }
         });
@@ -169,7 +165,7 @@ public class CalendarFragment extends Fragment {
                 mCalendarView.invalidateDecorators();
             }
         });
-        mCalendarArrowLeft.setOnClickListener(new View.OnClickListener() {
+        calendarArrowLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar date = mCalendarView.getCurrentDate().getCalendar();
@@ -177,7 +173,7 @@ public class CalendarFragment extends Fragment {
                 mCalendarView.setCurrentDate(date);
             }
         });
-        mCalendarArrowRight.setOnClickListener(new View.OnClickListener() {
+        calendarArrowRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar date = mCalendarView.getCurrentDate().getCalendar();
@@ -271,18 +267,18 @@ public class CalendarFragment extends Fragment {
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
-        public Thread newThread(Runnable r) {
+        public Thread newThread(@NonNull Runnable r) {
             return new Thread(r, "AsyncTask #" + mCount.getAndIncrement());
         }
     };
 
-    private static int sCpuCount = Runtime.getRuntime().availableProcessors();
+    private static final int sCpuCount = Runtime.getRuntime().availableProcessors();
     private static final Executor sExecutor = new ThreadPoolExecutor(sCpuCount + 1, sCpuCount * 2 + 1, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), sThreadFactory);
 
     private class ImageLoader extends AsyncTask<FoodItem, Void, Drawable> {
 
-        private FoodItemAdapter.ViewHolder mViewHolder;
-        private int mPosition;
+        private final FoodItemAdapter.ViewHolder mViewHolder;
+        private final int mPosition;
 
         public ImageLoader(FoodItemAdapter.ViewHolder viewHolder, int position) {
             mViewHolder = viewHolder;
@@ -291,7 +287,7 @@ public class CalendarFragment extends Fragment {
 
         @Override
         protected Drawable doInBackground(FoodItem... params) {
-            Drawable image = null;
+            Drawable image;
             try {
                 image = ContextCompat.getDrawable(getActivity(), getResources().getIdentifier("mini_" + params[0].getImage(), "drawable", getActivity().getPackageName()));
             } catch (Resources.NotFoundException ex) {

@@ -11,9 +11,6 @@ import java.util.concurrent.TimeUnit;
 import android.preference.PreferenceManager;
 import java.util.Comparator;
 
-/**
- * Created by Karol on 16.03.2016.
- */
 public class Database {
 
     private static final long INCOMING_SEASON_DAYS_DIFF = 30;

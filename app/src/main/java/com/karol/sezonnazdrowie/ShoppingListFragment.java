@@ -23,16 +23,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Karol on 28.03.2016.
- */
 public class ShoppingListFragment extends Fragment {
 
     public static final String PREF_SHOPPING_LIST = "SHOPPING_LIST";
 
-    private ListView mListView = null;
-    private ArrayAdapter mAdapter = null;
-    private Button mAddToListButton = null;
+    private ArrayAdapter<String> mAdapter = null;
 
     private View mRoot = null;
     private InputMethodManager mInputMethodManager;
@@ -51,16 +46,16 @@ public class ShoppingListFragment extends Fragment {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Set<String> shoppingSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
-        ArrayList shoppingList;
+        ArrayList<String> shoppingList;
         if (shoppingSet == null)
-            shoppingList = new ArrayList();
+            shoppingList = new ArrayList<>();
         else
-            shoppingList = new ArrayList(shoppingSet);
-        mListView = (ListView) mRoot.findViewById(R.id.listView);
+            shoppingList = new ArrayList<>(shoppingSet);
+        ListView listView = (ListView) mRoot.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, shoppingList);
-        mListView.setAdapter(mAdapter);
+        listView.setAdapter(mAdapter);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String selectedItem = (String) parent.getItemAtPosition(position);
@@ -89,8 +84,8 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        mAddToListButton = (Button) mRoot.findViewById(R.id.addToShoppingListButton);
-        mAddToListButton.setOnClickListener(new View.OnClickListener() {
+        Button addToListButton = (Button) mRoot.findViewById(R.id.addToShoppingListButton);
+        addToListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

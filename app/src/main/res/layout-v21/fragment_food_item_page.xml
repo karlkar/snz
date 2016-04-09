@@ -27,6 +27,7 @@
             android:id="@+id/addToShoppingListButton"
             android:layout_marginRight="16dp"
             android:layout_marginTop="-16dp"
+            android:stateListAnimator="@null"
             android:textSize="30sp"
             android:textColor="@android:color/white"
             android:background="@drawable/round_button"

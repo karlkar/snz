@@ -12,9 +12,6 @@ import android.widget.LinearLayout;
 
 import java.util.Set;
 
-/**
- * Created by Karol on 03.04.2016.
- */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
     @Override

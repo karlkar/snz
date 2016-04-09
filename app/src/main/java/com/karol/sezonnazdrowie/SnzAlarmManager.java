@@ -2,8 +2,6 @@ package com.karol.sezonnazdrowie;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.preference.PreferenceManager;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -13,12 +11,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
 import android.content.*;
-import android.os.*;
 
-/**
- * Created by Karol on 03.04.2016.
- */
-public class SnzAlarmManager {
+class SnzAlarmManager {
 
     public static void setAlarms(Context ctx) {
         HashMap<CalendarDay, ArrayList<FoodItem>> startMap = new HashMap<>();

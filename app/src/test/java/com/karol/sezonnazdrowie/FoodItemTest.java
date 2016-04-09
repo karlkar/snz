@@ -4,9 +4,6 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import junit.framework.TestCase;
 
-/**
- * Created by Karol on 05.04.2016.
- */
 public class FoodItemTest extends TestCase {
 
     public void testGetNearestSeasonDay() throws Exception {
