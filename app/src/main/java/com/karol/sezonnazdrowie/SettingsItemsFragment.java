@@ -1,9 +1,12 @@
 package com.karol.sezonnazdrowie;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,7 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-public class SettingsItemsFragment extends PreferenceFragment {
+public class SettingsItemsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,12 +30,28 @@ public class SettingsItemsFragment extends PreferenceFragment {
             list = Database.getInstance().getAllVegetables();
 
         for (FoodItem item : list) {
+            if (item.getStartDay1() == null)
+                continue;
             CheckBoxPreference pref = new CheckBoxPreference(screen.getContext());
             pref.setTitle(item.getName());
             pref.setKey("pref_noti_" + item.getName());
             pref.setDefaultValue(true);
             screen.addPreference(pref);
         }
+
+        ((FragmentsActivity)getActivity()).setSettingsItemsChanged(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
     }
 
     @Override
@@ -45,5 +64,10 @@ public class SettingsItemsFragment extends PreferenceFragment {
         }
 
         return layout;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        ((FragmentsActivity)getActivity()).setSettingsItemsChanged(true);
     }
 }

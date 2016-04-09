@@ -2,9 +2,11 @@ package com.karol.sezonnazdrowie;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import android.widget.LinearLayout;
 import java.util.Set;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
+
+    private static final String TAG = "SETTINGSFRAGMENT";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        if (((FragmentsActivity)getActivity()).getSettingsItemsChanged())
+            startSetAlarmsTask();
+        ((FragmentsActivity)getActivity()).setSettingsItemsChanged(false);
     }
 
     @Override
@@ -52,13 +59,26 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onPause();
     }
 
+    private void startSetAlarmsTask() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                SnzAlarmManager.setAlarms(getActivity());
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("pref_season_start")) {
+        Log.d(TAG, "onSharedPreferenceChanged: key = " + key);
+        if (key.equals("pref_season_start"))
             setPreferenceSummary(sharedPreferences, key);
-        } else if (key.equals("pref_season_end")) {
+        else if (key.equals("pref_season_end"))
             setPreferenceSummary(sharedPreferences, key);
-        }
+
+        if (!key.equals("maxReqCode"))
+            startSetAlarmsTask();
     }
 
     private void setPreferenceSummary(SharedPreferences sharedPreferences, String key) {

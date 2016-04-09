@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.app.AlarmManager;
 import java.util.Calendar;
 import android.app.TaskStackBuilder;
+import android.provider.Settings;
 
 public class Receiver extends BroadcastReceiver {
 
@@ -18,6 +19,7 @@ public class Receiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 		Bundle bundle = intent.getExtras();
 		String type = bundle.getString("type");
+		int reqCode = bundle.getInt("reqCode");
 		String title = bundle.getString("title");
 		String text = bundle.getString("text");
 		
@@ -26,6 +28,7 @@ public class Receiver extends BroadcastReceiver {
 		builder.setContentText(text);
 		builder.setSmallIcon(R.mipmap.ic_launcher);
 		builder.setAutoCancel(true);
+		builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
 			builder.setStyle(new Notification.BigTextStyle().bigText(text));
 
@@ -55,7 +58,7 @@ public class Receiver extends BroadcastReceiver {
 		calendar.set(Calendar.SECOND, 0);
 		
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+		PendingIntent alarmIntent = PendingIntent.getBroadcast(context, reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
     }
 }

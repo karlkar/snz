@@ -41,6 +41,8 @@ public class FragmentsActivity extends AppCompatActivity {
     private SnzDrawer mDrawer;
     private Toolbar mToolbar;
 
+    private boolean mSettingsItemsChanged = false;
+
 	private final Stack<Fragment> mFragmentBackStack = new Stack<>();
 
     @Override
@@ -182,6 +184,14 @@ public class FragmentsActivity extends AppCompatActivity {
             mFragmentBackStack.push(fragment);
         }
         mDrawerLayout.closeDrawers();
+    }
+
+    public boolean getSettingsItemsChanged() {
+        return mSettingsItemsChanged;
+    }
+
+    public void setSettingsItemsChanged(boolean changed) {
+        mSettingsItemsChanged = changed;
     }
 
     public void setActionBarTitle(String text) {

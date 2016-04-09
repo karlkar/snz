@@ -89,4 +89,9 @@
     <string name="no_notification">Bez powiadomienia</string>
     <string name="preview">Preview</string>
     <string name="app_logo">Application logo</string>
+    <string name="season_starts_soon">Wkrótce zacznie się sezon na</string>
+    <string name="season_starts_week">Za tydzień zacznie się sezon na</string>
+    <string name="season_starts_month">Za miesiąc zacznie się sezon na</string>
+    <string name="season_ends_soon">Wkrótce skończy się sezon na</string>
+    <string name="season_ends_week">Za tydzień skończy się sezon na</string>
 </resources>

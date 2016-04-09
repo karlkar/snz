@@ -2,7 +2,10 @@ package com.karol.sezonnazdrowie;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -10,9 +13,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
-import android.content.*;
 
 class SnzAlarmManager {
+
+    private final static String TAG = "SNZALARMMANAGER";
 
     public static void setAlarms(Context ctx) {
         HashMap<CalendarDay, ArrayList<FoodItem>> startMap = new HashMap<>();
@@ -28,22 +32,22 @@ class SnzAlarmManager {
         else {
             if (seasonStart.contains(ctx.getString(R.string.at_the_start_day)))
                 startDays.add(0);
-            else if (seasonStart.contains(ctx.getString(R.string.week_before)))
+            if (seasonStart.contains(ctx.getString(R.string.week_before)))
                 startDays.add(7);
-            else if (seasonStart.contains(ctx.getString(R.string.month_before)))
+            if (seasonStart.contains(ctx.getString(R.string.month_before)))
                 startDays.add(30);
         }
 
-        Intent intent = new Intent(ctx, Receiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(ctx, 0, intent, 0);
+        Intent intent;
+        PendingIntent alarmIntent;
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(alarmIntent);
-		
+        int reqCode = 1;
+
         Calendar today = Calendar.getInstance();
         for (CalendarDay day : startMap.keySet()) {
 			StringBuilder strBuilder = new StringBuilder();
 			for (FoodItem item : startMap.get(day)) {
-				if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), false)) {
+				if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), true)) {
 					if (strBuilder.length() > 0)
 						strBuilder.append(", ");
 					strBuilder.append(item.getConjugatedName());
@@ -53,16 +57,17 @@ class SnzAlarmManager {
 	            for (Integer dayDiff : startDays) {
 					String title = "";
 					if (dayDiff == 0)
-						title = "Wkrótce zacznie się sezon na";
+						title = ctx.getString(R.string.season_starts_soon);
 					else if (dayDiff == 7)
-						title = "Za tydzień zacznie się sezon na";
+						title = ctx.getString(R.string.season_starts_week);
 					else if (dayDiff == 30)
-						title = "Za miesiąc zacznie się sezon na";
+						title = ctx.getString(R.string.season_starts_month);
 					intent = new Intent(ctx, Receiver.class);
 					intent.putExtra("type", "start");
+                    intent.putExtra("reqCode", reqCode);
 					intent.putExtra("title", title);
 					intent.putExtra("text", strBuilder.toString());
-					alarmIntent = PendingIntent.getBroadcast(ctx, 0, intent, 0);
+					alarmIntent = PendingIntent.getBroadcast(ctx, reqCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     	            Calendar calendar = day.getCalendar();
         	        calendar.set(Calendar.YEAR, today.get(Calendar.YEAR));
             	    calendar.add(Calendar.DAY_OF_MONTH, -dayDiff);
@@ -73,7 +78,8 @@ class SnzAlarmManager {
 	                calendar.set(Calendar.SECOND, 0);
 
 	                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-    	        }
+                    Log.d(TAG, "setAlarms: Start Alarm set @ " + calendar.get(Calendar.DAY_OF_MONTH) + "." + calendar.get(Calendar.MONTH));
+                }
 			}
         }
 
@@ -84,31 +90,35 @@ class SnzAlarmManager {
         else {
             if (seasonEnd.contains(ctx.getString(R.string.at_the_end_day)))
                 endDays.add(0);
-            else if (seasonEnd.contains(ctx.getString(R.string.week_before)))
+            if (seasonEnd.contains(ctx.getString(R.string.week_before)))
                 endDays.add(7);
         }
 
         for (CalendarDay day : endMap.keySet()) {
 			StringBuilder strBuilder = new StringBuilder();
 			for (FoodItem item : endMap.get(day)) {
-				if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), false)) {
+                Log.d(TAG, "setAlarms: Checking pref_noti_" + item.getName());
+                if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), true)) {
 					if (strBuilder.length() > 0)
 						strBuilder.append(", ");
 					strBuilder.append(item.getConjugatedName());
-				}
+				} else {
+                    Log.d(TAG, "setAlarms: Skipping the item " + item.getName());
+                }
 			}
 			if (strBuilder.length() > 0) {
 	            for (Integer dayDiff : endDays) {
 					String title = "";
 					if (dayDiff == 0)
-						title = "Wkrótce skończy się sezon na";
+						title = ctx.getString(R.string.season_ends_soon);
 					else if (dayDiff == 7)
-						title = "Za tydzień skończy się sezon na";
+						title = ctx.getString(R.string.season_ends_week);
 					intent = new Intent(ctx, Receiver.class);
 					intent.putExtra("type", "end");
+                    intent.putExtra("reqCode", reqCode);
 					intent.putExtra("title", title);
 					intent.putExtra("text", strBuilder.toString());
-					alarmIntent = PendingIntent.getBroadcast(ctx, 0, intent, 0);
+					alarmIntent = PendingIntent.getBroadcast(ctx, reqCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     	            Calendar calendar = day.getCalendar();
         	        calendar.set(Calendar.YEAR, today.get(Calendar.YEAR));
         	        calendar.add(Calendar.DAY_OF_MONTH, -dayDiff);
@@ -119,8 +129,19 @@ class SnzAlarmManager {
         	        calendar.set(Calendar.SECOND, 0);
 	
 	                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                    Log.d(TAG, "setAlarms: End Alarm set @ " + calendar.get(Calendar.DAY_OF_MONTH) + "." + calendar.get(Calendar.MONTH));
 				}
             }
+        }
+        int prevMaxReqCode = PreferenceManager.getDefaultSharedPreferences(ctx).getInt("maxReqCode", 0);
+        Log.d(TAG, "setAlarms: Ending with " + reqCode + ", previous ending " + prevMaxReqCode);
+        PreferenceManager.getDefaultSharedPreferences(ctx).edit().putInt("maxReqCode", reqCode).apply();
+
+        intent = new Intent(ctx, Receiver.class);
+        while (prevMaxReqCode > reqCode) {
+            Log.d(TAG, "setAlarms: Cancelling an alarm of reqCode = " + reqCode);
+            alarmIntent = PendingIntent.getBroadcast(ctx, reqCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.cancel(alarmIntent);
         }
     }
 

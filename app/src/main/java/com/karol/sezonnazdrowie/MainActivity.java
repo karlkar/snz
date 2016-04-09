@@ -94,36 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-		if (Database.getInstance().getAllFruits() == null) {
+		if (Database.getInstance().getAllFruits() == null)
         	Database.getInstance().loadData(this);
-			String text = "pomidory, gruszki, sliwki, endywie, truskawki, brokuly, banany, porzeczke, rzodkiew korzen, fasole, marchew";
-			Notification.Builder builder = new Notification.Builder(this);
-			builder.setContentTitle("Juz wkrótce zaczyna się sezon na");
-			builder.setContentText(text);
-			builder.setSmallIcon(R.mipmap.ic_launcher);
-			builder.setAutoCancel(true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                builder.setStyle(new Notification.BigTextStyle().bigText(text));
-
-            Intent notiIntent = new Intent(this, FragmentsActivity.class);
-			notiIntent.putExtra(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_INCOMING);
-            PendingIntent pIntent;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-                stackBuilder.addParentStack(FragmentsActivity.class);
-                stackBuilder.addNextIntent(notiIntent);
-                pIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-            } else
-                pIntent = PendingIntent.getActivity(this, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentIntent(pIntent);
-			
-			NotificationManager	notiMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                notiMgr.notify(2, builder.build());
-            else
-                notiMgr.notify(2, builder.getNotification());
-        }
         super.onResume();
     }
 }
