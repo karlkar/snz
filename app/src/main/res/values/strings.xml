@@ -94,4 +94,6 @@
     <string name="season_starts_month">Za miesiąc zacznie się sezon na</string>
     <string name="season_ends_soon">Wkrótce skończy się sezon na</string>
     <string name="season_ends_week">Za tydzień skończy się sezon na</string>
+    <string name="time_dialog_set">Ustaw</string>
+    <string name="notification_hour">Godzina powiadomienia</string>
 </resources>

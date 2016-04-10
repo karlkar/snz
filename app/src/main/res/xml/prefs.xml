@@ -6,13 +6,15 @@
 
         <PreferenceScreen
             android:title="@string/notification_fruit"
-            android:key="pref_notification_fruit"
-            android:summary=""/>
+            android:key="pref_notification_fruit"/>
 
         <PreferenceScreen
             android:title="@string/notification_vegetable"
-            android:key="pref_notification_vegetable"
-            android:summary=""/>
+            android:key="pref_notification_vegetable"/>
+
+        <com.karol.sezonnazdrowie.TimePreference
+            android:title="@string/notification_hour"
+            android:key="pref_notification_hour"/>
 
         <MultiSelectListPreference
             android:key="pref_season_start"

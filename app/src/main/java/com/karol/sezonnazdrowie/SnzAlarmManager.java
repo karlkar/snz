@@ -42,6 +42,9 @@ class SnzAlarmManager {
         PendingIntent alarmIntent;
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         int reqCode = 1;
+        String notiTime = PreferenceManager.getDefaultSharedPreferences(ctx).getString("pref_notification_hour", null);
+        int notiHour = TimePreference.getHour(notiTime);
+        int notiMinute = TimePreference.getMinute(notiTime);
 
         Calendar today = Calendar.getInstance();
         for (CalendarDay day : startMap.keySet()) {
@@ -73,8 +76,8 @@ class SnzAlarmManager {
             	    calendar.add(Calendar.DAY_OF_MONTH, -dayDiff);
 	                if (calendar.before(today))
 	 	                calendar.add(Calendar.YEAR, 1);
-	                calendar.set(Calendar.HOUR_OF_DAY, 8);
-	                calendar.set(Calendar.MINUTE, 0);
+	                calendar.set(Calendar.HOUR_OF_DAY, notiHour);
+	                calendar.set(Calendar.MINUTE, notiMinute);
 	                calendar.set(Calendar.SECOND, 0);
 
 	                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
@@ -102,9 +105,8 @@ class SnzAlarmManager {
 					if (strBuilder.length() > 0)
 						strBuilder.append(", ");
 					strBuilder.append(item.getConjugatedName());
-				} else {
+				} else
                     Log.d(TAG, "setAlarms: Skipping the item " + item.getName());
-                }
 			}
 			if (strBuilder.length() > 0) {
 	            for (Integer dayDiff : endDays) {
@@ -124,8 +126,8 @@ class SnzAlarmManager {
         	        calendar.add(Calendar.DAY_OF_MONTH, -dayDiff);
         	        if (calendar.before(today))
         	            calendar.add(Calendar.YEAR, 1);
-        	        calendar.set(Calendar.HOUR_OF_DAY, 8);
-        	        calendar.set(Calendar.MINUTE, 0);
+        	        calendar.set(Calendar.HOUR_OF_DAY, notiHour);
+        	        calendar.set(Calendar.MINUTE, notiMinute);
         	        calendar.set(Calendar.SECOND, 0);
 	
 	                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
@@ -152,34 +154,34 @@ class SnzAlarmManager {
             if (item.getStartDay1() == null)
                 continue;
 
-            if (startMap.containsKey(item.getStartDay1())) {
+            if (startMap.containsKey(item.getStartDay1()))
                 startMap.get(item.getStartDay1()).add(item);
-            } else {
+            else {
                 ArrayList<FoodItem> list = new ArrayList<>();
                 list.add(item);
                 startMap.put(item.getStartDay1(), list);
             }
             if (item.getStartDay2() != null) {
-                if (startMap.containsKey(item.getStartDay2())) {
+                if (startMap.containsKey(item.getStartDay2()))
                     startMap.get(item.getStartDay2()).add(item);
-                } else {
+                else {
                     ArrayList<FoodItem> list = new ArrayList<>();
                     list.add(item);
                     startMap.put(item.getStartDay2(), list);
                 }
             }
 
-            if (endMap.containsKey(item.getEndDay1())) {
+            if (endMap.containsKey(item.getEndDay1()))
                 endMap.get(item.getEndDay1()).add(item);
-            } else {
+            else {
                 ArrayList<FoodItem> list = new ArrayList<>();
                 list.add(item);
                 endMap.put(item.getEndDay1(), list);
             }
             if (item.getEndDay2() != null) {
-                if (endMap.containsKey(item.getEndDay2())) {
+                if (endMap.containsKey(item.getEndDay2()))
                     endMap.get(item.getEndDay2()).add(item);
-                } else {
+                else {
                     ArrayList<FoodItem> list = new ArrayList<>();
                     list.add(item);
                     endMap.put(item.getEndDay2(), list);

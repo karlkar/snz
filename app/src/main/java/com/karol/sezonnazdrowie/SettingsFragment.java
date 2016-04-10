@@ -26,6 +26,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         setPreferenceSummary(getPreferenceManager().getSharedPreferences(), "pref_season_start");
         setPreferenceSummary(getPreferenceManager().getSharedPreferences(), "pref_season_end");
+        setTimePreferenceSummary(getPreferenceManager().getSharedPreferences(), "pref_notification_hour");
 
         findPreference("pref_notification_fruit").setOnPreferenceClickListener(this);
         findPreference("pref_notification_vegetable").setOnPreferenceClickListener(this);
@@ -76,6 +77,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             setPreferenceSummary(sharedPreferences, key);
         else if (key.equals("pref_season_end"))
             setPreferenceSummary(sharedPreferences, key);
+        else if (key.equals("pref_notification_hour"))
+            setTimePreferenceSummary(sharedPreferences, key);
 
         if (!key.equals("maxReqCode"))
             startSetAlarmsTask();
@@ -94,6 +97,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             }
             findPreference(key).setSummary(builder.toString());
         }
+    }
+
+    private void setTimePreferenceSummary(SharedPreferences sharedPreferences, String key) {
+        String hourStr = sharedPreferences.getString(key, null);
+        if (hourStr == null)
+            findPreference(key).setSummary("");
+        else
+            findPreference(key).setSummary(hourStr);
     }
 
     @Override
