@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="40sp"
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:id="@+id/rowText"
+        tools:ignore="MissingPrefix"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rowText"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/rowSeason1Text"
+        tools:ignore="MissingPrefix"/>
+
+</RelativeLayout>

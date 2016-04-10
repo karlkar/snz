@@ -1,6 +1,7 @@
 package com.karol.sezonnazdrowie;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -10,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListFragment extends Fragment {
 
@@ -32,15 +35,15 @@ public class ListFragment extends Fragment {
                 ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.season_incoming));
                 break;
         }
-			
-		if (mRoot != null)
+
+        if (mRoot != null)
             return mRoot;
 
         mRoot = inflater.inflate(R.layout.fragment_list, null);
 
-		if (Database.getInstance().getAllFruits() == null)
-			Database.getInstance().loadData(getActivity());
-		
+        if (Database.getInstance().getAllFruits() == null)
+            Database.getInstance().loadData(getActivity());
+
         ArrayList<FoodItem> items = null;
         switch (what) {
             case FragmentsActivity.INTENT_WHAT_FRUITS:
@@ -57,7 +60,11 @@ public class ListFragment extends Fragment {
         }
 
         ListView listView = (ListView) mRoot.findViewById(R.id.listView);
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);
+        ArrayAdapter adapter;
+        if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING))
+            adapter = new IncomingAdapter(getActivity(), R.layout.row_incoming_layout, items);
+        else
+            adapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,6 +84,39 @@ public class ListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (mRoot != null && mRoot.getParent() != null)
-            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
+            ((ViewGroup) mRoot.getParent()).removeView(mRoot);
+    }
+
+    private class IncomingAdapter extends ArrayAdapter<FoodItem> {
+
+        private class ViewHolder {
+            TextView mName;
+            TextView mSeason1;
+        }
+
+        public IncomingAdapter(Context context, int resource, List<FoodItem> items) {
+            super(context, resource, items);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.row_incoming_layout, parent, false);
+                holder = new ViewHolder();
+                holder.mName = (TextView) convertView.findViewById(R.id.rowText);
+                holder.mSeason1 = (TextView) convertView.findViewById(R.id.rowSeason1Text);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            FoodItem item = getItem(position);
+            holder.mName.setText(item.getName());
+            holder.mSeason1.setText(item.getNearestSeasonString());
+
+            return convertView;
+        }
     }
 }

@@ -63,13 +63,12 @@ public class FoodItemPageFragment extends Fragment {
         if (mItem.getStartDay1() == null) {
             addElementView(getString(R.string.season), getString(R.string.all_year));
         } else {
-            SimpleDateFormat format = new SimpleDateFormat("d MMMM", Locale.getDefault());
-            String from = format.format(mItem.getStartDay1().getDate());
-            String to = format.format(mItem.getEndDay1().getDate());
+            String from = FoodItem.DATE_FORMAT_TEXT.format(mItem.getStartDay1().getDate());
+            String to = FoodItem.DATE_FORMAT_TEXT.format(mItem.getEndDay1().getDate());
             addElementView(getString(R.string.season), getString(R.string.food_detail_item, from, to));
             if (mItem.getStartDay2() != null) {
-                from = format.format(mItem.getStartDay2().getDate());
-                to = format.format(mItem.getEndDay2().getDate());
+                from = FoodItem.DATE_FORMAT_TEXT.format(mItem.getStartDay2().getDate());
+                to = FoodItem.DATE_FORMAT_TEXT.format(mItem.getEndDay2().getDate());
                 TextView tmp = new TextView(getActivity());
                 tmp.setText(getString(R.string.food_detail_item, from, to));
                 mAdditionalTextsLayout.addView(tmp);

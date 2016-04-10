@@ -21,6 +21,9 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
 
     private static final String TAG = "FoodItem";
 
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("d.MM", Locale.getDefault());
+    public static final SimpleDateFormat DATE_FORMAT_TEXT = new SimpleDateFormat("d MMMM", Locale.getDefault());
+
     private final String mName;
 	private String mConjugatedName;
     private CalendarDay mStartDay1 = null;
@@ -96,15 +99,14 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
         mVitE = row[30];
         mVitK = row[31];
 
-        SimpleDateFormat format = new SimpleDateFormat("d.MM", Locale.getDefault());
         try {
             if (!startDate1.isEmpty() && !endDate1.isEmpty() && !startDate1.equals("-")) {
-                mStartDay1 = CalendarDay.from(format.parse(startDate1));
-                mEndDay1 = CalendarDay.from(format.parse(endDate1));
+                mStartDay1 = CalendarDay.from(DATE_FORMAT.parse(startDate1));
+                mEndDay1 = CalendarDay.from(DATE_FORMAT.parse(endDate1));
             }
             if (!startDate2.isEmpty() && !endDate2.isEmpty() && !startDate2.equals("-")) {
-                mStartDay2 = CalendarDay.from(format.parse(startDate2));
-                mEndDay2 = CalendarDay.from(format.parse(endDate2));
+                mStartDay2 = CalendarDay.from(DATE_FORMAT.parse(startDate2));
+                mEndDay2 = CalendarDay.from(DATE_FORMAT.parse(endDate2));
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -412,6 +414,19 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
                 || (mVitA != null && !mVitA.isEmpty()) || (mVitE != null && !mVitE.isEmpty()) || (mVitK != null && !mVitK.isEmpty());
     }
 
+    public String getNearestSeasonString() {
+        CalendarDay today = CalendarDay.today();
+        CalendarDay start = getNearestSeasonStart(today);
+        if (start == null)
+            return "";
+        CalendarDay end = getNearestSeasonEnd(today);
+        if (end == null)
+            return "";
+        String startDayStr = DATE_FORMAT_TEXT.format(start.getDate());
+        String endDayStr = DATE_FORMAT_TEXT.format(end.getDate());
+        return startDayStr + " - " + endDayStr;
+    }
+
     public CalendarDay getStartDay1() {
         return mStartDay1;
     }
@@ -428,7 +443,7 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
         return mEndDay2;
     }
 
-    public CalendarDay getNearestSeasonDay(CalendarDay rel) {
+    public CalendarDay getNearestSeasonDay(@NonNull CalendarDay rel) {
         if (mStartDay1 == null)
             return rel;
 
@@ -438,7 +453,7 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
         return getNearestSeasonStart(rel);
     }
 
-	public CalendarDay getNearestSeasonStart(CalendarDay rel) {
+	public CalendarDay getNearestSeasonStart(@NonNull CalendarDay rel) {
         if (mStartDay1 == null)
             return null;
         int relInDays = rel.getMonth() * 30 + rel.getDay();
@@ -474,7 +489,7 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
             return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
 	}
 	
-	public CalendarDay getNearestSeasonEnd(CalendarDay rel) {
+	public CalendarDay getNearestSeasonEnd(@NonNull CalendarDay rel) {
         if (mEndDay1 == null)
             return null;
         int relInDays = rel.getMonth() * 30 + rel.getDay();
