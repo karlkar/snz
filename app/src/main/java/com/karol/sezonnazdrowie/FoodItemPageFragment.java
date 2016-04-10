@@ -1,10 +1,10 @@
 package com.karol.sezonnazdrowie;
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 public class FoodItemPageFragment extends Fragment {
 
@@ -52,9 +50,11 @@ public class FoodItemPageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                Set<String> stringSet = prefs.getStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, new HashSet<String>(1));
-                stringSet.add(mItem.getName());
-                prefs.edit().clear().putStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, stringSet).apply();
+                String listStr = prefs.getString(ShoppingListFragment.PREF_SHOPPING_LIST, "");
+                if (listStr.length() > 0)
+                    listStr += ",";
+                listStr += mItem.getName();
+                prefs.edit().putString(ShoppingListFragment.PREF_SHOPPING_LIST, listStr).apply();
                 Toast.makeText(getActivity(), R.string.added_to_shopping_list, Toast.LENGTH_SHORT).show();
             }
         });

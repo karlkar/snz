@@ -1,27 +1,25 @@
 package com.karol.sezonnazdrowie;
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import java.util.Set;
-
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "SETTINGSFRAGMENT";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.prefs);
 
         setPreferenceSummary(getPreferenceManager().getSharedPreferences(), "pref_season_start");
@@ -60,13 +58,18 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     private void startSetAlarmsTask() {
-        new AsyncTask<Void, Void, Void>() {
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 SnzAlarmManager.setAlarms(getActivity());
                 return null;
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            task.execute();
     }
 
     @Override
@@ -82,17 +85,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     private void setPreferenceSummary(SharedPreferences sharedPreferences, String key) {
-        Set<String> stringSet = sharedPreferences.getStringSet(key, null);
-        if (stringSet == null || stringSet.size() == 0)
+        String prefVal = sharedPreferences.getString(key, null);
+        if (prefVal == null || prefVal.length() == 0)
             findPreference(key).setSummary(R.string.no_notification);
         else {
             StringBuilder builder = new StringBuilder();
-            for (String str : stringSet) {
-                if (builder.length() != 0)
-                    builder.append(", ");
-                builder.append(str);
-            }
-            findPreference(key).setSummary(builder.toString());
+            String[] src = {","};
+            String[] dest = {", "};
+            findPreference(key).setSummary(TextUtils.replace(prefVal, src, dest));
         }
     }
 

@@ -2,11 +2,9 @@ package com.karol.sezonnazdrowie;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
-import android.util.Log;
+import android.support.v7.preference.CheckBoxPreference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +12,10 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-public class SettingsItemsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsItemsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.prefs_list);
 
         PreferenceScreen screen = this.getPreferenceScreen();

@@ -10,4 +10,5 @@
 	<color name="btnShadowColor">#88D6D6D6</color>
 	<color name="btnTurquoise">#83E9CF</color>
 	<color name="btnGreen">#9FE19F</color>
+    <color name="checkboxUnchecked">#ffff4444</color>
 </resources>

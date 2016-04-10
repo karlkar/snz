@@ -1,6 +1,5 @@
 package com.karol.sezonnazdrowie;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +11,7 @@ import android.app.AlarmManager;
 import java.util.Calendar;
 import android.app.TaskStackBuilder;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 
 public class Receiver extends BroadcastReceiver {
 
@@ -23,14 +23,13 @@ public class Receiver extends BroadcastReceiver {
 		String title = bundle.getString("title");
 		String text = bundle.getString("text");
 		
-		Notification.Builder builder = new Notification.Builder(context);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 		builder.setContentTitle(title);
 		builder.setContentText(text);
 		builder.setSmallIcon(R.mipmap.ic_launcher);
 		builder.setAutoCancel(true);
 		builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-			builder.setStyle(new Notification.BigTextStyle().bigText(text));
+		builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
 
 		Intent notiIntent = new Intent(context, FragmentsActivity.class);
 		notiIntent.putExtra(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_INCOMING);
@@ -46,10 +45,7 @@ public class Receiver extends BroadcastReceiver {
 
 		NotificationManager	notiMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-			notiMgr.notify(type.equals("start") ? 0 : 1, builder.build());
-		else
-			notiMgr.notify(type.equals("start") ? 0 : 1, builder.getNotification());
+		notiMgr.notify(type.equals("start") ? 0 : 1, builder.build());
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, 1);

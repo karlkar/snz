@@ -1,12 +1,12 @@
 package com.karol.sezonnazdrowie;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +20,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 public class ShoppingListFragment extends Fragment {
 
@@ -45,12 +45,12 @@ public class ShoppingListFragment extends Fragment {
         mRoot = inflater.inflate(R.layout.fragment_shopping_list, null);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Set<String> shoppingSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
-        ArrayList<String> shoppingList;
+        String shoppingSet = prefs.getString(PREF_SHOPPING_LIST, null);
+        List<String> shoppingList;
         if (shoppingSet == null)
             shoppingList = new ArrayList<>();
         else
-            shoppingList = new ArrayList<>(shoppingSet);
+            shoppingList = new ArrayList<>(Arrays.asList(shoppingSet));
         ListView listView = (ListView) mRoot.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, shoppingList);
         listView.setAdapter(mAdapter);
@@ -73,9 +73,13 @@ public class ShoppingListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         mAdapter.remove(selectedItem);
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
-                        stringSet.remove(selectedItem);
-                        prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
+                        String newVal = "";
+                        for (int i = 0; i < mAdapter.getCount(); ++i) {
+                            if (i > 0)
+                                newVal += ",";
+                            newVal += mAdapter.getItem(i);
+                        }
+                        prefs.edit().putString(PREF_SHOPPING_LIST, newVal).apply();
                         Toast.makeText(getActivity(), getString(R.string.removed_product_name, selectedItem), Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                     }
@@ -106,10 +110,12 @@ public class ShoppingListFragment extends Fragment {
                             Toast.makeText(getActivity(), R.string.empty_product_name_message, Toast.LENGTH_LONG).show();
                         } else {
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
-                            stringSet.add(editText.getText().toString());
+                            String stringSet = prefs.getString(PREF_SHOPPING_LIST, "");
+                            if (stringSet.length() > 0)
+                                stringSet += ",";
+                            stringSet += editText.getText().toString();
                             mAdapter.add(editText.getText().toString());
-                            prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
+                            prefs.edit().putString(PREF_SHOPPING_LIST, stringSet).apply();
                             Toast.makeText(getActivity(), getString(R.string.added_to_shopping_list), Toast.LENGTH_LONG).show();
                         }
                     }

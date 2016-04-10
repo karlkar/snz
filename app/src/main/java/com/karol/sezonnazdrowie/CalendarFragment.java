@@ -1,16 +1,17 @@
 package com.karol.sezonnazdrowie;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -258,7 +259,10 @@ public class CalendarFragment extends Fragment {
             viewHolder.position = position;
             FoodItem item = getItem(position);
             ImageLoader loadTask = new ImageLoader(viewHolder, position);
-            loadTask.executeOnExecutor(sExecutor, item);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                loadTask.executeOnExecutor(sExecutor, item);
+            else
+                loadTask.execute(item);
 
             return view;
         }

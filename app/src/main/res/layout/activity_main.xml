@@ -28,7 +28,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         fontPath="fonts/Amatic-Bold.ttf"
-        android:textSize="40sp"
+        android:textSize="@dimen/textSize"
         tools:ignore="MissingPrefix"/>
 
     <TextView
@@ -39,7 +39,7 @@
         android:layout_below="@+id/dateTextView"
         android:layout_centerHorizontal="true"
 		fontPath="fonts/Amatic-Bold.ttf"
-        android:textSize="40sp"/>
+		android:textSize="@dimen/textSize"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
@@ -49,7 +49,7 @@
         android:id="@+id/fruitsBtn"
         android:layout_below="@+id/textView"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:textSize="40sp"
+		android:textSize="@dimen/textSize"
 		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:background="@drawable/button_turquis"/>
@@ -62,7 +62,7 @@
         android:id="@+id/vegetablesBtn"
         android:layout_below="@+id/fruitsBtn"
 		android:layout_alignLeft="@id/whiteStripe"
-        android:textSize="40sp"
+		android:textSize="@dimen/textSize"
 		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:background="@drawable/button_green"/>
@@ -83,7 +83,7 @@
         android:layout_height="@dimen/main_button_height"
         android:text="@string/incoming_season_btn"
         android:id="@+id/incomingSeasonBtn"
-        android:textSize="40sp"
+		android:textSize="@dimen/textSize"
 		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:layout_above="@+id/calendarBtn"
@@ -96,7 +96,7 @@
 		android:layout_marginTop="5dp"
         android:text="@string/calendar_btn"
         android:id="@+id/calendarBtn"
-        android:textSize="40sp"
+		android:textSize="@dimen/textSize"
 		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:layout_above="@+id/shopListBtn"
@@ -109,7 +109,7 @@
 		android:layout_marginTop="5dp"
         android:text="@string/shopping_list_btn"
         android:id="@+id/shopListBtn"
-        android:textSize="40sp"
+		android:textSize="@dimen/textSize"
 		fontPath="fonts/Amatic-Bold.ttf"
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"

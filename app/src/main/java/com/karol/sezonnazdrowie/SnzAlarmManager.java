@@ -12,7 +12,6 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Set;
 
 class SnzAlarmManager {
 
@@ -26,7 +25,7 @@ class SnzAlarmManager {
         fillMapWithItems(startMap, endMap, Database.getInstance().getAllVegetables());
 
         ArrayList<Integer> startDays = new ArrayList<>();
-        Set<String> seasonStart = PreferenceManager.getDefaultSharedPreferences(ctx).getStringSet("pref_season_start", null);
+        String seasonStart = PreferenceManager.getDefaultSharedPreferences(ctx).getString("pref_season_start", null);
         if (seasonStart == null)
             startDays.add(7);
         else {
@@ -84,7 +83,7 @@ class SnzAlarmManager {
         }
 
         ArrayList<Integer> endDays = new ArrayList<>();
-        Set<String> seasonEnd = PreferenceManager.getDefaultSharedPreferences(ctx).getStringSet("pref_season_end", null);
+        String seasonEnd = PreferenceManager.getDefaultSharedPreferences(ctx).getString("pref_season_end", null);
         if (seasonEnd == null)
             endDays.add(7);
         else {
