@@ -52,7 +52,7 @@ public class FragmentsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         setContentView(R.layout.activity_fragments);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
