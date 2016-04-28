@@ -75,7 +75,8 @@
     <string name="shopping_list_delete_dialog_title">Czy chcesz usunąć?</string>
     <string name="shopping_list_delete_dialog_message">Czy chcesz usunąć produkt `%1$s`</string>
     <string name="season">Sezon</string>
-    <string name="all_year">całoroczne</string>
+    <string name="season_all_year">Sezon: całoroczne</string>
+    <string name="season_from_to">Sezon: %1$s - %2$s</string>
     <string name="notification_fruit">Powiadomienia o owocach</string>
     <string name="notification_vegetable">Powiadomienia o warzywach</string>
     <string name="notification_season_start">Powiadomienie o początku sezonu</string>
