@@ -42,7 +42,7 @@ class SnzAlarmManager {
         PendingIntent alarmIntent;
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         int reqCode = 1;
-        String notiTime = PreferenceManager.getDefaultSharedPreferences(ctx).getString("pref_notification_hour", null);
+        String notiTime = PreferenceManager.getDefaultSharedPreferences(ctx).getString("pref_notification_hour", "20:00");
         int notiHour = TimePreference.getHour(notiTime);
         int notiMinute = TimePreference.getMinute(notiTime);
 
