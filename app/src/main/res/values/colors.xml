@@ -3,10 +3,10 @@
     <color name="colorPrimary">#83E9CF</color>
     <color name="colorPrimaryDark">#8adec8</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="dayGridSelectBorder">#FF4C4C</color>
+    <color name="dayGridSelectBorder">#9FE19F</color>
     <color name="dayGridNormalBorder">#DEDEDE</color>
-    <color name="dayGridSeasonBg">#83E9CF</color>
-    <color name="dayGridOuterSeasonBg">#CBF5EB</color>
+    <color name="dayGridSeasonBg">#9FE19F</color>
+    <color name="dayGridOuterSeasonBg">#c5f5c5</color>
 	<color name="btnShadowColor">#88D6D6D6</color>
 	<color name="btnTurquoise">#83E9CF</color>
 	<color name="btnGreen">#9FE19F</color>
