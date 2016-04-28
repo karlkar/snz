@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -84,7 +85,7 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        Button addToListButton = (Button) mRoot.findViewById(R.id.addToShoppingListButton);
+        ImageView addToListButton = (ImageView) mRoot.findViewById(R.id.addToShoppingListButton);
         addToListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

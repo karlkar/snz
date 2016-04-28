@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +21,7 @@ public class FoodItemPageFragment extends Fragment {
     private FoodItem mItem;
 
     private ImageView mPagePreviewImageView;
-    private Button mAddToShoppingListBtn;
+    private ImageView mAddToShoppingListImageView;
     private LinearLayout mAdditionalTextsLayout;
 
     private View mRoot = null;
@@ -45,8 +44,8 @@ public class FoodItemPageFragment extends Fragment {
         else
             mPagePreviewImageView.setImageResource(android.R.drawable.ic_menu_gallery);
 
-        mAddToShoppingListBtn = (Button) mRoot.findViewById(R.id.addToShoppingListButton);
-        mAddToShoppingListBtn.setOnClickListener(new View.OnClickListener() {
+        mAddToShoppingListImageView = (ImageView) mRoot.findViewById(R.id.addToShoppingListButton);
+        mAddToShoppingListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());

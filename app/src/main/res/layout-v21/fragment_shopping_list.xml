@@ -14,17 +14,13 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="16dp"/>
 
-    <Button
+    <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="+"
+        android:src="@drawable/plus"
         android:id="@+id/addToShoppingListButton"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
-        android:stateListAnimator="@null"
-        android:textSize="30sp"
-        android:textColor="@android:color/white"
-        android:background="@drawable/round_button"
         android:layout_alignRight="@+id/listView"
         android:layout_alignBottom="@+id/listView"/>
 
