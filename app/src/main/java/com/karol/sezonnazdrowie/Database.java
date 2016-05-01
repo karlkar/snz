@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
 import java.util.Comparator;
 
 public class Database {
@@ -56,22 +58,19 @@ public class Database {
         ArrayList<FoodItem> list = new ArrayList<>();
         CalendarDay today = CalendarDay.today();
         Calendar todayDate = Calendar.getInstance();
-        todayDate.set(Calendar.YEAR, 1970);
         for (FoodItem item : getAllFruits()) {
             if (!item.existsAt(today)) {
                 CalendarDay startDay1 = item.getStartDay1();
 
-                if (startDay1.getCalendar().after(todayDate) && TimeUnit.DAYS.convert(
-                        startDay1.getCalendar().getTimeInMillis() - todayDate.getTimeInMillis(),
-                        TimeUnit.MILLISECONDS) < INCOMING_SEASON_DAYS_DIFF)
+                long daysDiff = startDay1.getCalendar().get(Calendar.DAY_OF_YEAR) - todayDate.get(Calendar.DAY_OF_YEAR);
+                if (daysDiff > 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
                     list.add(item);
                 else {
                     CalendarDay startDay2 = item.getStartDay2();
                     if (startDay2 != null) {
-                        if (startDay2.getCalendar().after(todayDate) && TimeUnit.DAYS.convert(
-                                startDay2.getCalendar().getTimeInMillis() - todayDate.getTimeInMillis(),
-                                TimeUnit.MILLISECONDS) < INCOMING_SEASON_DAYS_DIFF)
-                        list.add(item);
+                        daysDiff = startDay2.getCalendar().get(Calendar.DAY_OF_YEAR) - todayDate.get(Calendar.DAY_OF_YEAR);
+                        if (daysDiff > 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
+                            list.add(item);
                     }
                 }
             }
@@ -80,16 +79,14 @@ public class Database {
             if (!item.existsAt(today)) {
                 CalendarDay startDay1 = item.getStartDay1();
 
-                if (startDay1.getCalendar().after(todayDate) && TimeUnit.DAYS.convert(
-                        startDay1.getCalendar().getTimeInMillis() - todayDate.getTimeInMillis(),
-                        TimeUnit.MILLISECONDS) < INCOMING_SEASON_DAYS_DIFF)
+                long daysDiff = startDay1.getCalendar().get(Calendar.DAY_OF_YEAR) - todayDate.get(Calendar.DAY_OF_YEAR);
+                if (daysDiff > 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
                     list.add(item);
                 else {
                     CalendarDay startDay2 = item.getStartDay2();
                     if (startDay2 != null) {
-                        if (startDay2.getCalendar().after(todayDate) && TimeUnit.DAYS.convert(
-                                startDay2.getCalendar().getTimeInMillis() - todayDate.getTimeInMillis(),
-                                TimeUnit.MILLISECONDS) < INCOMING_SEASON_DAYS_DIFF)
+                        daysDiff = startDay2.getCalendar().get(Calendar.DAY_OF_YEAR) - todayDate.get(Calendar.DAY_OF_YEAR);
+                        if (daysDiff > 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
                             list.add(item);
                     }
                 }

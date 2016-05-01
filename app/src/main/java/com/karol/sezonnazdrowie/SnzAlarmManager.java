@@ -71,7 +71,7 @@ class SnzAlarmManager {
 					intent.putExtra("title", title);
 					intent.putExtra("text", strBuilder.toString());
 					alarmIntent = PendingIntent.getBroadcast(ctx, reqCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    	            Calendar calendar = day.getCalendar();
+    	            Calendar calendar = (Calendar) day.getCalendar().clone();
         	        calendar.set(Calendar.YEAR, today.get(Calendar.YEAR));
             	    calendar.add(Calendar.DAY_OF_MONTH, -dayDiff);
 	                if (calendar.before(today))
@@ -121,7 +121,7 @@ class SnzAlarmManager {
 					intent.putExtra("title", title);
 					intent.putExtra("text", strBuilder.toString());
 					alarmIntent = PendingIntent.getBroadcast(ctx, reqCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    	            Calendar calendar = day.getCalendar();
+    	            Calendar calendar = (Calendar) day.getCalendar().clone();
         	        calendar.set(Calendar.YEAR, today.get(Calendar.YEAR));
         	        calendar.add(Calendar.DAY_OF_MONTH, -dayDiff);
         	        if (calendar.before(today))
