@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -17,6 +18,16 @@ import java.util.Set;
 class SnzAlarmManager {
 
     private final static String TAG = "SNZALARMMANAGER";
+
+    public static void startSetAlarmsTask(final Context ctx) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                SnzAlarmManager.setAlarms(ctx);
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
     public static void setAlarms(Context ctx) {
         HashMap<CalendarDay, ArrayList<FoodItem>> startMap = new HashMap<>();
@@ -145,6 +156,7 @@ class SnzAlarmManager {
             alarmIntent = PendingIntent.getBroadcast(ctx, reqCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.cancel(alarmIntent);
         }
+        PreferenceManager.getDefaultSharedPreferences(ctx).edit().putBoolean("pref_alarms_set", true).apply();
     }
 
     private static void fillMapWithItems(HashMap<CalendarDay, ArrayList<FoodItem>> startMap,

@@ -116,10 +116,8 @@ public class Database {
         Holder.instance.mVegetables = FoodItem.createItems(ctx, R.raw.vegetables, false);
 		
 		boolean alarmsSet = PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_alarms_set", false);
-		if (!alarmsSet) {
-			SnzAlarmManager.setAlarms(ctx);
-			PreferenceManager.getDefaultSharedPreferences(ctx).edit().putBoolean("pref_alarms_set", true).apply();
-		}
+		if (!alarmsSet)
+			SnzAlarmManager.startSetAlarmsTask(ctx);
     }
 
     public ArrayList<FoodItem> getAllFruits() {

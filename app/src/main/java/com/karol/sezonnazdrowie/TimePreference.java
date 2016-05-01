@@ -67,7 +67,7 @@ public class TimePreference extends DialogPreference {
     @Override
     protected void onBindDialogView(View v) {
         super.onBindDialogView(v);
-
+        onSetInitialValue(true, "20:00");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mTimePicker.setHour(mLastHour);
             mTimePicker.setMinute(mLastMinute);
@@ -110,7 +110,7 @@ public class TimePreference extends DialogPreference {
 
         if (restoreValue) {
             if (defaultValue == null)
-                time = getPersistedString("08:00");
+                time = getPersistedString("20:00");
             else
                 time = getPersistedString(defaultValue.toString());
         }

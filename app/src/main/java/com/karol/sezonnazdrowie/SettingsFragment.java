@@ -50,7 +50,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         if (((FragmentsActivity)getActivity()).getSettingsItemsChanged())
-            startSetAlarmsTask();
+            SnzAlarmManager.startSetAlarmsTask(getActivity());
         ((FragmentsActivity)getActivity()).setSettingsItemsChanged(false);
     }
 
@@ -58,16 +58,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onPause() {
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
-    }
-
-    private void startSetAlarmsTask() {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                SnzAlarmManager.setAlarms(getActivity());
-                return null;
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -81,7 +71,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             setTimePreferenceSummary(sharedPreferences, key);
 
         if (!key.equals("maxReqCode"))
-            startSetAlarmsTask();
+            SnzAlarmManager.startSetAlarmsTask(getActivity());
     }
 
     private void setPreferenceSummary(SharedPreferences sharedPreferences, String key) {
@@ -102,7 +92,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void setTimePreferenceSummary(SharedPreferences sharedPreferences, String key) {
         String hourStr = sharedPreferences.getString(key, null);
         if (hourStr == null)
-            findPreference(key).setSummary("");
+            findPreference(key).setSummary("20:00");
         else
             findPreference(key).setSummary(hourStr);
     }
