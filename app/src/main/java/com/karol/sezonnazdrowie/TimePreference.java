@@ -90,9 +90,7 @@ public class TimePreference extends DialogPreference {
                 mLastMinute = mTimePicker.getCurrentMinute();
             }
 
-            String time = String.valueOf(mLastHour) + ":" + String.valueOf(mLastMinute);
-            if (String.valueOf(mLastMinute).length() == 1)
-                time += "0";
+            String time = String.valueOf(mLastHour) + ":" + String.format("%02d", mLastMinute);
 
             if (callChangeListener(time))
                 persistString(time);
