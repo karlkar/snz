@@ -49,7 +49,11 @@ public class FoodItemPageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                Set<String> stringSet = prefs.getStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, new HashSet<String>(1));
+                Set<String> stringSet = prefs.getStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, null);
+                if (stringSet == null)
+                    stringSet = new HashSet<>();
+                else
+                    stringSet = new HashSet<>(stringSet);
                 stringSet.add(mItem.getName());
                 prefs.edit().clear().putStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, stringSet).apply();
                 Toast.makeText(getActivity(), R.string.added_to_shopping_list, Toast.LENGTH_SHORT).show();

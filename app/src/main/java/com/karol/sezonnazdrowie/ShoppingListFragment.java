@@ -74,9 +74,12 @@ public class ShoppingListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         mAdapter.remove(selectedItem);
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
-                        stringSet.remove(selectedItem);
-                        prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
+                        Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
+                        if (stringSet != null) {
+                            stringSet = new HashSet<>(stringSet);
+                            stringSet.remove(selectedItem);
+                            prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
+                        }
                         Toast.makeText(getActivity(), getString(R.string.removed_product_name, selectedItem), Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                     }
@@ -107,7 +110,11 @@ public class ShoppingListFragment extends Fragment {
                             Toast.makeText(getActivity(), R.string.empty_product_name_message, Toast.LENGTH_LONG).show();
                         } else {
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, new HashSet<String>(1));
+                            Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
+                            if (stringSet == null)
+                                stringSet = new HashSet<>();
+                            else
+                                stringSet = new HashSet<>(stringSet);
                             stringSet.add(editText.getText().toString());
                             mAdapter.add(editText.getText().toString());
                             prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
