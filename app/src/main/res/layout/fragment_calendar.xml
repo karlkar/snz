@@ -102,26 +102,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.karol.sezonnazdrowie.ExpandableGridView
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:id="@+id/fruitsGridView"
-                    android:gravity="center"
-                    android:numColumns="2"/>
+                    android:id="@+id/fruitsLayout"/>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     style="@style/TableDivider"/>
 
-                <com.karol.sezonnazdrowie.ExpandableGridView
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:id="@+id/vegetablesGridView"
-                    android:layout_gravity="center"
-                    android:numColumns="2"/>
+                    android:id="@+id/vegetablesLayout"/>
 
             </LinearLayout>
 
