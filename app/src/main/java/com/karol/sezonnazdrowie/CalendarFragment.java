@@ -3,12 +3,14 @@ package com.karol.sezonnazdrowie;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -45,6 +47,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CalendarFragment extends Fragment {
 
+    private static final String PREF_GRID_VIEW_MODE = "PREF_GRID_VIEW_MODE";
     private View mRootView = null;
     private ScrollView mCalendarScrollView;
 
@@ -67,6 +70,8 @@ public class CalendarFragment extends Fragment {
     private FoodItem mSelectedFoodItem;
     private boolean mGridViewMode = true;
 
+    private MenuItem mMenuItemViewModeSwitch;
+
     private final AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,7 +84,7 @@ public class CalendarFragment extends Fragment {
             mCurrentVegetableAdapter.enableItemAt(mSelectedFoodItem.isFruit() ? -1 : position);
             mCurrentVegetableAdapter.sortItems();
 
-            if (!mGridViewMode)
+            if (mGridViewMode)
                 Toast.makeText(getActivity(), mSelectedFoodItem.getName(), Toast.LENGTH_SHORT).show();
             mCalendarScrollView.fullScroll(ScrollView.FOCUS_UP);
 
@@ -119,6 +124,8 @@ public class CalendarFragment extends Fragment {
         mFruitsLayout = (FrameLayout) mRootView.findViewById(R.id.fruitsLayout);
         mVegetablesLayout = (FrameLayout) mRootView.findViewById(R.id.vegetablesLayout);
 
+        mGridViewMode = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PREF_GRID_VIEW_MODE, true);
+
         if (mGridViewMode)
             showGridView();
         else
@@ -149,7 +156,14 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.calendar_menu, menu);
+        mMenuItemViewModeSwitch = menu.findItem(R.id.menu_item_switch);
+        updateViewModeSwitchIcon();
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void updateViewModeSwitchIcon() {
+        if (mMenuItemViewModeSwitch != null)
+            mMenuItemViewModeSwitch.setIcon(mGridViewMode ? R.drawable.icon_text_view : R.drawable.icon_image_view);
     }
 
     @Override
@@ -192,6 +206,8 @@ public class CalendarFragment extends Fragment {
     private void showListView() {
         if (mFruitsListView == null) {
             mFruitsListView = new ExpandableListView(getActivity());
+            mFruitsListView.setDivider(ContextCompat.getDrawable(getActivity(), R.drawable.list_view_divider_light));
+            mFruitsListView.setDividerHeight((int) getResources().getDisplayMetrics().density);
             mFruitsListView.setAdapter(new FoodItemListAdapter(getActivity(), Database.getInstance().getAllFruits()));
             mFruitsListView.setVerticalScrollBarEnabled(false);
             mFruitsListView.setFocusable(false);
@@ -204,6 +220,8 @@ public class CalendarFragment extends Fragment {
 
         if (mVegetablesListView == null) {
             mVegetablesListView = new ExpandableListView(getActivity());
+            mVegetablesListView.setDivider(ContextCompat.getDrawable(getActivity(), R.drawable.list_view_divider_light));
+            mVegetablesListView.setDividerHeight((int) getResources().getDisplayMetrics().density);
             mVegetablesListView.setAdapter(new FoodItemListAdapter(getActivity(), Database.getInstance().getAllVegetables()));
             mVegetablesListView.setVerticalScrollBarEnabled(false);
             mVegetablesListView.setFocusable(false);
@@ -217,10 +235,12 @@ public class CalendarFragment extends Fragment {
 
     private void changeViewMode() {
         mGridViewMode = !mGridViewMode;
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(PREF_GRID_VIEW_MODE, mGridViewMode).apply();
         if (mGridViewMode)
             showGridView();
         else
             showListView();
+        updateViewModeSwitchIcon();
     }
 
     private void prepareCalendarView(View view) {
@@ -340,7 +360,9 @@ public class CalendarFragment extends Fragment {
             } else
                 viewHolder = (ViewHolder) convertView.getTag();
 
-            viewHolder.fruitName.setText(getItem(position).getName());
+            FoodItem item = getItem(position);
+            viewHolder.fruitName.setText(item.getName().toLowerCase());
+            viewHolder.fruitName.setTextColor(item.isEnabled() ? Color.BLACK : Color.GRAY);
             return convertView;
         }
     }

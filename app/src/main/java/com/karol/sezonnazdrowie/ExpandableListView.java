@@ -3,9 +3,9 @@ package com.karol.sezonnazdrowie;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.ListView;
 
-public class ExpandableListView extends GridView {
+public class ExpandableListView extends ListView {
 
     public ExpandableListView(Context context) {
         super(context);

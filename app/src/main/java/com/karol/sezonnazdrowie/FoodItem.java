@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -65,7 +66,7 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
     private boolean mEnabled = false;
 
     public FoodItem(String[] row, boolean isFruit) {
-		mName = row[0];
+        mName = row[0];
 		mConjugatedName = row[1];
         mImageResourceId = row[2];
         String startDate1 = row[3];

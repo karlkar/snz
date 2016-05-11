@@ -10,4 +10,6 @@
 	<color name="btnShadowColor">#88D6D6D6</color>
 	<color name="btnTurquoise">#83E9CF</color>
 	<color name="btnGreen">#9FE19F</color>
+    <color name="divider_darker">#aaa</color>
+    <color name="divider_lighter">#d4d4d4</color>
 </resources>
