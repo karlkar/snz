@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "774424617346",
+    "firebase_url": "https://admob-app-id-2139973343.firebaseio.com",
+    "project_id": "admob-app-id-2139973343",
+    "storage_bucket": "admob-app-id-2139973343.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774424617346:android:367e09b694d1ca4a",
+        "android_client_info": {
+          "package_name": "com.karol.sezonnazdrowie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774424617346-rlange1k8u4sru1emfkp69j499iqo3ca.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6zDh2OYdCTaIzAFOtmEF48vLxHggMaVk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
