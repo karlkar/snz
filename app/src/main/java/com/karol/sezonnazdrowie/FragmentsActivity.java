@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.Stack;
 
@@ -40,6 +41,7 @@ public class FragmentsActivity extends AppCompatActivity {
     private TextView mActionBarTitle;
     private SnzDrawer mDrawer;
     private Toolbar mToolbar;
+    private AdView mAdView = null;
 
     private boolean mSettingsItemsChanged = false;
 
@@ -132,14 +134,16 @@ public class FragmentsActivity extends AppCompatActivity {
             }
         });
 
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9982327151344679~2139973343");
+
 		final View adBackground = findViewById(R.id.adBackground);
-        AdView adView = (AdView) findViewById(R.id.adView);
+        mAdView = (AdView) findViewById(R.id.adView);
         adBackground.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceNote5))
                 .addTestDevice(getString(R.string.adMobTestDeviceS5))
                 .build();
-        adView.setAdListener(new AdListener() {
+        mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
                 if (Build.VERSION.SDK_INT >= 19)
@@ -147,13 +151,34 @@ public class FragmentsActivity extends AppCompatActivity {
                 adBackground.setVisibility(View.VISIBLE);
             }
         });
-        adView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAdView != null)
+            mAdView.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdView != null)
+            mAdView.resume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAdView != null)
+            mAdView.destroy();
     }
 
     @Override
