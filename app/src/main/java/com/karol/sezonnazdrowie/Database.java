@@ -57,19 +57,18 @@ public class Database {
     public ArrayList<FoodItem> getIncomingItems() {
         ArrayList<FoodItem> list = new ArrayList<>();
         CalendarDay today = CalendarDay.today();
-        Calendar todayDate = Calendar.getInstance();
         for (FoodItem item : getAllFruits()) {
             if (!item.existsAt(today)) {
                 CalendarDay startDay1 = item.getStartDay1();
 
-                long daysDiff = startDay1.getCalendar().get(Calendar.DAY_OF_YEAR) - todayDate.get(Calendar.DAY_OF_YEAR);
-                if (daysDiff > 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
+                long daysDiff = startDay1.getCalendar().get(Calendar.DAY_OF_YEAR) - today.getCalendar().get(Calendar.DAY_OF_YEAR);
+                if (daysDiff >= 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
                     list.add(item);
                 else {
                     CalendarDay startDay2 = item.getStartDay2();
                     if (startDay2 != null) {
-                        daysDiff = startDay2.getCalendar().get(Calendar.DAY_OF_YEAR) - todayDate.get(Calendar.DAY_OF_YEAR);
-                        if (daysDiff > 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
+                        daysDiff = startDay2.getCalendar().get(Calendar.DAY_OF_YEAR) - today.getCalendar().get(Calendar.DAY_OF_YEAR);
+                        if (daysDiff >= 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
                             list.add(item);
                     }
                 }
@@ -79,14 +78,14 @@ public class Database {
             if (!item.existsAt(today)) {
                 CalendarDay startDay1 = item.getStartDay1();
 
-                long daysDiff = startDay1.getCalendar().get(Calendar.DAY_OF_YEAR) - todayDate.get(Calendar.DAY_OF_YEAR);
-                if (daysDiff > 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
+                long daysDiff = startDay1.getCalendar().get(Calendar.DAY_OF_YEAR) - today.getCalendar().get(Calendar.DAY_OF_YEAR);
+                if (daysDiff >= 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
                     list.add(item);
                 else {
                     CalendarDay startDay2 = item.getStartDay2();
                     if (startDay2 != null) {
-                        daysDiff = startDay2.getCalendar().get(Calendar.DAY_OF_YEAR) - todayDate.get(Calendar.DAY_OF_YEAR);
-                        if (daysDiff > 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
+                        daysDiff = startDay2.getCalendar().get(Calendar.DAY_OF_YEAR) - today.getCalendar().get(Calendar.DAY_OF_YEAR);
+                        if (daysDiff >= 0 && daysDiff < INCOMING_SEASON_DAYS_DIFF)
                             list.add(item);
                     }
                 }
