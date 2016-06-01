@@ -81,7 +81,7 @@ public class FragmentsActivity extends AppCompatActivity {
             case INTENT_WHAT_CALENDAR: {
                 Fragment fragment = new CalendarFragment();
                 mFragmentBackStack.push(fragment);
-                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
                 break;
             }
             case INTENT_WHAT_SHOPPING_LIST: {
@@ -96,7 +96,7 @@ public class FragmentsActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString(INTENT_WHAT, what);
                 fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
                 break;
             }
         }
