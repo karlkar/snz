@@ -319,7 +319,7 @@ public class CalendarFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.i("CALENDARFRAGMENT", "getView: " + position);
+//            Log.i("CALENDARFRAGMENT", "getView: " + position);
             final ViewHolder viewHolder;
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.grid_layout, parent, false);
@@ -350,7 +350,7 @@ public class CalendarFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.i("CALENDARFRAGMENT", "getView: " + position);
+//            Log.i("CALENDARFRAGMENT", "getView: " + position);
             final ViewHolder viewHolder;
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_calendar_layout, parent, false);
