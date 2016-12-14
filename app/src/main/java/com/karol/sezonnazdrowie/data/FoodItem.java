@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -233,29 +234,30 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
     public boolean existsAt(CalendarDay date) {
         if (mStartDay1 == null || mEndDay1 == null) // całoroczne
             return true;
-        if (mStartDay1.getMonth() < date.getMonth() && mEndDay1.getMonth() > date.getMonth())
-            return true;
-        if ((mStartDay1.getMonth() == date.getMonth() && mStartDay1.getDay() <= date.getDay())
-                || (mEndDay1.getMonth() == date.getMonth() && mEndDay1.getDay() >= date.getDay()))
-            return true;
-        if (mEndDay1.isBefore(mStartDay1)) {
-            if (date.getMonth() > mStartDay1.getMonth() || date.getMonth() < mEndDay1.getMonth())
+        Calendar cal = date.getCalendar();
+        cal.set(Calendar.YEAR, 1970);
+        long relDate = cal.getTimeInMillis();
+
+        long start = mStartDay1.getCalendar().getTimeInMillis();
+        long end = mEndDay1.getCalendar().getTimeInMillis();
+
+        if (start <= end) {
+            if (relDate >= start && relDate <= end)
                 return true;
-            if ((date.getMonth() == mStartDay1.getMonth() && date.getDay() >= date.getDay())
-                    || (date.getMonth() == mEndDay1.getMonth() && date.getDay() <= mEndDay1.getDay()))
+        } else {
+            if (relDate <= end || relDate >= start)
                 return true;
         }
+
         if (mStartDay2 != null && mEndDay2 != null) {
-            if (mStartDay2.getMonth() < date.getMonth() && mEndDay2.getMonth() > date.getMonth())
-                return true;
-            if ((mStartDay2.getMonth() == date.getMonth() && mStartDay2.getDay() <= date.getDay())
-                    || (mEndDay2.getMonth() == date.getMonth()) && mEndDay2.getDay() >= date.getDay())
-                return true;
-            if (mEndDay2.isBefore(mStartDay2)) {
-                if (date.getMonth() > mStartDay2.getMonth() || date.getMonth() < mEndDay2.getMonth())
+            start = mStartDay2.getCalendar().getTimeInMillis();
+            end = mEndDay2.getCalendar().getTimeInMillis();
+
+            if (start <= end) {
+                if (relDate >= start && relDate <= end)
                     return true;
-                if ((date.getMonth() == mStartDay2.getMonth() && date.getDay() >= date.getDay())
-                        || (date.getMonth() == mEndDay2.getMonth() && date.getDay() <= mEndDay2.getDay()))
+            } else {
+                if (relDate <= end || relDate >= start)
                     return true;
             }
         }

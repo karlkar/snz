@@ -24,6 +24,10 @@ public class FoodItemTest extends TestCase {
         assertTrue(item.getNearestSeasonDay(CalendarDay.from(2016, 5, 14)).equals(CalendarDay.from(2016, 9, 1)));
         assertTrue(item.getNearestSeasonDay(CalendarDay.from(2016, 9, 1)).equals(CalendarDay.from(2016, 9, 1)));
         assertTrue(item.getNearestSeasonDay(CalendarDay.from(2016, 9, 19)).equals(CalendarDay.from(2016, 9, 19)));
+
+        item = new FoodItem("ROSZPONKA###15.12#30.04#############################".split("#", -1), true);
+        assertEquals("Equals", CalendarDay.from(2016, 11, 15), item.getNearestSeasonDay(CalendarDay.from(2016, 6, 14)));
+        assertEquals("Equals", CalendarDay.from(2016, 2, 10), item.getNearestSeasonDay(CalendarDay.from(2016, 2, 10)));
     }
 
     public void testGetNearestSeasonStart() throws Exception {
