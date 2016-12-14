@@ -35,6 +35,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -330,8 +331,14 @@ public class CalendarFragment extends Fragment {
                 viewHolder = (ViewHolder) convertView.getTag();
 
             viewHolder.position = position;
-            ImageLoader loadTask = new ImageLoader(viewHolder, position);
-            loadTask.executeOnExecutor(sExecutor, getItem(position));
+            FoodItem item = getItem(position);
+
+            Picasso.with(getContext()).load(
+                    getResources().getIdentifier("mini_" + item.getImage(), "drawable", getActivity().getPackageName()))
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .into(viewHolder.gridImage);
+
+            viewHolder.gridImage.setColorFilter(item.isEnabled() ? null : mGrayScaleFilter);
 
             return convertView;
         }
@@ -364,49 +371,6 @@ public class CalendarFragment extends Fragment {
             viewHolder.fruitName.setText(item.getName().toLowerCase());
             viewHolder.fruitName.setTextColor(item.isEnabled() ? Color.BLACK : Color.GRAY);
             return convertView;
-        }
-    }
-
-    private static final ThreadFactory sThreadFactory = new ThreadFactory() {
-        private final AtomicInteger mCount = new AtomicInteger(1);
-
-        public Thread newThread(@NonNull Runnable r) {
-            return new Thread(r, "AsyncTask #" + mCount.getAndIncrement());
-        }
-    };
-
-    private static final int sCpuCount = Runtime.getRuntime().availableProcessors();
-    private static final Executor sExecutor = new ThreadPoolExecutor(sCpuCount + 1, sCpuCount * 2 + 1, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), sThreadFactory);
-
-    private class ImageLoader extends AsyncTask<FoodItem, Void, Drawable> {
-
-        private final FoodItemGridAdapter.ViewHolder mViewHolder;
-        private final int mPosition;
-
-        public ImageLoader(FoodItemGridAdapter.ViewHolder viewHolder, int position) {
-            mViewHolder = viewHolder;
-            mPosition = position;
-        }
-
-        @Override
-        protected Drawable doInBackground(FoodItem... params) {
-            Drawable image;
-            try {
-                image = ContextCompat.getDrawable(getActivity(), getResources().getIdentifier("mini_" + params[0].getImage(), "drawable", getActivity().getPackageName()));
-            } catch (Resources.NotFoundException ex) {
-                image = ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_menu_gallery);
-            }
-            if (params[0].isEnabled())
-                image.setColorFilter(null);
-            else
-                image.setColorFilter(mGrayScaleFilter);
-            return image;
-        }
-
-        @Override
-        protected void onPostExecute(Drawable drawable) {
-            if (mPosition == mViewHolder.position)
-                mViewHolder.gridImage.setImageDrawable(drawable);
         }
     }
 
