@@ -522,6 +522,6 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
         } else if (start1Diff < 0 && start2Diff >= 0)
             return retVal2;
         else
-            return CalendarDay.from(rel.getYear() + 1, mEndDay2.getMonth(), mEndDay2.getDay());
+            return CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
 	}
 }
