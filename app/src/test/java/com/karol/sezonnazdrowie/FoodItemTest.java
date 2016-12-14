@@ -1,5 +1,6 @@
 package com.karol.sezonnazdrowie;
 
+import com.karol.sezonnazdrowie.data.FoodItem;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import junit.framework.TestCase;
@@ -56,6 +57,25 @@ public class FoodItemTest extends TestCase {
     }
 
     public void testGetNearestSeasonEnd() throws Exception {
+        // check all year items
+        FoodItem item = new FoodItem("WHATEVER###############################".split("#", -1), true);
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 1, 14)) == null);
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 4, 14)) == null);
 
+        // check items with one season
+        item = new FoodItem("WHATEVER###15.02#30.04###########################".split("#", -1), true);
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 1, 14)).equals(CalendarDay.from(2016, 3, 30)));
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 4, 14)).equals(CalendarDay.from(2017, 3, 30)));
+
+        //check items with two seasons
+        item = new FoodItem("ROSZPONKA###15.02#30.04#1.10#10.12#########################".split("#", -1), true);
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 1, 14)).equals(CalendarDay.from(2016, 3, 30)));
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 4, 14)).equals(CalendarDay.from(2016, 11, 10)));
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 8, 13)).equals(CalendarDay.from(2016, 11, 10)));
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 11, 13)).equals(CalendarDay.from(2017, 3, 30)));
+
+        // check days equal as compare days
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 11, 10)).equals(CalendarDay.from(2016, 11, 10)));
+        assertTrue(item.getNearestSeasonEnd(CalendarDay.from(2016, 3, 30)).equals(CalendarDay.from(2016, 3, 30)));
     }
 }
