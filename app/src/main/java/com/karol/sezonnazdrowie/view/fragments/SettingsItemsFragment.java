@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.view.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import com.karol.sezonnazdrowie.data.Database;
+import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.view.FragmentsActivity;
 
 import java.util.ArrayList;
 

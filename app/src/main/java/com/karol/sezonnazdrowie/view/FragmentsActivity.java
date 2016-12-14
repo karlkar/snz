@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.view;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -21,7 +21,14 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.view.controls.SnzDrawer;
+import com.karol.sezonnazdrowie.view.fragments.CalendarFragment;
+import com.karol.sezonnazdrowie.view.fragments.FoodItemPageFragment;
+import com.karol.sezonnazdrowie.view.fragments.ListFragment;
+import com.karol.sezonnazdrowie.view.fragments.SettingsFragment;
+import com.karol.sezonnazdrowie.view.fragments.SettingsItemsFragment;
+import com.karol.sezonnazdrowie.view.fragments.ShoppingListFragment;
 
 import java.util.Stack;
 

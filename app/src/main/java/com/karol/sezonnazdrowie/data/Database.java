@@ -1,7 +1,9 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.data;
 
 import android.content.Context;
 
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.model.SnzAlarmManager;
 import com.prolificinteractive.materialcalendarview.*;
 
 import java.util.ArrayList;
@@ -109,7 +111,7 @@ public class Database {
     }
 
     public void loadData(Context ctx) {
-        Holder.instance.mFruits = FoodItem.createItems(ctx, R.raw.fruits, true);
+        Holder.instance.mFruits = FoodItem.createItems(ctx, com.karol.sezonnazdrowie.R.raw.fruits, true);
         Holder.instance.mVegetables = FoodItem.createItems(ctx, R.raw.vegetables, false);
 		
 		boolean alarmsSet = PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_alarms_set", false);

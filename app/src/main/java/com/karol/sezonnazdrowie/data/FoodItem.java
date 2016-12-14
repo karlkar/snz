@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.data;
 
 import android.content.Context;
 import android.os.Parcel;

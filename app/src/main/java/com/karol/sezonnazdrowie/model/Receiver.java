@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.model;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -12,6 +12,9 @@ import android.app.AlarmManager;
 import java.util.Calendar;
 import android.app.TaskStackBuilder;
 import android.provider.Settings;
+
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.view.FragmentsActivity;
 
 public class Receiver extends BroadcastReceiver {
 

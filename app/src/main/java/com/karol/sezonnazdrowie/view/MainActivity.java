@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.karol.sezonnazdrowie.data.Database;
+import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.R;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.view.fragments;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.view.FragmentsActivity;
 
 import java.util.HashSet;
 import java.util.Set;

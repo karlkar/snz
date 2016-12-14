@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.model;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -8,6 +8,10 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.data.Database;
+import com.karol.sezonnazdrowie.view.controls.TimePreference;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
@@ -15,7 +19,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
 
-class SnzAlarmManager {
+public class SnzAlarmManager {
 
     private final static String TAG = "SNZALARMMANAGER";
 

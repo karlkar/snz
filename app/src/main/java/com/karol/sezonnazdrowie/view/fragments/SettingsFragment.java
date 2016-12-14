@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.view.fragments;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.model.SnzAlarmManager;
+import com.karol.sezonnazdrowie.view.FragmentsActivity;
 
 import java.util.Set;
 

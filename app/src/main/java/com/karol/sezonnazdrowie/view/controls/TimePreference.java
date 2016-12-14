@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.view.controls;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
+
+import com.karol.sezonnazdrowie.R;
 
 public class TimePreference extends DialogPreference {
 

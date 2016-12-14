@@ -1,8 +1,9 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.model;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
+import com.karol.sezonnazdrowie.data.FoodItem;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.Comparator;

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FragmentsActivity"
-			android:parentActivityName=".MainActivity"
+            android:name=".view.FragmentsActivity"
+			android:parentActivityName=".view.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
-				android:value=".MainActivity"/>
+				android:value=".view.MainActivity"/>
         </activity>
         <!-- This meta-data tag is required to use Google Play Services. -->
         <meta-data
@@ -47,7 +47,7 @@
             android:theme="@android:style/Theme.Translucent"/>
 
         <receiver
-            android:name=".Receiver"
+            android:name=".model.Receiver"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedReceiver">

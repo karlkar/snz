@@ -60,7 +60,7 @@
         </RelativeLayout>
 
         <!-- The navigation drawer -->
-        <com.karol.sezonnazdrowie.SnzDrawer
+        <com.karol.sezonnazdrowie.view.controls.SnzDrawer
                   android:layout_width="240dp"
                   android:layout_height="match_parent"
                   android:id="@+id/left_drawer"

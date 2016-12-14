@@ -1,4 +1,4 @@
-package com.karol.sezonnazdrowie;
+package com.karol.sezonnazdrowie.view.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -12,6 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.karol.sezonnazdrowie.data.Database;
+import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.view.FragmentsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
