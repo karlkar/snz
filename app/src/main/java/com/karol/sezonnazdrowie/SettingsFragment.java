@@ -2,7 +2,6 @@ package com.karol.sezonnazdrowie;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;

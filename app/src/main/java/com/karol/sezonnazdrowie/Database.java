@@ -7,9 +7,7 @@ import com.prolificinteractive.materialcalendarview.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.util.Comparator;
 
