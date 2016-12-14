@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -134,24 +135,28 @@ public class FragmentsActivity extends AppCompatActivity {
             }
         });
 
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9982327151344679~2139973343");
-
 		final View adBackground = findViewById(R.id.adBackground);
         mAdView = (AdView) findViewById(R.id.adView);
         adBackground.setVisibility(View.GONE);
-        AdRequest adRequest = new AdRequest.Builder()
+        final AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceNote5))
                 .addTestDevice(getString(R.string.adMobTestDeviceS5))
                 .build();
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
+                mAdView.setAdListener(null);
                 if (Build.VERSION.SDK_INT >= 19)
                     TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootView));
                 adBackground.setVisibility(View.VISIBLE);
             }
         });
-        mAdView.loadAd(adRequest);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdView.loadAd(adRequest);
+            }
+        }, 500);
     }
 
     @Override
