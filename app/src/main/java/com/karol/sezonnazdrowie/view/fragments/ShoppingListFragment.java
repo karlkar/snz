@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,23 +33,20 @@ import java.util.Set;
 public class ShoppingListFragment extends Fragment {
 
     public static final String PREF_SHOPPING_LIST = "SHOPPING_LIST";
+    private static final String TAG = "SHOPPINGLISTFRAGMENT";
 
     private ArrayAdapter<String> mAdapter = null;
-
-    private View mRoot = null;
     private InputMethodManager mInputMethodManager;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.shopping_list));
-
-        if (mRoot != null)
-            return mRoot;
 
         mInputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        mRoot = inflater.inflate(R.layout.fragment_shopping_list, null);
+        View view = inflater.inflate(R.layout.fragment_shopping_list, null);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Set<String> shoppingSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
@@ -57,7 +55,7 @@ public class ShoppingListFragment extends Fragment {
             shoppingList = new ArrayList<>();
         else
             shoppingList = new ArrayList<>(shoppingSet);
-        ListView listView = (ListView) mRoot.findViewById(R.id.listView);
+        ListView listView = (ListView) view.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, shoppingList);
         listView.setAdapter(mAdapter);
 
@@ -93,7 +91,7 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        ImageView addToListButton = (ImageView) mRoot.findViewById(R.id.addToShoppingListButton);
+        ImageView addToListButton = (ImageView) view.findViewById(R.id.addToShoppingListButton);
         addToListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +128,7 @@ public class ShoppingListFragment extends Fragment {
                 mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         });
-        return mRoot;
+        return view;
     }
 
     private void acceptInput(EditText editText, DialogInterface alertDialog) {
@@ -150,12 +148,5 @@ public class ShoppingListFragment extends Fragment {
             Toast.makeText(getActivity(), getString(R.string.added_to_shopping_list), Toast.LENGTH_LONG).show();
             alertDialog.dismiss();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mRoot != null && mRoot.getParent() != null)
-            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
     }
 }

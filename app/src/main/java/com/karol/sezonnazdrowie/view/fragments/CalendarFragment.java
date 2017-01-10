@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,9 +47,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CalendarFragment extends Fragment {
+    private static final String TAG = "CALENDARFRAGMENT";
 
     private static final String PREF_GRID_VIEW_MODE = "PREF_GRID_VIEW_MODE";
-    private View mRootView = null;
     private ScrollView mCalendarScrollView;
 
     private FrameLayout mFruitsLayout;
@@ -110,18 +111,16 @@ public class CalendarFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
         setHasOptionsMenu(true);
 
-        if (mRootView != null)
-            return mRootView;
+        View view = inflater.inflate(R.layout.fragment_calendar, null);
 
-        mRootView = inflater.inflate(R.layout.fragment_calendar, null);
+        mCalendarScrollView = (ScrollView) view.findViewById(R.id.calendarScrollView);
 
-        mCalendarScrollView = (ScrollView) mRootView.findViewById(R.id.calendarScrollView);
-
-        mFruitsLayout = (FrameLayout) mRootView.findViewById(R.id.fruitsLayout);
-        mVegetablesLayout = (FrameLayout) mRootView.findViewById(R.id.vegetablesLayout);
+        mFruitsLayout = (FrameLayout) view.findViewById(R.id.fruitsLayout);
+        mVegetablesLayout = (FrameLayout) view.findViewById(R.id.vegetablesLayout);
 
         mGridViewMode = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PREF_GRID_VIEW_MODE, true);
 
@@ -130,15 +129,8 @@ public class CalendarFragment extends Fragment {
         else
             showListView();
 
-        prepareCalendarView(mRootView);
-        return mRootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mRootView != null && mRootView.getParent() != null)
-            ((ViewGroup) mRootView.getParent()).removeView(mRootView);
+        prepareCalendarView(view);
+        return view;
     }
 
     @Override

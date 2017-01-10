@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,12 @@ import java.util.List;
 
 public class ListFragment extends Fragment {
 
-    private View mRoot = null;
+    private static final String TAG = "LISTFRAGMENT";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         String what = getArguments().getString(FragmentsActivity.INTENT_WHAT);
         switch (what) {
             case FragmentsActivity.INTENT_WHAT_FRUITS:
@@ -41,10 +43,7 @@ public class ListFragment extends Fragment {
                 break;
         }
 
-        if (mRoot != null)
-            return mRoot;
-
-        mRoot = inflater.inflate(R.layout.fragment_list, null);
+        View view = inflater.inflate(R.layout.fragment_list, null);
 
         if (Database.getInstance().getAllFruits() == null)
             Database.getInstance().loadData(getActivity());
@@ -64,7 +63,7 @@ public class ListFragment extends Fragment {
                 break;
         }
 
-        ListView listView = (ListView) mRoot.findViewById(R.id.listView);
+        ListView listView = (ListView) view.findViewById(R.id.listView);
         ArrayAdapter adapter;
         if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING))
             adapter = new IncomingAdapter(getActivity(), R.layout.row_incoming_layout, items);
@@ -82,14 +81,7 @@ public class ListFragment extends Fragment {
                 ((FragmentsActivity) getActivity()).replaceFragments(fragment);
             }
         });
-        return mRoot;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mRoot != null && mRoot.getParent() != null)
-            ((ViewGroup) mRoot.getParent()).removeView(mRoot);
+        return view;
     }
 
     private class IncomingAdapter extends ArrayAdapter<FoodItem> {

@@ -84,28 +84,30 @@ public class FragmentsActivity extends AppCompatActivity {
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-        String what = getIntent().getStringExtra(INTENT_WHAT);
-        switch (what) {
-            case INTENT_WHAT_CALENDAR: {
-                Fragment fragment = new CalendarFragment();
-                mFragmentBackStack.push(fragment);
-                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
-                break;
-            }
-            case INTENT_WHAT_SHOPPING_LIST: {
-                Fragment fragment = new ShoppingListFragment();
-                mFragmentBackStack.push(fragment);
-                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
-                break;
-            }
-            default: {
-                Fragment fragment = new ListFragment();
-                mFragmentBackStack.push(fragment);
-                Bundle bundle = new Bundle();
-                bundle.putString(INTENT_WHAT, what);
-                fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
-                break;
+        if (savedInstanceState == null) {
+            String what = getIntent().getStringExtra(INTENT_WHAT);
+            switch (what) {
+                case INTENT_WHAT_CALENDAR: {
+                    Fragment fragment = new CalendarFragment();
+                    mFragmentBackStack.push(fragment);
+                    getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
+                    break;
+                }
+                case INTENT_WHAT_SHOPPING_LIST: {
+                    Fragment fragment = new ShoppingListFragment();
+                    mFragmentBackStack.push(fragment);
+                    getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
+                    break;
+                }
+                default: {
+                    Fragment fragment = new ListFragment();
+                    mFragmentBackStack.push(fragment);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(INTENT_WHAT, what);
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
+                    break;
+                }
             }
         }
 

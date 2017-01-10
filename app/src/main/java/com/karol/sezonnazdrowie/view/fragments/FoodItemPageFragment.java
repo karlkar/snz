@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,33 +23,28 @@ import java.util.Set;
 
 public class FoodItemPageFragment extends Fragment {
 
+    private static final String TAG = "FOODITEMPAGEFRAGMENT";
     private FoodItem mItem;
 
     private ImageView mPagePreviewImageView;
     private ImageView mAddToShoppingListImageView;
     private LinearLayout mAdditionalTextsLayout;
 
-    private View mRoot = null;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mRoot != null && mItem != null) {
-            ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
-            return mRoot;
-        }
-
-        mRoot = inflater.inflate(R.layout.fragment_food_item_page, null);
+        Log.d(TAG, "onCreateView: ");
+        View view = inflater.inflate(R.layout.fragment_food_item_page, null);
         mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
         ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
 
-        mPagePreviewImageView = (ImageView) mRoot.findViewById(R.id.pagePreviewImageView);
+        mPagePreviewImageView = (ImageView) view.findViewById(R.id.pagePreviewImageView);
         if (!mItem.getImage().isEmpty())
             mPagePreviewImageView.setImageResource(getResources().getIdentifier(mItem.getImage(), "drawable", getActivity().getPackageName()));
         else
             mPagePreviewImageView.setImageResource(android.R.drawable.ic_menu_gallery);
 
-        mAddToShoppingListImageView = (ImageView) mRoot.findViewById(R.id.addToShoppingListButton);
+        mAddToShoppingListImageView = (ImageView) view.findViewById(R.id.addToShoppingListButton);
         mAddToShoppingListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +60,7 @@ public class FoodItemPageFragment extends Fragment {
             }
         });
 
-        mAdditionalTextsLayout = (LinearLayout) mRoot.findViewById(R.id.additionalTextsLayout);
+        mAdditionalTextsLayout = (LinearLayout) view.findViewById(R.id.additionalTextsLayout);
         if (mItem.getStartDay1() == null) {
             TextView tmp = new TextView(getActivity());
             tmp.setText(R.string.season_all_year);
@@ -144,14 +140,7 @@ public class FoodItemPageFragment extends Fragment {
             mAdditionalTextsLayout.addView(title);
             addSpacer();
         }
-        return mRoot;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mRoot != null && mRoot.getParent() != null)
-            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
+        return view;
     }
 
     private void addElementView(String title, String value) {
