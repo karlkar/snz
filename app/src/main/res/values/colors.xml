@@ -12,4 +12,5 @@
 	<color name="btnGreen">#9FE19F</color>
     <color name="divider_darker">#aaa</color>
     <color name="divider_lighter">#d4d4d4</color>
+    <color name="colorFloatingActionButton">#84E9CF</color>
 </resources>
