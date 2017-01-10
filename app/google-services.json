@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "774424617346-nqe8fjo9q6dncjqfvaqlsviiebe3snrj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.karol.sezonnazdrowie",
+            "certificate_hash": "1F9779474E7E9842D263D3F48A0E10675334682F"
+          }
+        },
+        {
+          "client_id": "774424617346-tud0p50o5ir4qv6f6thgeevshebsuk5s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.karol.sezonnazdrowie",
+            "certificate_hash": "A9F574F57DEE97AC389E2DBE68A1A6873E416502"
+          }
+        },
+        {
           "client_id": "774424617346-rlange1k8u4sru1emfkp69j499iqo3ca.apps.googleusercontent.com",
           "client_type": 3
         }
