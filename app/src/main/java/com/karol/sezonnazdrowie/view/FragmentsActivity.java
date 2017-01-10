@@ -7,12 +7,12 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Handler;
+import android.support.transition.TransitionManager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -155,8 +155,7 @@ public class FragmentsActivity extends AppCompatActivity {
             @Override
             public void onAdLoaded() {
                 mAdView.setAdListener(null);
-                if (Build.VERSION.SDK_INT >= 19)
-                    TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootView));
+                TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootView));
                 adBackground.setVisibility(View.VISIBLE);
             }
         });
