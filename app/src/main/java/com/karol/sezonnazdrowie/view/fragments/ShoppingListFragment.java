@@ -8,15 +8,18 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.karol.sezonnazdrowie.R;
@@ -98,37 +101,55 @@ public class ShoppingListFragment extends Fragment {
                 builder.setTitle(getString(R.string.shopping_list_add_dialog_title));
                 builder.setMessage(getString(R.string.shopping_list_add_dialog_message));
                 final EditText editText = new EditText(getActivity());
+                editText.setLines(1);
+                editText.setSingleLine();
+                editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 builder.setView(editText);
                 builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                         dialog.dismiss();
                     }
                 });
                 builder.setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (editText.getText().toString().isEmpty()) {
-                            Toast.makeText(getActivity(), R.string.empty_product_name_message, Toast.LENGTH_LONG).show();
-                        } else {
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
-                            if (stringSet == null)
-                                stringSet = new HashSet<>();
-                            else
-                                stringSet = new HashSet<>(stringSet);
-                            stringSet.add(editText.getText().toString());
-                            mAdapter.add(editText.getText().toString());
-                            prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
-                            Toast.makeText(getActivity(), getString(R.string.added_to_shopping_list), Toast.LENGTH_LONG).show();
-                        }
+                        acceptInput(editText, dialog);
                     }
                 });
-                builder.show();
+                final AlertDialog alertDialog = builder.create();
+                editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        acceptInput(editText, alertDialog);
+                        return true;
+                    }
+                });
+                alertDialog.show();
                 mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         });
         return mRoot;
+    }
+
+    private void acceptInput(EditText editText, DialogInterface alertDialog) {
+        if (editText.getText().toString().isEmpty()) {
+            Toast.makeText(getActivity(), R.string.empty_product_name_message, Toast.LENGTH_LONG).show();
+        } else {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
+            if (stringSet == null)
+                stringSet = new HashSet<>();
+            else
+                stringSet = new HashSet<>(stringSet);
+            stringSet.add(editText.getText().toString());
+            mAdapter.add(editText.getText().toString());
+            prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
+            mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            Toast.makeText(getActivity(), getString(R.string.added_to_shopping_list), Toast.LENGTH_LONG).show();
+            alertDialog.dismiss();
+        }
     }
 
     @Override
