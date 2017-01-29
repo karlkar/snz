@@ -7,7 +7,9 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,20 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
-import com.karol.sezonnazdrowie.model.FoodItemAdapter;
-import com.karol.sezonnazdrowie.model.FoodItemGridAdapter;
-import com.karol.sezonnazdrowie.model.FoodItemListAdapter;
+import com.karol.sezonnazdrowie.model.SnzAdapter;
 import com.karol.sezonnazdrowie.view.FragmentsActivity;
-import com.karol.sezonnazdrowie.view.controls.ExpandableGridView;
-import com.karol.sezonnazdrowie.view.controls.ExpandableListView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -43,43 +39,38 @@ public class CalendarFragment extends Fragment {
     private static final String TAG = "CALENDARFRAGMENT";
 
     private static final String PREF_GRID_VIEW_MODE = "PREF_GRID_VIEW_MODE";
-    private NestedScrollView mScrollView;
 
-    private FrameLayout mFruitsLayout;
-    private GridView mFruitsGridView = null;
-    private ExpandableListView mFruitsListView = null;
-    private FoodItemAdapter mCurrentFruitAdapter;
-
-    private FrameLayout mVegetablesLayout;
-    private GridView mVegetablesGridView = null;
-    private ExpandableListView mVegetablesListView = null;
-    private FoodItemAdapter mCurrentVegetableAdapter;
+    private RecyclerView mFruitsRv;
+    private RecyclerView mVegetablesRv;
+    private SnzAdapter mFruitAdapter;
+    private SnzAdapter mVegetableAdapter;
 
     private TextView mCalendarHeaderTextView;
     private MaterialCalendarView mCalendarView;
+    private MenuItem mMenuItemViewModeSwitch;
+    private AppBarLayout mAppBarLayout;
 
     private int mCurrentMonth;
     private CalendarDay mSelectedDate = null;
     private FoodItem mSelectedFoodItem;
     private boolean mGridViewMode = true;
 
-    private MenuItem mMenuItemViewModeSwitch;
-
-    private final AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+    SnzAdapter.OnItemClickListener mOnItemClickListener = new SnzAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        public void onClicked(FoodItem foodItem, int position) {
             mSelectedDate = null;
             mCalendarView.setSelectedDate(mSelectedDate);
-            mSelectedFoodItem = (FoodItem) parent.getItemAtPosition(position);
+            mSelectedFoodItem = foodItem;
 
-            mCurrentFruitAdapter.enableItemAt(mSelectedFoodItem.isFruit() ? position : -1);
-            mCurrentFruitAdapter.sortItems();
-            mCurrentVegetableAdapter.enableItemAt(mSelectedFoodItem.isFruit() ? -1 : position);
-            mCurrentVegetableAdapter.sortItems();
+            mFruitAdapter.enableItemAt(foodItem.isFruit() ? position : -1);
+            mFruitAdapter.notifyDataSetChanged();
+            mVegetableAdapter.enableItemAt(foodItem.isFruit() ? -1 : position);
+            mVegetableAdapter.notifyDataSetChanged();
 
             if (mGridViewMode)
                 Toast.makeText(getActivity(), mSelectedFoodItem.getName(), Toast.LENGTH_SHORT).show();
-            mScrollView.scrollTo(0, 0);
+            mFruitsRv.smoothScrollToPosition(0);
+            mVegetablesRv.smoothScrollToPosition(0);
             mAppBarLayout.setExpanded(true, true);
 
             CalendarDay currentDay = mCalendarView.getCurrentDate();
@@ -102,7 +93,6 @@ public class CalendarFragment extends Fragment {
             return true;
         }
     };
-    private AppBarLayout mAppBarLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,17 +103,29 @@ public class CalendarFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_calendar, null);
 
         mAppBarLayout = (AppBarLayout) view.findViewById(R.id.appbar_layout);
-        mScrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
 
-        mFruitsLayout = (FrameLayout) view.findViewById(R.id.fruitsLayout);
-        mVegetablesLayout = (FrameLayout) view.findViewById(R.id.vegetablesLayout);
+        mFruitsRv = (RecyclerView) view.findViewById(R.id.fruitsRecyclerView);
+        mVegetablesRv = (RecyclerView) view.findViewById(R.id.vegetablesRecyclerView);
 
-        mGridViewMode = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PREF_GRID_VIEW_MODE, true);
-
-        if (mGridViewMode)
-            showGridView();
-        else
-            showListView();
+        mGridViewMode = PreferenceManager.getDefaultSharedPreferences(
+                getActivity()).getBoolean(PREF_GRID_VIEW_MODE, true);
+        if (mGridViewMode) {
+            mFruitsRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            mVegetablesRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        } else {
+            mFruitsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mVegetablesRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
+        mFruitAdapter = new SnzAdapter(
+                Database.getInstance().getAllFruits(),
+                mGridViewMode,
+                mOnItemClickListener);
+        mFruitsRv.setAdapter(mFruitAdapter);
+        mVegetableAdapter = new SnzAdapter(
+                Database.getInstance().getAllVegetables(),
+                mGridViewMode,
+                mOnItemClickListener);
+        mVegetablesRv.setAdapter(mVegetableAdapter);
 
         prepareCalendarView(view);
         return view;
@@ -158,57 +160,28 @@ public class CalendarFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showGridView() {
-        if (mFruitsGridView == null) {
-            mFruitsGridView = new ExpandableGridView(getActivity());
-            mFruitsGridView.setAdapter(new FoodItemGridAdapter(getActivity(), Database.getInstance().getAllFruits()));
-            mFruitsGridView.setOnItemClickListener(mOnItemClickListener);
-            mFruitsGridView.setOnItemLongClickListener(mOnItemLongClickListener);
-        }
-        mCurrentFruitAdapter = (FoodItemAdapter) mFruitsGridView.getAdapter();
-        mFruitsLayout.removeAllViews();
-        mFruitsLayout.addView(mFruitsGridView);
-
-        if (mVegetablesGridView == null) {
-            mVegetablesGridView = new ExpandableGridView(getActivity());
-            mVegetablesGridView.setAdapter(new FoodItemGridAdapter(getActivity(), Database.getInstance().getAllVegetables()));
-            mVegetablesGridView.setOnItemClickListener(mOnItemClickListener);
-            mVegetablesGridView.setOnItemLongClickListener(mOnItemLongClickListener);
-        }
-        mCurrentVegetableAdapter = (FoodItemAdapter) mVegetablesGridView.getAdapter();
-        mVegetablesLayout.removeAllViews();
-        mVegetablesLayout.addView(mVegetablesGridView);
-    }
-
-    private void showListView() {
-        if (mFruitsListView == null) {
-            mFruitsListView = new ExpandableListView(getActivity());
-            mFruitsListView.setAdapter(new FoodItemListAdapter(getActivity(), Database.getInstance().getAllFruits()));
-            mFruitsListView.setOnItemClickListener(mOnItemClickListener);
-            mFruitsListView.setOnItemLongClickListener(mOnItemLongClickListener);
-        }
-        mCurrentFruitAdapter = (FoodItemAdapter) mFruitsListView.getAdapter();
-        mFruitsLayout.removeAllViews();
-        mFruitsLayout.addView(mFruitsListView);
-
-        if (mVegetablesListView == null) {
-            mVegetablesListView = new ExpandableListView(getActivity());
-            mVegetablesListView.setAdapter(new FoodItemListAdapter(getActivity(), Database.getInstance().getAllVegetables()));
-            mVegetablesListView.setOnItemClickListener(mOnItemClickListener);
-            mVegetablesListView.setOnItemLongClickListener(mOnItemLongClickListener);
-        }
-        mCurrentVegetableAdapter = (FoodItemAdapter) mVegetablesListView.getAdapter();
-        mVegetablesLayout.removeAllViews();
-        mVegetablesLayout.addView(mVegetablesListView);
-    }
-
     private void changeViewMode() {
         mGridViewMode = !mGridViewMode;
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(PREF_GRID_VIEW_MODE, mGridViewMode).apply();
-        if (mGridViewMode)
-            showGridView();
-        else
-            showListView();
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .edit()
+                .putBoolean(PREF_GRID_VIEW_MODE, mGridViewMode)
+                .apply();
+
+        if (mGridViewMode) {
+            mFruitAdapter.setGridMode(mGridViewMode);
+            mVegetableAdapter.setGridMode(mGridViewMode);
+            mFruitsRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            mFruitAdapter.notifyDataSetChanged();
+            mVegetablesRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            mVegetableAdapter.notifyDataSetChanged();
+        } else {
+            mFruitAdapter.setGridMode(mGridViewMode);
+            mVegetableAdapter.setGridMode(mGridViewMode);
+            mFruitsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mFruitAdapter.notifyDataSetChanged();
+            mVegetablesRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mVegetableAdapter.notifyDataSetChanged();
+        }
         updateViewModeSwitchIcon();
     }
 
@@ -267,10 +240,12 @@ public class CalendarFragment extends Fragment {
     private void onSelectedDateChanged(CalendarDay date) {
         mSelectedDate = date;
         mSelectedFoodItem = null;
-        mCurrentFruitAdapter.enableItemsAt(date);
-        mCurrentVegetableAdapter.enableItemsAt(date);
-        mCurrentFruitAdapter.sortItems();
-        mCurrentVegetableAdapter.sortItems();
+
+        mFruitAdapter.enableItemsAt(date);
+        mFruitAdapter.notifyDataSetChanged();
+        mVegetableAdapter.enableItemsAt(date);
+        mVegetableAdapter.notifyDataSetChanged();
+
         mCalendarView.invalidateDecorators();
     }
 

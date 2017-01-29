@@ -5,16 +5,13 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Build;
-import android.os.Handler;
-import android.support.transition.TransitionManager;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
@@ -47,8 +44,6 @@ public class FragmentsActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private TextView mActionBarTitle;
-    private SnzDrawer mDrawer;
-    private Toolbar mToolbar;
     private AdView mAdView = null;
 
     private boolean mSettingsItemsChanged = false;
@@ -65,12 +60,12 @@ public class FragmentsActivity extends AppCompatActivity {
         super.onCreate(null);
         setContentView(R.layout.activity_fragments);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        mActionBarTitle = (TextView) mToolbar.findViewById(R.id.action_bar_title);
+        mActionBarTitle = (TextView) toolbar.findViewById(R.id.action_bar_title);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
@@ -111,8 +106,8 @@ public class FragmentsActivity extends AppCompatActivity {
             }
         }
 
-        mDrawer = (SnzDrawer) findViewById(R.id.left_drawer);
-        mDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        SnzDrawer drawer = (SnzDrawer) findViewById(R.id.left_drawer);
+        drawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String text = (String) parent.getItemAtPosition(position);
@@ -146,16 +141,13 @@ public class FragmentsActivity extends AppCompatActivity {
 
 		final View adBackground = findViewById(R.id.adBackground);
         mAdView = (AdView) findViewById(R.id.adView);
-        adBackground.setVisibility(View.GONE);
         final AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.adMobTestDeviceNote5))
                 .addTestDevice(getString(R.string.adMobTestDeviceS5))
                 .build();
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
                 mAdView.setAdListener(null);
-                TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.rootView));
                 adBackground.setVisibility(View.VISIBLE);
             }
         });
