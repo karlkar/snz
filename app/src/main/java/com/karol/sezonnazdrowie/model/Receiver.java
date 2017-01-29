@@ -1,20 +1,21 @@
 package com.karol.sezonnazdrowie.model;
 
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.AlarmManager;
-import java.util.Calendar;
-import android.app.TaskStackBuilder;
 import android.provider.Settings;
 
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.view.FragmentsActivity;
+
+import java.util.Calendar;
 
 public class Receiver extends BroadcastReceiver {
 

@@ -14,9 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
-import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.view.FragmentsActivity;
 
 import java.util.ArrayList;

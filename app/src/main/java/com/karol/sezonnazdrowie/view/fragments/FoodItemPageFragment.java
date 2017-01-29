@@ -14,8 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.view.FragmentsActivity;
 
 import java.util.HashSet;

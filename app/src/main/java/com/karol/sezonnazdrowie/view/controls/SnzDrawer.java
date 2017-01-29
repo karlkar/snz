@@ -1,11 +1,13 @@
 package com.karol.sezonnazdrowie.view.controls;
+
 import android.content.Context;
-import android.util.*;
-import android.widget.*;
+import android.util.AttributeSet;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.karol.sezonnazdrowie.R;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class SnzDrawer extends ListView {
 	public SnzDrawer(Context context) {

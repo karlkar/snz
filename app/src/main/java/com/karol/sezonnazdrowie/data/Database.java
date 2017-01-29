@@ -1,16 +1,15 @@
 package com.karol.sezonnazdrowie.data;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.model.SnzAlarmManager;
-import com.prolificinteractive.materialcalendarview.*;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import android.preference.PreferenceManager;
-
 import java.util.Comparator;
 
 public class Database {

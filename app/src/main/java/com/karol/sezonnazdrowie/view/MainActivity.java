@@ -2,15 +2,15 @@ package com.karol.sezonnazdrowie.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
-import com.karol.sezonnazdrowie.R;
 
 import java.util.Date;
 

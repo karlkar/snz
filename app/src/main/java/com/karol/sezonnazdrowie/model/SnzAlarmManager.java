@@ -9,8 +9,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.data.Database;
+import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.view.controls.TimePreference;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
