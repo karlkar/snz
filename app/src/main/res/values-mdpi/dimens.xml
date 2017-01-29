@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_middle_bar_width">70dp</dimen>
-    <dimen name="main_button_width">75dp</dimen>
+    <dimen name="main_button_height">70dp</dimen>
 </resources>

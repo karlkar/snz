@@ -16,7 +16,7 @@
         app:elevation="0dp">
 
         <LinearLayout
-            android:layout_width="@dimen/main_middle_bar_width"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|snap"
             android:layout_gravity="center_horizontal"
@@ -58,7 +58,7 @@
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                 android:id="@+id/calendarView"
-                android:layout_width="@dimen/main_middle_bar_width"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mcv_showOtherDates="all"
                 app:mcv_dateTextAppearance="@style/CustomTextAppearance"
@@ -67,7 +67,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
-        android:layout_width="@dimen/main_middle_bar_width"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal"

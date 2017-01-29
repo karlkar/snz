@@ -11,6 +11,8 @@ import android.widget.TimePicker;
 
 import com.karol.sezonnazdrowie.R;
 
+import java.util.Locale;
+
 public class TimePreference extends DialogPreference {
 
     private TimePicker mTimePicker;
@@ -92,7 +94,10 @@ public class TimePreference extends DialogPreference {
                 mLastMinute = mTimePicker.getCurrentMinute();
             }
 
-            String time = String.valueOf(mLastHour) + ":" + String.format("%02d", mLastMinute);
+            String time = String.valueOf(mLastHour) + ":" + String.format(
+                    Locale.getDefault(),
+                    "%02d",
+                    mLastMinute);
 
             if (callChangeListener(time))
                 persistString(time);
