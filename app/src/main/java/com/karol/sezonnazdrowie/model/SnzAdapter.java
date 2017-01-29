@@ -23,7 +23,7 @@ import java.util.List;
 
 public class SnzAdapter extends RecyclerView.Adapter<SnzAdapter.SnzViewHolder> {
 
-    private static ColorMatrixColorFilter mGrayScaleFilter;
+    private static final ColorMatrixColorFilter mGrayScaleFilter;
 
     static {
         ColorMatrix matrix = new ColorMatrix();
@@ -39,10 +39,10 @@ public class SnzAdapter extends RecyclerView.Adapter<SnzAdapter.SnzViewHolder> {
         boolean onItemLongClick(FoodItem foodItem, int position);
     }
 
-    private List<FoodItem> mItems;
+    private final List<FoodItem> mItems;
     private boolean mGridMode;
-    private OnItemClickListener mOnItemClickListener;
-    private OnItemLongClickListener mOnItemLongClickListener;
+    private final OnItemClickListener mOnItemClickListener;
+    private final OnItemLongClickListener mOnItemLongClickListener;
 
     public SnzAdapter(
             @NonNull List<FoodItem> items,
@@ -130,9 +130,9 @@ public class SnzAdapter extends RecyclerView.Adapter<SnzAdapter.SnzViewHolder> {
     }
 
     class SnzViewHolder extends RecyclerView.ViewHolder {
-        View root;
-        ImageView image;
-        TextView text;
+        final View root;
+        final ImageView image;
+        final TextView text;
 
         public SnzViewHolder(View itemView) {
             super(itemView);

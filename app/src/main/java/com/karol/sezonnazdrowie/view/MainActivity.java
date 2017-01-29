@@ -18,13 +18,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mDateTextView = null;
-    private Button mFruitsBtn = null;
-    private Button mVegetablesBtn = null;
-    private Button mCalendarBtn = null;
-    private Button mShopListBtn = null;
-    private Button mIncomingSeasonBtn;
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -35,17 +28,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDateTextView = (TextView) findViewById(R.id.dateTextView);
-        mFruitsBtn = (Button) findViewById(R.id.fruitsBtn);
-        mVegetablesBtn = (Button) findViewById(R.id.vegetablesBtn);
-        mIncomingSeasonBtn = (Button) findViewById(R.id.incomingSeasonBtn);
-        mCalendarBtn = (Button) findViewById(R.id.calendarBtn);
-        mShopListBtn = (Button) findViewById(R.id.shopListBtn);
+        TextView dateTextView = (TextView) findViewById(R.id.dateTextView);
+        Button fruitsBtn = (Button) findViewById(R.id.fruitsBtn);
+        Button vegetablesBtn = (Button) findViewById(R.id.vegetablesBtn);
+        Button incomingSeasonBtn = (Button) findViewById(R.id.incomingSeasonBtn);
+        Button calendarBtn = (Button) findViewById(R.id.calendarBtn);
+        Button shopListBtn = (Button) findViewById(R.id.shopListBtn);
 
         Date today = new Date();
-        mDateTextView.setText(FoodItem.DATE_FORMAT_TEXT.format(today));
+        dateTextView.setText(FoodItem.DATE_FORMAT_TEXT.format(today));
 
-        mFruitsBtn.setOnClickListener(new View.OnClickListener() {
+        fruitsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
@@ -54,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mVegetablesBtn.setOnClickListener(new View.OnClickListener() {
+        vegetablesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
@@ -63,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mIncomingSeasonBtn.setOnClickListener(new View.OnClickListener() {
+        incomingSeasonBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 				Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
@@ -72,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mCalendarBtn.setOnClickListener(new View.OnClickListener() {
+        calendarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
@@ -81,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mShopListBtn.setOnClickListener(new View.OnClickListener() {
+        shopListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);

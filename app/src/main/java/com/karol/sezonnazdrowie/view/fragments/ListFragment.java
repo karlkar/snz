@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,7 +67,7 @@ public class ListFragment extends Fragment {
         ListView listView = (ListView) view.findViewById(R.id.listView);
         ArrayAdapter adapter;
         if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING))
-            adapter = new IncomingAdapter(getActivity(), R.layout.row_incoming_layout, items);
+            adapter = new IncomingAdapter(getActivity(), items);
         else
             adapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);
         listView.setAdapter(adapter);
@@ -91,12 +92,13 @@ public class ListFragment extends Fragment {
             TextView mSeason1;
         }
 
-        public IncomingAdapter(Context context, int resource, List<FoodItem> items) {
-            super(context, resource, items);
+        public IncomingAdapter(Context context, List<FoodItem> items) {
+            super(context, R.layout.row_incoming_layout, items);
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

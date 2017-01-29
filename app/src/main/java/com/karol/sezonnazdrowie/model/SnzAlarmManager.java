@@ -33,7 +33,7 @@ public class SnzAlarmManager {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public static void setAlarms(Context ctx) {
+    private static void setAlarms(Context ctx) {
         HashMap<CalendarDay, ArrayList<FoodItem>> startMap = new HashMap<>();
         HashMap<CalendarDay, ArrayList<FoodItem>> endMap = new HashMap<>();
 

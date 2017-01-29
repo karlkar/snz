@@ -102,7 +102,7 @@ public class Database {
 				if (lhsDay != null && rhsDay == null)
 					return 1;
 				if (lhsDay == null && rhsDay == null || lhsDay.equals(rhsDay))
-					return lhs.compareTo(rhs);
+					return 0;
 				return lhsDay.isBefore(rhsDay) ? -1 : 1;
 			}
 		});

@@ -58,12 +58,17 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Log.d(TAG, "onSharedPreferenceChanged: key = " + key);
-        if (key.equals("pref_season_start"))
-            setPreferenceSummary(sharedPreferences, key);
-        else if (key.equals("pref_season_end"))
-            setPreferenceSummary(sharedPreferences, key);
-        else if (key.equals("pref_notification_hour"))
-            setTimePreferenceSummary(sharedPreferences, key);
+        switch (key) {
+            case "pref_season_start":
+                setPreferenceSummary(sharedPreferences, key);
+                break;
+            case "pref_season_end":
+                setPreferenceSummary(sharedPreferences, key);
+                break;
+            case "pref_notification_hour":
+                setTimePreferenceSummary(sharedPreferences, key);
+                break;
+        }
 
         if (!key.equals("maxReqCode"))
             SnzAlarmManager.startSetAlarmsTask(getActivity());

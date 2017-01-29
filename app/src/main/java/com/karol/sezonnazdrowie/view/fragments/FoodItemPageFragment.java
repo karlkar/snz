@@ -26,8 +26,6 @@ public class FoodItemPageFragment extends Fragment {
     private static final String TAG = "FOODITEMPAGEFRAGMENT";
     private FoodItem mItem;
 
-    private ImageView mPagePreviewImageView;
-    private ImageView mAddToShoppingListImageView;
     private LinearLayout mAdditionalTextsLayout;
 
     @Nullable
@@ -38,14 +36,14 @@ public class FoodItemPageFragment extends Fragment {
         mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
         ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
 
-        mPagePreviewImageView = (ImageView) view.findViewById(R.id.pagePreviewImageView);
+        ImageView pagePreviewImageView = (ImageView) view.findViewById(R.id.pagePreviewImageView);
         if (!mItem.getImage().isEmpty())
-            mPagePreviewImageView.setImageResource(getResources().getIdentifier(mItem.getImage(), "drawable", getActivity().getPackageName()));
+            pagePreviewImageView.setImageResource(getResources().getIdentifier(mItem.getImage(), "drawable", getActivity().getPackageName()));
         else
-            mPagePreviewImageView.setImageResource(android.R.drawable.ic_menu_gallery);
+            pagePreviewImageView.setImageResource(android.R.drawable.ic_menu_gallery);
 
-        mAddToShoppingListImageView = (ImageView) view.findViewById(R.id.addToShoppingListButton);
-        mAddToShoppingListImageView.setOnClickListener(new View.OnClickListener() {
+        ImageView addToShoppingListImageView = (ImageView) view.findViewById(R.id.addToShoppingListButton);
+        addToShoppingListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());

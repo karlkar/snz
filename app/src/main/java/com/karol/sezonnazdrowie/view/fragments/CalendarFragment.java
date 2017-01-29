@@ -53,11 +53,11 @@ public class CalendarFragment extends Fragment {
     private FoodItem mSelectedFoodItem;
     private boolean mGridViewMode = true;
 
-    SnzAdapter.OnItemClickListener mOnItemClickListener = new SnzAdapter.OnItemClickListener() {
+    private final SnzAdapter.OnItemClickListener mOnItemClickListener = new SnzAdapter.OnItemClickListener() {
         @Override
         public void onClicked(FoodItem foodItem, int position) {
             mSelectedDate = null;
-            mCalendarView.setSelectedDate(mSelectedDate);
+            mCalendarView.setSelectedDate((CalendarDay) null);
             mSelectedFoodItem = foodItem;
 
             mFruitAdapter.enableItemAt(foodItem.isFruit() ? position : -1);
