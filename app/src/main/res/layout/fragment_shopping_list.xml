@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ListView
+        android:id="@+id/listView"
         android:layout_width="@dimen/main_middle_bar_width"
         android:layout_height="match_parent"
-        android:id="@+id/listView"
-        android:dividerHeight="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
         android:divider="@drawable/list_view_divider"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp"/>
+        android:dividerHeight="1dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addToShoppingListButton"
@@ -22,8 +21,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         app:backgroundTint="@color/colorFloatingActionButton"
-        app:srcCompat="@drawable/ic_add_white_24dp"
-        android:layout_alignRight="@+id/listView"
-        android:layout_alignBottom="@+id/listView" />
+        app:srcCompat="@drawable/ic_add_white_24dp" />
 
-</RelativeLayout>
+</FrameLayout>

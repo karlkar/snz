@@ -93,4 +93,5 @@
     <string name="season_ends_week">Za tydzień skończy się sezon na</string>
     <string name="time_dialog_set">Ustaw</string>
     <string name="notification_hour">Godzina powiadomienia</string>
+    <string name="fregment_calendar_menu_change_view">Zmień widok</string>
 </resources>

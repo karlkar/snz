@@ -1,130 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:background="@drawable/bg"
     tools:context="com.karol.sezonnazdrowie.view.MainActivity">
 
     <LinearLayout
+        android:id="@+id/whiteStripe"
         android:layout_width="@dimen/main_middle_bar_width"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:background="@android:color/white"
-		android:id="@+id/whiteStripe"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true">
-    </LinearLayout>
+        android:orientation="horizontal" />
 
     <TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:id="@+id/dateTextView"
-		android:layout_alignParentTop="true"
-		android:layout_centerHorizontal="true"
-		fontPath="fonts/Amatic-Bold.ttf"
-		android:textSize="40sp"
-		tools:ignore="MissingPrefix"/>
-
-    <TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/current_season"
-		android:id="@+id/textView"
-		android:layout_below="@+id/dateTextView"
-		android:layout_centerHorizontal="true"
-		fontPath="fonts/Amatic-Bold.ttf"
-		android:textSize="40sp"
-		tools:ignore="MissingPrefix"/>
-
-    <Button
-		android:layout_width="@dimen/main_button_width"
-		android:layout_height="@dimen/main_button_height"
-		android:layout_marginTop="5dp"
-		android:text="@string/fruits_btn"
-		android:id="@+id/fruitsBtn"
-		android:layout_below="@+id/textView"
-		android:layout_alignLeft="@id/whiteStripe"
-		android:stateListAnimator="@null"
-		android:textSize="40sp"
-		fontPath="fonts/Amatic-Bold.ttf"
-		android:textColor="@android:color/white"
-		android:background="@drawable/button_turquis"
-		tools:ignore="MissingPrefix"/>
-
-    <Button
-		android:layout_width="@dimen/main_button_width"
-		android:layout_height="@dimen/main_button_height"
-		android:layout_marginTop="5dp"
-		android:text="@string/vegetables_btn"
-		android:id="@+id/vegetablesBtn"
-		android:layout_below="@+id/fruitsBtn"
-		android:layout_alignLeft="@id/whiteStripe"
-		android:stateListAnimator="@null"
-		android:textSize="40sp"
-		fontPath="fonts/Amatic-Bold.ttf"
-		android:textColor="@android:color/white"
-		android:background="@drawable/button_green"
-		tools:ignore="MissingPrefix"/>
-
-    <ImageView
+        android:id="@+id/dateTextView"
+        fontPath="fonts/Amatic-Bold.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/vegetablesBtn"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix" />
+
+    <TextView
+        android:id="@+id/textView"
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dateTextView"
+        android:layout_centerHorizontal="true"
+        android:text="@string/current_season"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix" />
+
+    <Button
+        android:id="@+id/fruitsBtn"
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:layout_width="@dimen/main_button_width"
+        android:layout_height="@dimen/main_button_height"
+        android:layout_alignLeft="@id/whiteStripe"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_turquis"
+        android:stateListAnimator="@null"
+        android:text="@string/fruits_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix" />
+
+    <Button
+        android:id="@+id/vegetablesBtn"
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:layout_width="@dimen/main_button_width"
+        android:layout_height="@dimen/main_button_height"
+        android:layout_alignLeft="@id/whiteStripe"
+        android:layout_below="@+id/fruitsBtn"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_green"
+        android:stateListAnimator="@null"
+        android:text="@string/vegetables_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix" />
+
+    <ImageView
+        android:id="@+id/mainLogoImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/incomingSeasonBtn"
         android:layout_alignLeft="@+id/whiteStripe"
         android:layout_alignRight="@+id/whiteStripe"
-		android:contentDescription="@string/app_logo"
-        android:src="@drawable/truskawka1"
-        android:id="@+id/mainLogoImageView"/>
+        android:layout_below="@+id/vegetablesBtn"
+        android:contentDescription="@string/app_logo"
+        android:src="@drawable/truskawka1" />
 
     <Button
-		android:layout_width="@dimen/main_button_width"
-		android:layout_height="@dimen/main_button_height"
-		android:text="@string/incoming_season_btn"
-		android:id="@+id/incomingSeasonBtn"
-		android:textSize="40sp"
-		fontPath="fonts/Amatic-Bold.ttf"
-		android:textColor="@android:color/white"
-		android:layout_above="@+id/calendarBtn"
-		android:layout_alignLeft="@id/whiteStripe"
-		android:stateListAnimator="@null"
-		android:background="@drawable/button_turquis"
-		tools:ignore="MissingPrefix"/>
+        android:id="@+id/incomingSeasonBtn"
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:layout_width="@dimen/main_button_width"
+        android:layout_height="@dimen/main_button_height"
+        android:layout_above="@+id/calendarBtn"
+        android:layout_alignLeft="@id/whiteStripe"
+        android:background="@drawable/button_turquis"
+        android:stateListAnimator="@null"
+        android:text="@string/incoming_season_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix" />
 
     <Button
-		android:layout_width="@dimen/main_button_width"
-		android:layout_height="@dimen/main_button_height"
-		android:layout_marginTop="5dp"
-		android:text="@string/calendar_btn"
-		android:id="@+id/calendarBtn"
-		android:textSize="40sp"
-		fontPath="fonts/Amatic-Bold.ttf"
-		android:textColor="@android:color/white"
-		android:layout_above="@+id/shopListBtn"
-		android:layout_alignLeft="@id/whiteStripe"
-		android:stateListAnimator="@null"
-		android:background="@drawable/button_green"
-		tools:ignore="MissingPrefix"/>
+        android:id="@+id/calendarBtn"
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:layout_width="@dimen/main_button_width"
+        android:layout_height="@dimen/main_button_height"
+        android:layout_above="@+id/shopListBtn"
+        android:layout_alignLeft="@id/whiteStripe"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_green"
+        android:stateListAnimator="@null"
+        android:text="@string/calendar_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix" />
 
     <Button
-		android:layout_width="@dimen/main_button_width"
-		android:layout_height="@dimen/main_button_height"
-		android:layout_marginTop="5dp"
-		android:text="@string/shopping_list_btn"
-		android:id="@+id/shopListBtn"
-		android:textSize="40sp"
-		fontPath="fonts/Amatic-Bold.ttf"
-		android:textColor="@android:color/white"
-		android:layout_alignParentBottom="true"
-		android:layout_alignLeft="@id/whiteStripe"
-		android:stateListAnimator="@null"
-		android:layout_marginBottom="16dp"
-		android:background="@drawable/button_green"
-		tools:ignore="MissingPrefix"/>
+        android:id="@+id/shopListBtn"
+        fontPath="fonts/Amatic-Bold.ttf"
+        android:layout_width="@dimen/main_button_width"
+        android:layout_height="@dimen/main_button_height"
+        android:layout_alignLeft="@id/whiteStripe"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_green"
+        android:stateListAnimator="@null"
+        android:text="@string/shopping_list_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        tools:ignore="MissingPrefix" />
 
 </RelativeLayout>

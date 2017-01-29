@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/rowText"
+        fontPath="fonts/Amatic-Bold.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:gravity="center"
         android:textSize="40sp"
-        fontPath="fonts/Amatic-Bold.ttf"
-        android:id="@+id/rowText"
-        tools:ignore="MissingPrefix"/>
+        tools:ignore="MissingPrefix" />
 
     <TextView
+        android:id="@+id/rowSeason1Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_below="@id/rowText"
         android:gravity="center"
-        android:id="@+id/rowSeason1Text"
-        tools:ignore="MissingPrefix"/>
+        tools:ignore="MissingPrefix" />
 
-</RelativeLayout>
+</LinearLayout>
