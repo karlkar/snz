@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FragmentsActivity extends AppCompatActivity {
 
+    private static final String TAG = "FragmentsActivity";
+
     public static final String INTENT_WHAT = "WHAT";
     public static final String INTENT_WHAT_VEGETABLES = "VEGETABLES";
     public static final String INTENT_WHAT_FRUITS = "FRUITS";
@@ -47,8 +50,6 @@ public class FragmentsActivity extends AppCompatActivity {
     private AdView mAdView = null;
 
     private boolean mSettingsItemsChanged = false;
-
-	private final Stack<Fragment> mFragmentBackStack = new Stack<>();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -79,30 +80,25 @@ public class FragmentsActivity extends AppCompatActivity {
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-        if (savedInstanceState == null) {
-            String what = getIntent().getStringExtra(INTENT_WHAT);
-            switch (what) {
-                case INTENT_WHAT_CALENDAR: {
-                    Fragment fragment = new CalendarFragment();
-                    mFragmentBackStack.push(fragment);
-                    getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
-                    break;
-                }
-                case INTENT_WHAT_SHOPPING_LIST: {
-                    Fragment fragment = new ShoppingListFragment();
-                    mFragmentBackStack.push(fragment);
-                    getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
-                    break;
-                }
-                default: {
-                    Fragment fragment = new ListFragment();
-                    mFragmentBackStack.push(fragment);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(INTENT_WHAT, what);
-                    fragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
-                    break;
-                }
+        String what = getIntent().getStringExtra(INTENT_WHAT);
+        switch (what) {
+            case INTENT_WHAT_CALENDAR: {
+                Fragment fragment = new CalendarFragment();
+                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
+                break;
+            }
+            case INTENT_WHAT_SHOPPING_LIST: {
+                Fragment fragment = new ShoppingListFragment();
+                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
+                break;
+            }
+            default: {
+                Fragment fragment = new ListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(INTENT_WHAT, what);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().add(R.id.contentView, fragment).commit();
+                break;
             }
         }
 
@@ -195,7 +191,7 @@ public class FragmentsActivity extends AppCompatActivity {
 
     public void replaceFragments(Fragment fragment) {
         boolean isSameAsCurrent;
-        Fragment currentFragment = mFragmentBackStack.peek();
+        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.contentView);
         if (fragment.getClass().equals(ListFragment.class)) {
             isSameAsCurrent = currentFragment.getClass().equals(ListFragment.class)
                     && fragment.getArguments().getString(INTENT_WHAT).equals(currentFragment.getArguments().getString(INTENT_WHAT));
@@ -209,10 +205,7 @@ public class FragmentsActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.contentView, fragment);
             if (fragment instanceof CalendarFragment || fragment instanceof FoodItemPageFragment || fragment instanceof SettingsFragment || fragment instanceof SettingsItemsFragment)
                 fragmentTransaction.addToBackStack(null);
-            else
-                mFragmentBackStack.pop();
             fragmentTransaction.commit();
-            mFragmentBackStack.push(fragment);
         }
         mDrawerLayout.closeDrawers();
     }
@@ -233,7 +226,6 @@ public class FragmentsActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
-            mFragmentBackStack.pop();
         } else
             super.onBackPressed();
     }
