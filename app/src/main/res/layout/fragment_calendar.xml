@@ -1,64 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingPrefix"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:id="@+id/calendarScrollView"
-    >
+    tools:ignore="MissingPrefix"
+    android:layout_gravity="center_horizontal">
 
-    <LinearLayout
-        android:layout_width="@dimen/main_middle_bar_width"
+    <!--<LinearLayout-->
+        <!--android:layout_width="@dimen/main_middle_bar_width"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:orientation="vertical">-->
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:orientation="vertical">
+        android:background="@null"
+        app:elevation="0dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/main_middle_bar_width"
             android:layout_height="wrap_content"
-            android:id="@+id/calendarTop"
-            android:gravity="center">
+            app:layout_scrollFlags="scroll|snap"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="50dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="&lt;"
+                android:id="@+id/calendarTop"
                 android:gravity="center"
-                android:id="@+id/caledarArrowLeft"
-                fontPath="fonts/Amatic-Bold.ttf"
-                android:textSize="30sp"/>
+                android:layout_gravity="center_horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="&lt;"
+                    android:gravity="center"
+                    android:id="@+id/caledarArrowLeft"
+                    fontPath="fonts/Amatic-Bold.ttf"
+                    android:textSize="30sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/calendarHeader"
+                    fontPath="fonts/Amatic-Bold.ttf"
+                    android:textSize="30sp"/>
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="&gt;"
+                    android:gravity="center"
+                    android:id="@+id/caledarArrowRight"
+                    fontPath="fonts/Amatic-Bold.ttf"
+                    android:textSize="30sp"/>
+
+            </LinearLayout>
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="@dimen/main_middle_bar_width"
                 android:layout_height="wrap_content"
-                android:id="@+id/calendarHeader"
-                fontPath="fonts/Amatic-Bold.ttf"
-                android:textSize="30sp"/>
-
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:text="&gt;"
-                android:gravity="center"
-                android:id="@+id/caledarArrowRight"
-                fontPath="fonts/Amatic-Bold.ttf"
-                android:textSize="30sp"/>
-
+                app:mcv_showOtherDates="all"
+                app:mcv_dateTextAppearance="@style/CustomTextAppearance"
+                android:layout_gravity="center_horizontal" />
         </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
 
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:mcv_showOtherDates="all"
-            app:mcv_dateTextAppearance="@style/CustomTextAppearance"/>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="@dimen/main_middle_bar_width"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_gravity="center_horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -122,5 +144,7 @@
             </LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </android.support.v4.widget.NestedScrollView>
+    <!--</LinearLayout>-->
+
+</android.support.design.widget.CoordinatorLayout>

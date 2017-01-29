@@ -1,17 +1,14 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,36 +18,32 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.model.FoodItemAdapter;
-import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.model.FoodItemGridAdapter;
 import com.karol.sezonnazdrowie.model.FoodItemListAdapter;
+import com.karol.sezonnazdrowie.view.FragmentsActivity;
 import com.karol.sezonnazdrowie.view.controls.ExpandableGridView;
 import com.karol.sezonnazdrowie.view.controls.ExpandableListView;
-import com.karol.sezonnazdrowie.view.FragmentsActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CalendarFragment extends Fragment {
     private static final String TAG = "CALENDARFRAGMENT";
 
     private static final String PREF_GRID_VIEW_MODE = "PREF_GRID_VIEW_MODE";
-    private ScrollView mCalendarScrollView;
+    private NestedScrollView mScrollView;
 
     private FrameLayout mFruitsLayout;
     private GridView mFruitsGridView = null;
@@ -86,7 +79,8 @@ public class CalendarFragment extends Fragment {
 
             if (mGridViewMode)
                 Toast.makeText(getActivity(), mSelectedFoodItem.getName(), Toast.LENGTH_SHORT).show();
-            mCalendarScrollView.fullScroll(ScrollView.FOCUS_UP);
+            mScrollView.scrollTo(0, 0);
+            mAppBarLayout.setExpanded(true, true);
 
             CalendarDay currentDay = mCalendarView.getCurrentDate();
             CalendarDay properDay = mSelectedFoodItem.getNearestSeasonDay(currentDay);
@@ -108,6 +102,7 @@ public class CalendarFragment extends Fragment {
             return true;
         }
     };
+    private AppBarLayout mAppBarLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,7 +112,8 @@ public class CalendarFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_calendar, null);
 
-        mCalendarScrollView = (ScrollView) view.findViewById(R.id.calendarScrollView);
+        mAppBarLayout = (AppBarLayout) view.findViewById(R.id.appbar_layout);
+        mScrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
 
         mFruitsLayout = (FrameLayout) view.findViewById(R.id.fruitsLayout);
         mVegetablesLayout = (FrameLayout) view.findViewById(R.id.vegetablesLayout);
