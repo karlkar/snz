@@ -143,6 +143,7 @@ public class FragmentsActivity extends AppCompatActivity {
         mAdView = (AdView) findViewById(R.id.adView);
         final AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.adMobTestDeviceS5))
+                .addTestDevice(getString(R.string.adMobTestDeviceS7))
                 .build();
         mAdView.setAdListener(new AdListener() {
             @Override
