@@ -2,7 +2,6 @@ package com.karol.sezonnazdrowie.view.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -17,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,12 +80,12 @@ public class CalendarFragment extends Fragment {
         }
     };
 
-    private final AdapterView.OnItemLongClickListener mOnItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+    private final SnzAdapter.OnItemLongClickListener mOnItemLongClickListener = new SnzAdapter.OnItemLongClickListener() {
         @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        public boolean onItemLongClick(FoodItem foodItem, int position) {
             Fragment fragment = new FoodItemPageFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(FragmentsActivity.INTENT_ITEM, (Parcelable) parent.getItemAtPosition(position));
+            bundle.putParcelable(FragmentsActivity.INTENT_ITEM, foodItem);
             fragment.setArguments(bundle);
             ((FragmentsActivity) getActivity()).replaceFragments(fragment);
             return true;
@@ -101,12 +99,16 @@ public class CalendarFragment extends Fragment {
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-
         mAppBarLayout = (AppBarLayout) view.findViewById(R.id.appbar_layout);
-
         mFruitsRv = (RecyclerView) view.findViewById(R.id.fruitsRecyclerView);
         mVegetablesRv = (RecyclerView) view.findViewById(R.id.vegetablesRecyclerView);
 
+        setupRecyclers();
+        prepareCalendarView(view);
+        return view;
+    }
+
+    private void setupRecyclers() {
         mGridViewMode = PreferenceManager.getDefaultSharedPreferences(
                 getActivity()).getBoolean(PREF_GRID_VIEW_MODE, true);
         if (mGridViewMode) {
@@ -119,16 +121,15 @@ public class CalendarFragment extends Fragment {
         mFruitAdapter = new SnzAdapter(
                 Database.getInstance().getAllFruits(),
                 mGridViewMode,
-                mOnItemClickListener);
+                mOnItemClickListener,
+                mOnItemLongClickListener);
         mFruitsRv.setAdapter(mFruitAdapter);
         mVegetableAdapter = new SnzAdapter(
                 Database.getInstance().getAllVegetables(),
                 mGridViewMode,
-                mOnItemClickListener);
+                mOnItemClickListener,
+                mOnItemLongClickListener);
         mVegetablesRv.setAdapter(mVegetableAdapter);
-
-        prepareCalendarView(view);
-        return view;
     }
 
     @Override
@@ -167,21 +168,18 @@ public class CalendarFragment extends Fragment {
                 .putBoolean(PREF_GRID_VIEW_MODE, mGridViewMode)
                 .apply();
 
-        if (mGridViewMode) {
-            mFruitAdapter.setGridMode(mGridViewMode);
-            mVegetableAdapter.setGridMode(mGridViewMode);
-            mFruitsRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            mFruitAdapter.notifyDataSetChanged();
-            mVegetablesRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            mVegetableAdapter.notifyDataSetChanged();
-        } else {
-            mFruitAdapter.setGridMode(mGridViewMode);
-            mVegetableAdapter.setGridMode(mGridViewMode);
-            mFruitsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mFruitAdapter.notifyDataSetChanged();
-            mVegetablesRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mVegetableAdapter.notifyDataSetChanged();
-        }
+        mFruitAdapter.setGridMode(mGridViewMode);
+        mFruitsRv.setLayoutManager(
+                mGridViewMode ?
+                        new GridLayoutManager(getActivity(), 2)
+                        : new LinearLayoutManager(getActivity()));
+        mFruitAdapter.notifyDataSetChanged();
+        mVegetableAdapter.setGridMode(mGridViewMode);
+        mVegetablesRv.setLayoutManager(
+                mGridViewMode ?
+                        new GridLayoutManager(getActivity(), 2)
+                        : new LinearLayoutManager(getActivity()));
+        mVegetableAdapter.notifyDataSetChanged();
         updateViewModeSwitchIcon();
     }
 

@@ -24,6 +24,7 @@ import java.util.List;
 public class SnzAdapter extends RecyclerView.Adapter<SnzAdapter.SnzViewHolder> {
 
     private static ColorMatrixColorFilter mGrayScaleFilter;
+
     static {
         ColorMatrix matrix = new ColorMatrix();
         matrix.setSaturation(0);
@@ -34,17 +35,24 @@ public class SnzAdapter extends RecyclerView.Adapter<SnzAdapter.SnzViewHolder> {
         void onClicked(FoodItem position, int adapterPosition);
     }
 
-    List<FoodItem> mItems;
+    public interface OnItemLongClickListener {
+        boolean onItemLongClick(FoodItem foodItem, int position);
+    }
+
+    private List<FoodItem> mItems;
     private boolean mGridMode;
-    OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
 
     public SnzAdapter(
             @NonNull List<FoodItem> items,
             boolean gridMode,
-            @NonNull OnItemClickListener onItemClickListener) {
+            @NonNull OnItemClickListener onItemClickListener,
+            @NonNull OnItemLongClickListener onItemLongClickListener) {
         mItems = items;
         mGridMode = gridMode;
         mOnItemClickListener = onItemClickListener;
+        mOnItemLongClickListener = onItemLongClickListener;
     }
 
     public void setGridMode(boolean gridViewMode) {
@@ -80,6 +88,12 @@ public class SnzAdapter extends RecyclerView.Adapter<SnzAdapter.SnzViewHolder> {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onClicked(item, holder.getAdapterPosition());
+            }
+        });
+        holder.root.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return mOnItemLongClickListener.onItemLongClick(item, holder.getAdapterPosition());
             }
         });
     }
