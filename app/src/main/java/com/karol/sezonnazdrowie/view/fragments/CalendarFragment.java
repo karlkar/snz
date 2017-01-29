@@ -136,7 +136,8 @@ public class CalendarFragment extends Fragment {
     public void onStart() {
         super.onStart();
         // Fix for selection of grid, when coming back to calendarfragment from other fragment
-        mCalendarView.setSelectedDate(mSelectedDate);
+        if (mSelectedDate != null)
+            mCalendarView.setSelectedDate(mSelectedDate);
     }
 
     @Override
@@ -232,7 +233,8 @@ public class CalendarFragment extends Fragment {
         CalendarDay today = CalendarDay.today();
         mCalendarView.setSelectedDate(today);
         mCurrentMonth = mCalendarView.getCurrentDate().getMonth();
-        onSelectedDateChanged(today);
+        if (mSelectedFoodItem == null)
+            onSelectedDateChanged(today);
     }
 
     private void onSelectedDateChanged(CalendarDay date) {
