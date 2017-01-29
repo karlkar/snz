@@ -100,7 +100,7 @@ public class CalendarFragment extends Fragment {
         ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_calendar, null);
+        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         mAppBarLayout = (AppBarLayout) view.findViewById(R.id.appbar_layout);
 

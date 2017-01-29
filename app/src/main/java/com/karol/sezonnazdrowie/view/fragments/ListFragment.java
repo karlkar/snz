@@ -43,7 +43,7 @@ public class ListFragment extends Fragment {
                 break;
         }
 
-        View view = inflater.inflate(R.layout.fragment_list, null);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         if (Database.getInstance().getAllFruits() == null)
             Database.getInstance().loadData(getActivity());

@@ -34,7 +34,7 @@ public class FoodItemPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
-        View view = inflater.inflate(R.layout.fragment_food_item_page, null);
+        View view = inflater.inflate(R.layout.fragment_food_item_page, container, false);
         mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
         ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
 

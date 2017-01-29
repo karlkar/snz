@@ -46,7 +46,7 @@ public class ShoppingListFragment extends Fragment {
 
         mInputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        View view = inflater.inflate(R.layout.fragment_shopping_list, null);
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Set<String> shoppingSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
