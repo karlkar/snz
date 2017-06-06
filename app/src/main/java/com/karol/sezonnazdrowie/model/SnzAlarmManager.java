@@ -33,7 +33,7 @@ public class SnzAlarmManager {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private static void setAlarms(Context ctx) {
+    static void setAlarms(Context ctx) {
         HashMap<CalendarDay, ArrayList<FoodItem>> startMap = new HashMap<>();
         HashMap<CalendarDay, ArrayList<FoodItem>> endMap = new HashMap<>();
 
@@ -115,7 +115,6 @@ public class SnzAlarmManager {
         for (CalendarDay day : endMap.keySet()) {
 			StringBuilder strBuilder = new StringBuilder();
 			for (FoodItem item : endMap.get(day)) {
-                Log.d(TAG, "setAlarms: Checking pref_noti_" + item.getName());
                 if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_noti_" + item.getName(), true)) {
 					if (strBuilder.length() > 0)
 						strBuilder.append(", ");
