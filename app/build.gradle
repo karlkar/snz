@@ -12,6 +12,7 @@ android {
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
+            v2SigningEnabled false
         }
     }
     compileSdkVersion 25
@@ -21,8 +22,8 @@ android {
         applicationId "com.karol.sezonnazdrowie"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 8
-        versionName "1.7"
+        versionCode 9
+        versionName "1.8"
     }
     buildTypes {
         release {
