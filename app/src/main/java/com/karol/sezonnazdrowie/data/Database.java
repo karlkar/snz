@@ -16,8 +16,10 @@ public class Database {
 
     private static final long INCOMING_SEASON_DAYS_DIFF = 30;
 
-    private ArrayList<FoodItem> mFruits = null;
-    private ArrayList<FoodItem> mVegetables = null;
+    private static Database sInstance = null;
+
+    private ArrayList<FoodItem> mFruits = new ArrayList<>();
+    private ArrayList<FoodItem> mVegetables = new ArrayList<>();
     private ArrayList<FoodItem> mCurrentFruits = null;
     private ArrayList<FoodItem> mCurrentVegetables = null;
 
@@ -25,7 +27,9 @@ public class Database {
     }
 
     public static Database getInstance() {
-        return Holder.instance;
+        if (sInstance == null)
+            sInstance = new Database();
+        return sInstance;
     }
 
     public ArrayList<FoodItem> getCurrentFruits() {
@@ -110,8 +114,8 @@ public class Database {
     }
 
     public void loadData(Context ctx) {
-        Holder.instance.mFruits = FoodItem.createItems(ctx, com.karol.sezonnazdrowie.R.raw.fruits, true);
-        Holder.instance.mVegetables = FoodItem.createItems(ctx, R.raw.vegetables, false);
+        sInstance.mFruits = FoodItem.createItems(ctx, com.karol.sezonnazdrowie.R.raw.fruits, true);
+        sInstance.mVegetables = FoodItem.createItems(ctx, R.raw.vegetables, false);
 		
 		boolean alarmsSet = PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("pref_alarms_set", false);
 		if (!alarmsSet)
@@ -124,9 +128,5 @@ public class Database {
 
     public ArrayList<FoodItem> getAllVegetables() {
         return mVegetables;
-    }
-
-    private static class Holder {
-        static final Database instance = new Database();
     }
 }

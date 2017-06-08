@@ -12,6 +12,7 @@ import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -27,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ArrayList<FoodItem> allFruits = Database.getInstance().getAllFruits();
+        if (allFruits == null || allFruits.size() == 0)
+            Database.getInstance().loadData(this);
 
         TextView dateTextView = (TextView) findViewById(R.id.dateTextView);
         Button fruitsBtn = (Button) findViewById(R.id.fruitsBtn);
@@ -82,12 +87,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-		if (Database.getInstance().getAllFruits() == null)
-        	Database.getInstance().loadData(this);
-        super.onResume();
     }
 }
