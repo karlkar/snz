@@ -30,8 +30,6 @@ import com.karol.sezonnazdrowie.view.fragments.ShoppingListFragment;
 
 import java.util.Stack;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 public class FragmentsActivity extends AppCompatActivity {
 
     private static final String TAG = "FragmentsActivity";
@@ -50,11 +48,6 @@ public class FragmentsActivity extends AppCompatActivity {
     private AdView mAdView = null;
 
     private boolean mSettingsItemsChanged = false;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

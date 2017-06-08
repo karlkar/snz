@@ -39,48 +39,44 @@
 
                 <TextView
                     android:id="@+id/dateTextView"
-                    fontPath="fonts/Amatic-Bold.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="40sp"
-                    tools:ignore="MissingPrefix" />
+                    android:fontFamily="@font/amatic_sc_bold"
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/textView"
-                    fontPath="fonts/Amatic-Bold.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/amatic_sc_bold"
                     android:text="@string/current_season"
-                    android:textSize="40sp"
-                    tools:ignore="MissingPrefix" />
+                    android:textSize="40sp" />
 
                 <Button
                     android:id="@+id/fruitsBtn"
-                    fontPath="fonts/Amatic-Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/main_button_height"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/button_turquis"
+                    android:fontFamily="@font/amatic_sc_bold"
                     android:stateListAnimator="@null"
                     android:text="@string/fruits_btn"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
-                    tools:ignore="MissingPrefix" />
+                    android:textSize="40sp" />
 
                 <Button
                     android:id="@+id/vegetablesBtn"
-                    fontPath="fonts/Amatic-Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/main_button_height"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/button_green"
+                    android:fontFamily="@font/amatic_sc_bold"
                     android:stateListAnimator="@null"
                     android:text="@string/vegetables_btn"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
-                    tools:ignore="MissingPrefix" />
+                    android:textSize="40sp" />
 
                 <ImageView
                     android:id="@+id/mainLogoImageView"
@@ -93,42 +89,39 @@
 
                 <Button
                     android:id="@+id/incomingSeasonBtn"
-                    fontPath="fonts/Amatic-Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/main_button_height"
                     android:background="@drawable/button_turquis"
+                    android:fontFamily="@font/amatic_sc_bold"
                     android:stateListAnimator="@null"
                     android:text="@string/incoming_season_btn"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
-                    tools:ignore="MissingPrefix" />
+                    android:textSize="40sp" />
 
                 <Button
                     android:id="@+id/calendarBtn"
-                    fontPath="fonts/Amatic-Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/main_button_height"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/button_green"
+                    android:fontFamily="@font/amatic_sc_bold"
                     android:stateListAnimator="@null"
                     android:text="@string/calendar_btn"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
-                    tools:ignore="MissingPrefix" />
+                    android:textSize="40sp" />
 
                 <Button
                     android:id="@+id/shopListBtn"
-                    fontPath="fonts/Amatic-Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/main_button_height"
                     android:layout_marginBottom="16dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/button_green"
+                    android:fontFamily="@font/amatic_sc_bold"
                     android:stateListAnimator="@null"
                     android:text="@string/shopping_list_btn"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
-                    tools:ignore="MissingPrefix" />
+                    android:textSize="40sp" />
             </LinearLayout>
         </ScrollView>
     </FrameLayout>

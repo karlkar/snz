@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/rowText"
-        fontPath="fonts/Amatic-Bold.ttf"
+        android:fontFamily="@font/amatic_sc_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:gravity="center"
-        android:textSize="40sp"
-        tools:ignore="MissingPrefix" />
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/rowSeason1Text"
@@ -22,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:gravity="center"
-        tools:ignore="MissingPrefix" />
+        android:gravity="center" />
 
 </LinearLayout>

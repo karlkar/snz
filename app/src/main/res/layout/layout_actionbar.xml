@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/MyToolbarStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,13 +7,12 @@
 
     <TextView
         android:id="@+id/action_bar_title"
-        fontPath="fonts/Amatic-Bold.ttf"
+        android:fontFamily="@font/amatic_sc_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="#ffffff"
-        android:textSize="40sp"
-        tools:ignore="MissingPrefix" />
+        android:textSize="40sp" />
 
 </android.support.v7.widget.Toolbar>
