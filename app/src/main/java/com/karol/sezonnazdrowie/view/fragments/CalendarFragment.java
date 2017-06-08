@@ -191,7 +191,7 @@ public class CalendarFragment extends Fragment {
         mCalendarHeaderTextView.setText(String.format(getResources().getStringArray(R.array.monthsWithYear)[Calendar.getInstance().get(Calendar.MONTH)], Calendar.getInstance().get(Calendar.YEAR)));
 
         mCalendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
-        mCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
+        mCalendarView.state().edit().setFirstDayOfWeek(Calendar.MONDAY).commit();
         mCalendarView.setTopbarVisible(false);
         mCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -210,17 +210,13 @@ public class CalendarFragment extends Fragment {
         calendarArrowLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar date = mCalendarView.getCurrentDate().getCalendar();
-                date.add(Calendar.MONTH, -1);
-                mCalendarView.setCurrentDate(date);
+                mCalendarView.goToPrevious();
             }
         });
         calendarArrowRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar date = mCalendarView.getCurrentDate().getCalendar();
-                date.add(Calendar.MONTH, 1);
-                mCalendarView.setCurrentDate(date);
+                mCalendarView.goToNext();
             }
         });
 
