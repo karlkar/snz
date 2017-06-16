@@ -22,8 +22,9 @@ android {
         applicationId "com.karol.sezonnazdrowie"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.8"
+        versionCode 10
+        versionName "1.9"
+        resConfigs "pl"
     }
     buildTypes {
         release {
@@ -40,8 +41,8 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
-    compile 'com.google.firebase:firebase-ads:11.0.0'
-    releaseCompile 'com.google.firebase:firebase-crash:11.0.0'
+    compile 'com.google.firebase:firebase-ads:11.0.1'
+    releaseCompile 'com.google.firebase:firebase-crash:11.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     testCompile 'junit:junit:4.12'
 }
