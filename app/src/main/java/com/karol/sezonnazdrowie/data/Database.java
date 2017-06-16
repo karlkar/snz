@@ -14,7 +14,7 @@ import java.util.Comparator;
 
 public class Database {
 
-    private static final long INCOMING_SEASON_DAYS_DIFF = 30;
+    private static final long INCOMING_SEASON_DAYS_DIFF = 32;
 
     private static Database sInstance = null;
 
