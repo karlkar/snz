@@ -15,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "774424617346-f7s5b28ocrcb82nh9ab11l1qmkf92toq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.karol.sezonnazdrowie",
+            "certificate_hash": "5c8f61e35e47f634d59b012714ad82fdf7af3cf9"
+          }
+        },
+        {
+          "client_id": "774424617346-kjc293i8t2929g9nhah8es1phim3e8ue.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.karol.sezonnazdrowie",
+            "certificate_hash": "6319b737cddf8d477e60ec41d3dab79a3c345767"
+          }
+        },
+        {
           "client_id": "774424617346-nqe8fjo9q6dncjqfvaqlsviiebe3snrj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.karol.sezonnazdrowie",
-            "certificate_hash": "1F9779474E7E9842D263D3F48A0E10675334682F"
+            "certificate_hash": "1f9779474e7e9842d263d3f48a0e10675334682f"
           }
         },
         {
@@ -27,7 +43,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.karol.sezonnazdrowie",
-            "certificate_hash": "A9F574F57DEE97AC389E2DBE68A1A6873E416502"
+            "certificate_hash": "a9f574f57dee97ac389e2dbe68a1a6873e416502"
           }
         },
         {
