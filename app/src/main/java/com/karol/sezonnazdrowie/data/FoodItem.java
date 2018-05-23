@@ -3,7 +3,7 @@ package com.karol.sezonnazdrowie.data;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -242,11 +242,13 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
         long end = mEndDay1.getCalendar().getTimeInMillis();
 
         if (start <= end) {
-            if (relDate >= start && relDate <= end)
+            if (relDate >= start && relDate <= end) {
                 return true;
+            }
         } else {
-            if (relDate <= end || relDate >= start)
+            if (relDate <= end || relDate >= start) {
                 return true;
+            }
         }
 
         if (mStartDay2 != null && mEndDay2 != null) {
@@ -254,11 +256,9 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
             end = mEndDay2.getCalendar().getTimeInMillis();
 
             if (start <= end) {
-                if (relDate >= start && relDate <= end)
-                    return true;
+                return relDate >= start && relDate <= end;
             } else {
-                if (relDate <= end || relDate >= start)
-                    return true;
+                return relDate <= end || relDate >= start;
             }
         }
         return false;

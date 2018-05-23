@@ -1,14 +1,15 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.core.content.ContextCompat;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -83,25 +84,24 @@ public class CalendarFragment extends Fragment {
     private final SnzAdapter.OnItemLongClickListener mOnItemLongClickListener = new SnzAdapter.OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(FoodItem foodItem, int position) {
-            Fragment fragment = new FoodItemPageFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(FragmentsActivity.INTENT_ITEM, foodItem);
-            fragment.setArguments(bundle);
-            ((FragmentsActivity) getActivity()).replaceFragments(fragment);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.action_food_detail, bundle);
             return true;
         }
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-        mAppBarLayout = (AppBarLayout) view.findViewById(R.id.appbar_layout);
-        mFruitsRv = (RecyclerView) view.findViewById(R.id.fruitsRecyclerView);
-        mVegetablesRv = (RecyclerView) view.findViewById(R.id.vegetablesRecyclerView);
+        mAppBarLayout = view.findViewById(R.id.appbar_layout);
+        mFruitsRv = view.findViewById(R.id.fruitsRecyclerView);
+        mVegetablesRv = view.findViewById(R.id.vegetablesRecyclerView);
 
         setupRecyclers();
         prepareCalendarView(view);
@@ -187,10 +187,10 @@ public class CalendarFragment extends Fragment {
     private void prepareCalendarView(View view) {
         View calendarArrowLeft = view.findViewById(R.id.caledarArrowLeft);
         View calendarArrowRight = view.findViewById(R.id.caledarArrowRight);
-        mCalendarHeaderTextView = (TextView) view.findViewById(R.id.calendarHeader);
+        mCalendarHeaderTextView = view.findViewById(R.id.calendarHeader);
         mCalendarHeaderTextView.setText(String.format(getResources().getStringArray(R.array.monthsWithYear)[Calendar.getInstance().get(Calendar.MONTH)], Calendar.getInstance().get(Calendar.YEAR)));
 
-        mCalendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
+        mCalendarView = view.findViewById(R.id.calendarView);
         mCalendarView.state().edit().setFirstDayOfWeek(Calendar.MONDAY).commit();
         mCalendarView.setTopbarVisible(false);
         mCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {

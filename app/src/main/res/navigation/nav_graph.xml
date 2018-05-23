@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.karol.sezonnazdrowie.view.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_calendar"
+            app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_shopping_list"
+            app:destination="@id/shoppingListFragment" />
+        <action
+            android:id="@+id/action_list"
+            app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_settings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.karol.sezonnazdrowie.view.fragments.CalendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendar_detail"
+            app:destination="@id/foodItemPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoppingListFragment"
+        android:name="com.karol.sezonnazdrowie.view.fragments.ShoppingListFragment"
+        android:label="fragment_shopping_list"
+        tools:layout="@layout/fragment_shopping_list" />
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.karol.sezonnazdrowie.view.fragments.ListFragment"
+        android:label="fragment_list"
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_food_detail"
+            app:destination="@id/foodItemPageFragment" />
+        <argument
+            android:name="WHAT"
+            app:type="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/foodItemPageFragment"
+        android:name="com.karol.sezonnazdrowie.view.fragments.FoodItemPageFragment"
+        android:label="fragment_food_item_page"
+        tools:layout="@layout/fragment_food_item_page" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.karol.sezonnazdrowie.view.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settings_details"
+            app:destination="@id/settingsItemsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsItemsFragment2"
+        android:name="com.karol.sezonnazdrowie.view.fragments.SettingsItemsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

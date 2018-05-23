@@ -1,13 +1,10 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,11 +21,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 public class ShoppingListFragment extends Fragment {
 
@@ -40,9 +42,12 @@ public class ShoppingListFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
-        ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.shopping_list));
+        ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.shopping_list));
 
         mInputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -51,39 +56,43 @@ public class ShoppingListFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Set<String> shoppingSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
         ArrayList<String> shoppingList;
-        if (shoppingSet == null)
+        if (shoppingSet == null) {
             shoppingList = new ArrayList<>();
-        else
+        } else {
             shoppingList = new ArrayList<>(shoppingSet);
-        ListView listView = (ListView) view.findViewById(R.id.listView);
+        }
+        ListView listView = view.findViewById(R.id.listView);
         mAdapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, shoppingList);
         listView.setAdapter(mAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view1, int position, long id) {
                 final String selectedItem = (String) parent.getItemAtPosition(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(getString(R.string.shopping_list_delete_dialog_title));
                 builder.setMessage(getString(R.string.shopping_list_delete_dialog_message, selectedItem));
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int i) {
                         dialog.dismiss();
                     }
                 });
                 builder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int i) {
                         mAdapter.remove(selectedItem);
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
+                        SharedPreferences prefs1 = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        Set<String> stringSet = prefs1.getStringSet(PREF_SHOPPING_LIST, null);
                         if (stringSet != null) {
                             stringSet = new HashSet<>(stringSet);
                             stringSet.remove(selectedItem);
-                            prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
+                            prefs1.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();
                         }
-                        Toast.makeText(getActivity(), getString(R.string.removed_product_name, selectedItem), Toast.LENGTH_LONG).show();
+                        Toast.makeText(
+                                getActivity(),
+                                getString(R.string.removed_product_name, selectedItem),
+                                Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                     }
                 });
@@ -91,10 +100,10 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        ImageView addToListButton = (ImageView) view.findViewById(R.id.addToShoppingListButton);
+        ImageView addToListButton = view.findViewById(R.id.addToShoppingListButton);
         addToListButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(getString(R.string.shopping_list_add_dialog_title));
                 builder.setMessage(getString(R.string.shopping_list_add_dialog_message));
@@ -105,21 +114,23 @@ public class ShoppingListFragment extends Fragment {
                 builder.setView(editText);
                 builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int i) {
                         mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                         dialog.dismiss();
                     }
                 });
-                builder.setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        acceptInput(editText, dialog);
-                    }
-                });
+                builder.setPositiveButton(
+                        getString(R.string.add),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                acceptInput(editText, dialog);
+                            }
+                        });
                 final AlertDialog alertDialog = builder.create();
                 editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    public boolean onEditorAction(TextView v1, int actionId, KeyEvent event) {
                         acceptInput(editText, alertDialog);
                         return true;
                     }
@@ -137,10 +148,11 @@ public class ShoppingListFragment extends Fragment {
         } else {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
-            if (stringSet == null)
+            if (stringSet == null) {
                 stringSet = new HashSet<>();
-            else
+            } else {
                 stringSet = new HashSet<>(stringSet);
+            }
             stringSet.add(editText.getText().toString());
             mAdapter.add(editText.getText().toString());
             prefs.edit().clear().putStringSet(PREF_SHOPPING_LIST, stringSet).apply();

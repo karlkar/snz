@@ -1,10 +1,9 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragment;
+import androidx.preference.Preference;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +31,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         findPreference("pref_notification_fruit").setOnPreferenceClickListener(this);
         findPreference("pref_notification_vegetable").setOnPreferenceClickListener(this);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
     }
 
     @Override
@@ -99,14 +103,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        Fragment fragment = new SettingsItemsFragment();
-        Bundle bundle = new Bundle();
-        if (preference.getKey().equals("pref_notification_fruit"))
-            bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_FRUITS);
-        else if (preference.getKey().equals("pref_notification_vegetable"))
-            bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_VEGETABLES);
-        fragment.setArguments(bundle);
-        ((FragmentsActivity)getActivity()).replaceFragments(fragment);
+//        Fragment fragment = new SettingsItemsFragment();
+//        Bundle bundle = new Bundle();
+//        if (preference.getKey().equals("pref_notification_fruit"))
+//            bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_FRUITS);
+//        else if (preference.getKey().equals("pref_notification_vegetable"))
+//            bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_VEGETABLES);
+//        fragment.setArguments(bundle);
+//        ((FragmentsActivity)getActivity()).replaceFragments(fragment);
         return true;
     }
 }

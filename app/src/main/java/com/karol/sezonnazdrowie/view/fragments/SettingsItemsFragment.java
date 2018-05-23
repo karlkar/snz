@@ -2,9 +2,9 @@ package com.karol.sezonnazdrowie.view.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
+import androidx.preference.PreferenceFragment;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +42,11 @@ public class SettingsItemsFragment extends PreferenceFragment implements SharedP
         }
 
         ((FragmentsActivity)getActivity()).setSettingsItemsChanged(false);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
     }
 
     @Override

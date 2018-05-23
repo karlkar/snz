@@ -95,4 +95,5 @@
     <string name="notification_hour">Godzina powiadomienia</string>
     <string name="fregment_calendar_menu_change_view">Zmień widok</string>
     <string name="adMobTestDeviceS7">3795279CABB4FAC75E5F23A086CC9C9F</string>
+    <string name="start">Start</string>
 </resources>

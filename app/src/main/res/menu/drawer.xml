@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_drawer_start"
+            android:title="@string/start" />
+        <item
+            android:id="@+id/menu_drawer_fruits"
+            android:title="@string/season_fruits" />
+        <item
+            android:id="@+id/menu_drawer_vegetables"
+            android:title="@string/season_vegetables" />
+        <item
+            android:id="@+id/menu_drawer_incoming"
+            android:title="@string/season_incoming" />
+        <item
+            android:id="@+id/menu_drawer_calendar"
+            android:title="@string/calendar" />
+        <item
+            android:id="@+id/menu_drawer_shopping_list"
+            android:title="@string/shopping_list" />
+        <!--<item-->
+            <!--android:id="@+id/menu_drawer_settings"-->
+            <!--android:title="@string/settings" />-->
+    </group>
+</menu>

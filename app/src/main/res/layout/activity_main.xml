@@ -1,133 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    android:orientation="horizontal"
     tools:context="com.karol.sezonnazdrowie.view.MainActivity">
 
-    <android.support.v4.widget.Space
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="5">
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <LinearLayout
-            android:id="@+id/whiteStripe"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginRight="4dp"
-            android:background="@android:color/white"
-            android:orientation="vertical" />
+            android:layout_height="match_parent">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline1" />
 
-            <LinearLayout
+            <fragment
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:defaultNavHost="true"
+                app:layout_constraintBottom_toTopOf="@id/adBackground"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navGraph="@navigation/nav_graph" />
+
+            <FrameLayout
+                android:id="@+id/adBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:background="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <TextView
-                    android:id="@+id/dateTextView"
+                <!-- view for AdMob Banner Ad -->
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/amatic_sc_bold"
-                    android:textSize="40sp" />
+                    android:layout_gravity="center_horizontal"
+                    ads:adSize="SMART_BANNER"
+                    ads:adUnitId="@string/banner_ad_unit_id" />
+            </FrameLayout>
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/amatic_sc_bold"
-                    android:text="@string/current_season"
-                    android:textSize="40sp" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
 
-                <Button
-                    android:id="@+id/fruitsBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/main_button_height"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/button_turquis"
-                    android:fontFamily="@font/amatic_sc_bold"
-                    android:stateListAnimator="@null"
-                    android:text="@string/fruits_btn"
-                    android:textColor="@android:color/white"
-                    android:textSize="40sp" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.85" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <Button
-                    android:id="@+id/vegetablesBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/main_button_height"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/button_green"
-                    android:fontFamily="@font/amatic_sc_bold"
-                    android:stateListAnimator="@null"
-                    android:text="@string/vegetables_btn"
-                    android:textColor="@android:color/white"
-                    android:textSize="40sp" />
+        <!-- The navigation drawer -->
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/left_drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="?attr/colorPrimaryDark"
+            app:menu="@menu/drawer"/>
 
-                <ImageView
-                    android:id="@+id/mainLogoImageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:scaleType="fitCenter"
-                    android:contentDescription="@string/app_logo"
-                    android:src="@drawable/truskawka1" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 
-                <Button
-                    android:id="@+id/incomingSeasonBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/main_button_height"
-                    android:background="@drawable/button_turquis"
-                    android:fontFamily="@font/amatic_sc_bold"
-                    android:stateListAnimator="@null"
-                    android:text="@string/incoming_season_btn"
-                    android:textColor="@android:color/white"
-                    android:textSize="40sp" />
-
-                <Button
-                    android:id="@+id/calendarBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/main_button_height"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/button_green"
-                    android:fontFamily="@font/amatic_sc_bold"
-                    android:stateListAnimator="@null"
-                    android:text="@string/calendar_btn"
-                    android:textColor="@android:color/white"
-                    android:textSize="40sp" />
-
-                <Button
-                    android:id="@+id/shopListBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/main_button_height"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/button_green"
-                    android:fontFamily="@font/amatic_sc_bold"
-                    android:stateListAnimator="@null"
-                    android:text="@string/shopping_list_btn"
-                    android:textColor="@android:color/white"
-                    android:textSize="40sp" />
-            </LinearLayout>
-        </ScrollView>
-    </FrameLayout>
-
-    <android.support.v4.widget.Space
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

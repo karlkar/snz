@@ -1,11 +1,8 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,13 +20,18 @@ import com.karol.sezonnazdrowie.view.FragmentsActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 public class ListFragment extends Fragment {
 
     private static final String TAG = "LISTFRAGMENT";
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         String what = getArguments().getString(FragmentsActivity.INTENT_WHAT);
         switch (what) {
@@ -47,8 +49,9 @@ public class ListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         ArrayList<FoodItem> allFruits = Database.getInstance().getAllFruits();
-        if (allFruits == null || allFruits.isEmpty())
+        if (allFruits == null || allFruits.isEmpty()) {
             Database.getInstance().loadData(getActivity());
+        }
 
         ArrayList<FoodItem> items = null;
         switch (what) {
@@ -65,24 +68,22 @@ public class ListFragment extends Fragment {
                 break;
         }
 
-        ListView listView = (ListView) view.findViewById(R.id.listView);
+        ListView listView = view.findViewById(R.id.listView);
         ArrayAdapter adapter;
-        if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING))
+        if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING)) {
             adapter = new IncomingAdapter(getActivity(), items);
-        else
+        } else {
             adapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);
+        }
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = new FoodItemPageFragment();
+            public void onItemClick(AdapterView<?> parent, View view1, int position, long id) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(FragmentsActivity.INTENT_ITEM, (Parcelable) parent.getItemAtPosition(position));
-                fragment.setArguments(bundle);
-                ((FragmentsActivity) getActivity()).replaceFragments(fragment);
-            }
-        });
+                Navigation.findNavController(view1).navigate(R.id.action_food_detail, bundle);
+            }});
         return view;
     }
 
@@ -93,7 +94,7 @@ public class ListFragment extends Fragment {
             TextView mSeason1;
         }
 
-        public IncomingAdapter(Context context, List<FoodItem> items) {
+        IncomingAdapter(Context context, List<FoodItem> items) {
             super(context, R.layout.row_incoming_layout, items);
         }
 
@@ -105,8 +106,8 @@ public class ListFragment extends Fragment {
                 LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.row_incoming_layout, parent, false);
                 holder = new ViewHolder();
-                holder.mName = (TextView) convertView.findViewById(R.id.rowText);
-                holder.mSeason1 = (TextView) convertView.findViewById(R.id.rowSeason1Text);
+                holder.mName = convertView.findViewById(R.id.rowText);
+                holder.mSeason1 = convertView.findViewById(R.id.rowSeason1Text);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();

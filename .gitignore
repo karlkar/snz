@@ -34,3 +34,5 @@ captures/
 .idea/
 *.iml
 *.iml
+/mapping*.txt
+/app/release/

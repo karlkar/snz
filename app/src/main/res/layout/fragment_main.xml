@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="@font/amatic_sc_bold"
+        android:textSize="40sp"
+        tools:text="9 maj"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="11dp"
+        android:fontFamily="@font/amatic_sc_bold"
+        android:text="@string/current_season"
+        android:textSize="40sp"
+        app:layout_constraintTop_toBottomOf="@id/dateTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/fruitsBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_turquis"
+        android:fontFamily="@font/amatic_sc_bold"
+        android:stateListAnimator="@null"
+        android:text="@string/fruits_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView" />
+
+    <Button
+        android:id="@+id/vegetablesBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_green"
+        android:fontFamily="@font/amatic_sc_bold"
+        android:stateListAnimator="@null"
+        android:text="@string/vegetables_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fruitsBtn" />
+
+    <ImageView
+        android:id="@+id/mainLogoImageView"
+        android:layout_width="0dp"
+        android:layout_height="163dp"
+        android:contentDescription="@string/app_logo"
+        android:scaleType="fitCenter"
+        android:src="@drawable/truskawka1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vegetablesBtn"/>
+
+    <Button
+        android:id="@+id/incomingSeasonBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_turquis"
+        android:fontFamily="@font/amatic_sc_bold"
+        android:stateListAnimator="@null"
+        android:text="@string/incoming_season_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainLogoImageView" />
+
+    <Button
+        android:id="@+id/calendarBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_green"
+        android:fontFamily="@font/amatic_sc_bold"
+        android:stateListAnimator="@null"
+        android:text="@string/calendar_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/incomingSeasonBtn" />
+
+    <Button
+        android:id="@+id/shopListBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_green"
+        android:fontFamily="@font/amatic_sc_bold"
+        android:stateListAnimator="@null"
+        android:text="@string/shopping_list_btn"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/calendarBtn"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

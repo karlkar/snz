@@ -1,10 +1,11 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
-import android.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,19 +31,19 @@ public class FoodItemPageFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_food_item_page, container, false);
         mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
         ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
 
-        ImageView pagePreviewImageView = (ImageView) view.findViewById(R.id.pagePreviewImageView);
+        ImageView pagePreviewImageView = view.findViewById(R.id.pagePreviewImageView);
         if (!mItem.getImage().isEmpty())
             pagePreviewImageView.setImageResource(getResources().getIdentifier(mItem.getImage(), "drawable", getActivity().getPackageName()));
         else
             pagePreviewImageView.setImageResource(android.R.drawable.ic_menu_gallery);
 
-        ImageView addToShoppingListImageView = (ImageView) view.findViewById(R.id.addToShoppingListButton);
+        ImageView addToShoppingListImageView = view.findViewById(R.id.addToShoppingListButton);
         addToShoppingListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +59,7 @@ public class FoodItemPageFragment extends Fragment {
             }
         });
 
-        mAdditionalTextsLayout = (LinearLayout) view.findViewById(R.id.additionalTextsLayout);
+        mAdditionalTextsLayout = view.findViewById(R.id.additionalTextsLayout);
         if (mItem.getStartDay1() == null) {
             TextView tmp = new TextView(getActivity());
             tmp.setText(R.string.season_all_year);
