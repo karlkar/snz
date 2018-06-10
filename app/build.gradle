@@ -24,7 +24,7 @@ android {
         versionCode 11
         versionName "1.10"
         resConfigs "pl"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -40,16 +40,15 @@ android {
 }
 
 dependencies {
-    def nav_version = "1.0.0-alpha01"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
-    implementation 'com.google.android.material:material:1.0.0-alpha1'
-    implementation 'androidx.browser:browser:1.0.0-alpha1'
-    implementation 'androidx.preference:preference:1.0.0-alpha1'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha3'
+    implementation 'com.google.android.material:material:1.0.0-alpha3'
+    implementation 'androidx.browser:browser:1.0.0-alpha3'
+    implementation 'androidx.preference:preference:1.0.0-alpha3'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.1'
 
-    implementation 'com.google.android.material:material:1.0.0-alpha1'
+    implementation 'com.google.android.material:material:1.0.0-alpha3'
 
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
 
@@ -60,11 +59,11 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha3'
+    androidTestImplementation 'androidx.test:rules:1.1.0-alpha3'
 
-    implementation "android.arch.navigation:navigation-fragment:$nav_version"
-    implementation "android.arch.navigation:navigation-ui:$nav_version"
+    implementation "android.arch.navigation:navigation-fragment:1.0.0-alpha01"
+    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha01"
 }
 
 apply plugin: 'com.google.gms.google-services'

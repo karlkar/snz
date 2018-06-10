@@ -45,6 +45,7 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_FRUITS);
+                Navigation.findNavController(v).getGraph().setStartDestination(R.id.listFragment);
                 Navigation.findNavController(v).navigate(R.id.action_list, bundle);
             }
         });
@@ -54,6 +55,7 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_VEGETABLES);
+                Navigation.findNavController(v).getGraph().setStartDestination(R.id.listFragment);
                 Navigation.findNavController(v).navigate(R.id.action_list, bundle);
             }
         });
@@ -63,16 +65,25 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_INCOMING);
+                Navigation.findNavController(v).getGraph().setStartDestination(R.id.listFragment);
                 Navigation.findNavController(v).navigate(R.id.action_list, bundle);
             }
         });
 
-        calendarBtn.setOnClickListener(
-                Navigation.createNavigateOnClickListener(R.id.action_calendar)
-        );
+        calendarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).getGraph().setStartDestination(R.id.calendarFragment);
+                Navigation.findNavController(v).navigate(R.id.action_calendar);
+            }
+        });
 
-        shopListBtn.setOnClickListener(
-                Navigation.createNavigateOnClickListener(R.id.action_shopping_list)
-        );
+        shopListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).getGraph().setStartDestination(R.id.shoppingListFragment);
+                Navigation.findNavController(v).navigate(R.id.action_shopping_list);
+            }
+        });
     }
 }

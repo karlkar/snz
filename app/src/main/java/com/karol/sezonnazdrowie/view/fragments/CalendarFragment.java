@@ -25,6 +25,7 @@ import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.model.SnzAdapter;
 import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -87,7 +88,7 @@ public class CalendarFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putParcelable(FragmentsActivity.INTENT_ITEM, foodItem);
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
-                    .navigate(R.id.action_food_detail, bundle);
+                    .navigate(R.id.foodItemPageFragment, bundle);
             return true;
         }
     };
@@ -95,7 +96,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
-        ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);

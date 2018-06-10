@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class FoodItemPageFragment extends Fragment {
         Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_food_item_page, container, false);
         mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
-        ((FragmentsActivity) getActivity()).setActionBarTitle(mItem.getName());
+        ((MainActivity) getActivity()).setActionBarTitle(mItem.getName());
 
         ImageView pagePreviewImageView = view.findViewById(R.id.pagePreviewImageView);
         if (!mItem.getImage().isEmpty())

@@ -16,6 +16,7 @@ import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +37,13 @@ public class ListFragment extends Fragment {
         String what = getArguments().getString(FragmentsActivity.INTENT_WHAT);
         switch (what) {
             case FragmentsActivity.INTENT_WHAT_FRUITS:
-                ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.season_fruits));
+                ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_fruits));
                 break;
             case FragmentsActivity.INTENT_WHAT_VEGETABLES:
-                ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.season_vegetables));
+                ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_vegetables));
                 break;
             case FragmentsActivity.INTENT_WHAT_INCOMING:
-                ((FragmentsActivity) getActivity()).setActionBarTitle(getString(R.string.season_incoming));
+                ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_incoming));
                 break;
         }
 

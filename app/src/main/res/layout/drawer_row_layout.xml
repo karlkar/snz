@@ -13,6 +13,7 @@
         android:fontFamily="@font/amatic_sc_bold"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        android:text="Ciekawe"/>
 
 </FrameLayout>
