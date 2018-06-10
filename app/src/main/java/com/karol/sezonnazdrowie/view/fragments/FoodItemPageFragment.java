@@ -1,11 +1,8 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +14,14 @@ import android.widget.Toast;
 
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.FoodItem;
-import com.karol.sezonnazdrowie.view.FragmentsActivity;
 import com.karol.sezonnazdrowie.view.MainActivity;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class FoodItemPageFragment extends Fragment {
 
@@ -35,14 +35,15 @@ public class FoodItemPageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_food_item_page, container, false);
-        mItem = getArguments().getParcelable(FragmentsActivity.INTENT_ITEM);
+        mItem = getArguments().getParcelable(MainActivity.INTENT_ITEM);
         ((MainActivity) getActivity()).setActionBarTitle(mItem.getName());
 
         ImageView pagePreviewImageView = view.findViewById(R.id.pagePreviewImageView);
-        if (!mItem.getImage().isEmpty())
+        if (!mItem.getImage().isEmpty()) {
             pagePreviewImageView.setImageResource(getResources().getIdentifier(mItem.getImage(), "drawable", getActivity().getPackageName()));
-        else
+        } else {
             pagePreviewImageView.setImageResource(android.R.drawable.ic_menu_gallery);
+        }
 
         ImageView addToShoppingListImageView = view.findViewById(R.id.addToShoppingListButton);
         addToShoppingListImageView.setOnClickListener(new View.OnClickListener() {
@@ -50,10 +51,11 @@ public class FoodItemPageFragment extends Fragment {
             public void onClick(View v) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 Set<String> stringSet = prefs.getStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, null);
-                if (stringSet == null)
+                if (stringSet == null) {
                     stringSet = new HashSet<>();
-                else
+                } else {
                     stringSet = new HashSet<>(stringSet);
+                }
                 stringSet.add(mItem.getName());
                 prefs.edit().clear().putStringSet(ShoppingListFragment.PREF_SHOPPING_LIST, stringSet).apply();
                 Toast.makeText(getActivity(), R.string.added_to_shopping_list, Toast.LENGTH_SHORT).show();

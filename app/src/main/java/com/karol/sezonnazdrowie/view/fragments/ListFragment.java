@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
-import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
 import com.karol.sezonnazdrowie.view.MainActivity;
 
 import java.util.ArrayList;
@@ -34,15 +34,15 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
-        String what = getArguments().getString(FragmentsActivity.INTENT_WHAT);
+        String what = getArguments().getString(MainActivity.INTENT_WHAT);
         switch (what) {
-            case FragmentsActivity.INTENT_WHAT_FRUITS:
+            case MainActivity.INTENT_WHAT_FRUITS:
                 ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_fruits));
                 break;
-            case FragmentsActivity.INTENT_WHAT_VEGETABLES:
+            case MainActivity.INTENT_WHAT_VEGETABLES:
                 ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_vegetables));
                 break;
-            case FragmentsActivity.INTENT_WHAT_INCOMING:
+            case MainActivity.INTENT_WHAT_INCOMING:
                 ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_incoming));
                 break;
         }
@@ -56,22 +56,20 @@ public class ListFragment extends Fragment {
 
         ArrayList<FoodItem> items = null;
         switch (what) {
-            case FragmentsActivity.INTENT_WHAT_FRUITS:
+            case MainActivity.INTENT_WHAT_FRUITS:
                 items = Database.getInstance().getCurrentFruits();
-//            items = Database.getInstance().getAllFruits();
                 break;
-            case FragmentsActivity.INTENT_WHAT_VEGETABLES:
+            case MainActivity.INTENT_WHAT_VEGETABLES:
                 items = Database.getInstance().getCurrentVegetables();
-//            items = Database.getInstance().getAllVegetables();
                 break;
-            case FragmentsActivity.INTENT_WHAT_INCOMING:
+            case MainActivity.INTENT_WHAT_INCOMING:
                 items = Database.getInstance().getIncomingItems();
                 break;
         }
 
         ListView listView = view.findViewById(R.id.listView);
         ArrayAdapter adapter;
-        if (what.equals(FragmentsActivity.INTENT_WHAT_INCOMING)) {
+        if (what.equals(MainActivity.INTENT_WHAT_INCOMING)) {
             adapter = new IncomingAdapter(getActivity(), items);
         } else {
             adapter = new ArrayAdapter<>(getActivity(), R.layout.row_layout, R.id.rowText, items);
@@ -82,7 +80,7 @@ public class ListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view1, int position, long id) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(FragmentsActivity.INTENT_ITEM, (Parcelable) parent.getItemAtPosition(position));
+                bundle.putParcelable(MainActivity.INTENT_ITEM, (Parcelable) parent.getItemAtPosition(position));
                 Navigation.findNavController(view1).navigate(R.id.action_food_detail, bundle);
             }});
         return view;

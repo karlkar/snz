@@ -2,28 +2,32 @@ package com.karol.sezonnazdrowie.view.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.preference.PreferenceFragment;
-import androidx.preference.Preference;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.model.SnzAlarmManager;
-import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
+import com.karol.sezonnazdrowie.view.controls.TimePreference;
+import com.karol.sezonnazdrowie.view.controls.TimePreferenceDialogFragmentCompat;
 
 import java.util.Set;
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.navigation.Navigation;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+
+public class SettingsFragment extends PreferenceFragmentCompat
+        implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
     private static final String TAG = "SETTINGSFRAGMENT";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.prefs);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.prefs, rootKey);
 
         setPreferenceSummary(getPreferenceManager().getSharedPreferences(), "pref_season_start");
         setPreferenceSummary(getPreferenceManager().getSharedPreferences(), "pref_season_end");
@@ -33,24 +37,20 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         findPreference("pref_notification_vegetable").setOnPreferenceClickListener(this);
     }
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ((FragmentsActivity)getActivity()).setActionBarTitle(getString(R.string.settings));
-        return inflater.inflate(R.layout.fragment_settings, container, false);
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.settings));
+//        return inflater.inflate(R.layout.fragment_settings, container, false);
+//    }
 
     @Override
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        if (((FragmentsActivity)getActivity()).getSettingsItemsChanged())
-            SnzAlarmManager.startSetAlarmsTask(getActivity());
-        ((FragmentsActivity)getActivity()).setSettingsItemsChanged(false);
+//        if (((MainActivity)getActivity()).getSettingsItemsChanged()) {
+//            SnzAlarmManager.startSetAlarmsTask(getActivity());
+//        }
+//        ((MainActivity)getActivity()).setSettingsItemsChanged(false);
     }
 
     @Override
@@ -74,15 +74,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 break;
         }
 
-        if (!key.equals("maxReqCode"))
+        if (!key.equals("maxReqCode")) {
             SnzAlarmManager.startSetAlarmsTask(getActivity());
+        }
     }
 
     private void setPreferenceSummary(SharedPreferences sharedPreferences, String key) {
         Set<String> stringSet = sharedPreferences.getStringSet(key, null);
-        if (stringSet == null || stringSet.size() == 0)
+        if (stringSet == null || stringSet.size() == 0) {
             findPreference(key).setSummary(R.string.no_notification);
-        else {
+        } else {
             StringBuilder builder = new StringBuilder();
             for (String str : stringSet) {
                 if (builder.length() != 0)
@@ -95,22 +96,44 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     private void setTimePreferenceSummary(SharedPreferences sharedPreferences, String key) {
         String hourStr = sharedPreferences.getString(key, null);
-        if (hourStr == null)
+        if (hourStr == null) {
             findPreference(key).setSummary("20:00");
-        else
+        } else {
             findPreference(key).setSummary(hourStr);
+        }
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-//        Fragment fragment = new SettingsItemsFragment();
-//        Bundle bundle = new Bundle();
-//        if (preference.getKey().equals("pref_notification_fruit"))
-//            bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_FRUITS);
-//        else if (preference.getKey().equals("pref_notification_vegetable"))
-//            bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_VEGETABLES);
-//        fragment.setArguments(bundle);
-//        ((FragmentsActivity)getActivity()).replaceFragments(fragment);
+        Bundle bundle = new Bundle();
+        if (preference.getKey().equals("pref_notification_fruit")) {
+            bundle.putString(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_FRUITS);
+        } else if (preference.getKey().equals("pref_notification_vegetable")) {
+            bundle.putString(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_VEGETABLES);
+        }
+
+        Navigation
+                .findNavController(getActivity(), R.id.nav_host_fragment)
+                .navigate(R.id.settingsItemsFragment2, bundle);
+
         return true;
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        DialogFragment dialogFragment = null;
+        if (preference instanceof TimePreference) {
+            dialogFragment = new TimePreferenceDialogFragmentCompat();
+            Bundle bundle = new Bundle(1);
+            bundle.putString("key", preference.getKey());
+            dialogFragment.setArguments(bundle);
+        }
+
+        if (dialogFragment != null) {
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(this.getFragmentManager(), "DIALOG");
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
     }
 }

@@ -1,23 +1,15 @@
 package com.karol.sezonnazdrowie.view.controls;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Build;
-import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.TimePicker;
 
-import com.karol.sezonnazdrowie.R;
-
-import java.util.Locale;
+import androidx.preference.DialogPreference;
 
 public class TimePreference extends DialogPreference {
 
-    private TimePicker mTimePicker;
-    private int mLastHour;
-    private int mLastMinute;
+    public int hour;
+    public int minute;
 
     public static int getHour(String time) {
         String[] pieces=time.split(":");
@@ -31,77 +23,8 @@ public class TimePreference extends DialogPreference {
         return(Integer.parseInt(pieces[1]));
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public TimePreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-
-        setPositiveButtonText(R.string.time_dialog_set);
-        setNegativeButtonText(R.string.cancel);
-    }
-
-    public TimePreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-
-        setPositiveButtonText(R.string.time_dialog_set);
-        setNegativeButtonText(R.string.cancel);
-    }
-
     public TimePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        setPositiveButtonText(R.string.time_dialog_set);
-        setNegativeButtonText(R.string.cancel);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public TimePreference(Context context) {
-        super(context);
-
-        setPositiveButtonText(R.string.time_dialog_set);
-        setNegativeButtonText(R.string.cancel);
-    }
-
-    @Override
-    protected View onCreateDialogView() {
-        mTimePicker = new TimePicker(getContext());
-        mTimePicker.setIs24HourView(true);
-        return(mTimePicker);
-    }
-
-    @Override
-    protected void onBindDialogView(View v) {
-        super.onBindDialogView(v);
-        onSetInitialValue(true, "20:00");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mTimePicker.setHour(mLastHour);
-            mTimePicker.setMinute(mLastMinute);
-        } else {
-            mTimePicker.setCurrentHour(mLastHour);
-            mTimePicker.setCurrentMinute(mLastMinute);
-        }
-    }
-
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        super.onDialogClosed(positiveResult);
-
-        if (positiveResult) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mLastHour = mTimePicker.getHour();
-                mLastMinute = mTimePicker.getMinute();
-            } else {
-                mLastHour = mTimePicker.getCurrentHour();
-                mLastMinute = mTimePicker.getCurrentMinute();
-            }
-
-            String time = String.valueOf(mLastHour) + ":" + String.format(
-                    Locale.getDefault(),
-                    "%02d",
-                    mLastMinute);
-
-            if (callChangeListener(time))
-                persistString(time);
-        }
     }
 
     @Override
@@ -114,15 +37,24 @@ public class TimePreference extends DialogPreference {
         String time;
 
         if (restoreValue) {
-            if (defaultValue == null)
+            if (defaultValue == null) {
                 time = getPersistedString("20:00");
-            else
+            } else {
                 time = getPersistedString(defaultValue.toString());
-        }
-        else
+            }
+        } else {
             time = defaultValue.toString();
+        }
 
-        mLastHour = getHour(time);
-        mLastMinute = getMinute(time);
+        hour = getHour(time);
+        minute = getMinute(time);
+    }
+
+    public static String timeToString(int h, int m) {
+        return String.format("%02d:%02d", h, m);
+    }
+
+    public void persistStringValue(String value) {
+        persistString(value);
     }
 }

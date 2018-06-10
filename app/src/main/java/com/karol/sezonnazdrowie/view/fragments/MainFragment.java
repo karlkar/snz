@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.FoodItem;
-import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
 
 import java.util.Date;
 
@@ -44,7 +44,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_FRUITS);
+                bundle.putString(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_FRUITS);
                 Navigation.findNavController(v).getGraph().setStartDestination(R.id.listFragment);
                 Navigation.findNavController(v).navigate(R.id.action_list, bundle);
             }
@@ -54,7 +54,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_VEGETABLES);
+                bundle.putString(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_VEGETABLES);
                 Navigation.findNavController(v).getGraph().setStartDestination(R.id.listFragment);
                 Navigation.findNavController(v).navigate(R.id.action_list, bundle);
             }
@@ -64,7 +64,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_INCOMING);
+                bundle.putString(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_INCOMING);
                 Navigation.findNavController(v).getGraph().setStartDestination(R.id.listFragment);
                 Navigation.findNavController(v).navigate(R.id.action_list, bundle);
             }

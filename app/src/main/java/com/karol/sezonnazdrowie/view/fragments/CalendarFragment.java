@@ -24,7 +24,7 @@ import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.model.SnzAdapter;
-import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
 import com.karol.sezonnazdrowie.view.MainActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -86,7 +86,7 @@ public class CalendarFragment extends Fragment {
         @Override
         public boolean onItemLongClick(FoodItem foodItem, int position) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(FragmentsActivity.INTENT_ITEM, foodItem);
+            bundle.putParcelable(MainActivity.INTENT_ITEM, foodItem);
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
                     .navigate(R.id.foodItemPageFragment, bundle);
             return true;

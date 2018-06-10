@@ -3,7 +3,6 @@ package com.karol.sezonnazdrowie.view;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.material.navigation.NavigationView;
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
@@ -20,8 +18,6 @@ import com.karol.sezonnazdrowie.data.FoodItem;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -36,93 +32,20 @@ import static androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String INTENT_WHAT = "WHAT";
+    public static final String INTENT_WHAT_VEGETABLES = "VEGETABLES";
+    public static final String INTENT_WHAT_FRUITS = "FRUITS";
+    public static final String INTENT_WHAT_INCOMING = "INCOMING";
+    public static final String INTENT_WHAT_CALENDAR = "CALENDAR";
+    public static final String INTENT_WHAT_SHOPPING_LIST = "SHOPPING_LIST";
+    public static final String INTENT_ITEM = "ITEM";
+
     private AdView mAdView;
     private TextView mActionBarTitle;
     private View mAdBackground;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavController mNavController;
-
-    private class MyNavigationItemSelectedListener implements
-            NavigationView.OnNavigationItemSelectedListener {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            NavOptions navOptions = new NavOptions.Builder()
-                    .setPopUpTo(R.id.mainFragment, true)
-                    .build();
-//            switch (menuItem.getItemId()) {
-//                case R.id.menu_drawer_start: {
-//                    mNavController.navigate(
-//                            R.id.mainFragment,
-//                            null,
-//                            navOptions);
-//                    return true;
-//                }
-//                case R.id.menu_drawer_fruits: {
-//                    mNavController.getGraph().setStartDestination(R.id.listFragment);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString(
-//                            FragmentsActivity.INTENT_WHAT,
-//                            FragmentsActivity.INTENT_WHAT_FRUITS);
-//                    mNavController.navigate(
-//                            R.id.listFragment,
-//                            bundle,
-//                            navOptions);
-//                    return true;
-//                }
-//                case R.id.menu_drawer_vegetables: {
-//                    mNavController.getGraph().setStartDestination(R.id.listFragment);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString(
-//                            FragmentsActivity.INTENT_WHAT,
-//                            FragmentsActivity.INTENT_WHAT_VEGETABLES);
-//                    mNavController.navigate(
-//                            R.id.listFragment,
-//                            bundle,
-//                            navOptions);
-//                    return true;
-//                }
-//                case R.id.menu_drawer_incoming: {
-//                    mNavController.getGraph().setStartDestination(R.id.listFragment);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString(
-//                            FragmentsActivity.INTENT_WHAT,
-//                            FragmentsActivity.INTENT_WHAT_INCOMING);
-//                    mNavController.navigate(
-//                            R.id.listFragment,
-//                            bundle,
-//                            navOptions);
-//                    return true;
-//                }
-//                case R.id.menu_drawer_calendar: {
-//                    mNavController.getGraph().setStartDestination(R.id.calendarFragment);
-//                    mNavController.navigate(
-//                            R.id.calendarFragment,
-//                            null,
-//                            navOptions);
-//                    return true;
-//                }
-//                case R.id.menu_drawer_shopping_list: {
-//                    mNavController.getGraph().setStartDestination(R.id.shoppingListFragment);
-//                    mNavController.navigate(
-//                            R.id.shoppingListFragment,
-//                            null,
-//                            navOptions);
-//                    return true;
-//                }
-//                case R.id.menu_drawer_settings: {
-//                    mNavController.getGraph().setStartDestination(R.id.settingsFragment);
-//                    mNavController.navigate(
-//                            R.id.settingsFragment,
-//                            null,
-//                            navOptions);
-//                    return true;
-//                }
-//            }
-            return false;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        final NavigationView navigationView = findViewById(R.id.left_drawer);
-        navigationView.setNavigationItemSelectedListener(
-                new MyNavigationItemSelectedListener());
-
         ListView drawer = findViewById(R.id.snz_drawer);
         drawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -155,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
                     mNavController.getGraph().setStartDestination(R.id.listFragment);
                     Bundle bundle = new Bundle();
                     bundle.putString(
-                            FragmentsActivity.INTENT_WHAT,
-                            FragmentsActivity.INTENT_WHAT_VEGETABLES);
+                            MainActivity.INTENT_WHAT,
+                            MainActivity.INTENT_WHAT_VEGETABLES);
                     mNavController.navigate(
                             R.id.listFragment,
                             bundle,
@@ -165,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
                     mNavController.getGraph().setStartDestination(R.id.listFragment);
                     Bundle bundle = new Bundle();
                     bundle.putString(
-                            FragmentsActivity.INTENT_WHAT,
-                            FragmentsActivity.INTENT_WHAT_FRUITS);
+                            MainActivity.INTENT_WHAT,
+                            MainActivity.INTENT_WHAT_FRUITS);
                     mNavController.navigate(
                             R.id.listFragment,
                             bundle,
@@ -175,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                     mNavController.getGraph().setStartDestination(R.id.listFragment);
                     Bundle bundle = new Bundle();
                     bundle.putString(
-                            FragmentsActivity.INTENT_WHAT,
-                            FragmentsActivity.INTENT_WHAT_INCOMING);
+                            MainActivity.INTENT_WHAT,
+                            MainActivity.INTENT_WHAT_INCOMING);
                     mNavController.navigate(
                             R.id.listFragment,
                             bundle,
@@ -254,27 +173,6 @@ public class MainActivity extends AppCompatActivity {
                 mAdView.loadAd(adRequest);
             }
         }, 500);
-    }
-
-    private ActionBarDrawerToggle createDrawerToggle() {
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                this,
-                mDrawerLayout,
-                mToolbar,
-                R.string.drawer_open,
-                R.string.drawer_close) {
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
-        return drawerToggle;
     }
 
     public void setActionBarTitle(String text) {

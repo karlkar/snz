@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 
 import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.view.FragmentsActivity;
+import com.karol.sezonnazdrowie.view.MainActivity;
 
 import java.util.Calendar;
 
@@ -26,34 +26,37 @@ public class Receiver extends BroadcastReceiver {
 		int reqCode = bundle.getInt("reqCode");
 		String title = bundle.getString("title");
 		String text = bundle.getString("text");
-		
+
 		Notification.Builder builder = new Notification.Builder(context);
 		builder.setContentTitle(title);
 		builder.setContentText(text);
 		builder.setSmallIcon(R.mipmap.ic_launcher);
 		builder.setAutoCancel(true);
 		builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-			builder.setStyle(new Notification.BigTextStyle().bigText(text));
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            builder.setStyle(new Notification.BigTextStyle().bigText(text));
+        }
 
-		Intent notiIntent = new Intent(context, FragmentsActivity.class);
-		notiIntent.putExtra(FragmentsActivity.INTENT_WHAT, FragmentsActivity.INTENT_WHAT_INCOMING);
+		Intent notiIntent = new Intent(context, MainActivity.class);
+		notiIntent.putExtra(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_INCOMING);
 		PendingIntent pIntent;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-			stackBuilder.addParentStack(FragmentsActivity.class);
+			stackBuilder.addParentStack(MainActivity.class);
 			stackBuilder.addNextIntent(notiIntent);
 			pIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-		} else
-			pIntent = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		} else {
+            pIntent = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 		builder.setContentIntent(pIntent);
 
 		NotificationManager	notiMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-			notiMgr.notify(type.equals("start") ? 0 : 1, builder.build());
-		else
-			notiMgr.notify(type.equals("start") ? 0 : 1, builder.getNotification());
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            notiMgr.notify(type.equals("start") ? 0 : 1, builder.build());
+        } else {
+            notiMgr.notify(type.equals("start") ? 0 : 1, builder.getNotification());
+        }
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, 1);
