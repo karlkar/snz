@@ -5,6 +5,7 @@ import android.app.Application;
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.data.ShoppingList;
 
 import java.util.ArrayList;
 
@@ -18,9 +19,12 @@ public class MainViewModel extends AndroidViewModel {
     private final Database mDatabase = new Database();
     private MutableLiveData<String> mActionBarTitle = new MutableLiveData<>();
     private boolean mSettingsItemChanged = false;
+    private ShoppingList mShoppingList;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+
+        mShoppingList = new ShoppingList(application);
 
         mActionBarTitle.postValue(application.getString(R.string.app_name));
 
@@ -48,5 +52,9 @@ public class MainViewModel extends AndroidViewModel {
 
     public void setSettingsItemChanged(boolean settingsItemChanged) {
         mSettingsItemChanged = settingsItemChanged;
+    }
+
+    public ShoppingList getShoppingList() {
+        return mShoppingList;
     }
 }

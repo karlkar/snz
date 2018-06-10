@@ -1,8 +1,6 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +14,6 @@ import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.model.MainViewModel;
 import com.karol.sezonnazdrowie.view.MainActivity;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,20 +57,7 @@ public class FoodItemPageFragment extends Fragment {
         addToShoppingListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Move to viewModel
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                Set<String> stringSet = prefs.getStringSet(
-                        ShoppingListFragment.PREF_SHOPPING_LIST,
-                        null);
-                if (stringSet == null) {
-                    stringSet = new HashSet<>();
-                } else {
-                    stringSet = new HashSet<>(stringSet);
-                }
-                stringSet.add(mItem.getName());
-                prefs.edit().clear().putStringSet(
-                        ShoppingListFragment.PREF_SHOPPING_LIST,
-                        stringSet).apply();
+                mMainViewModel.getShoppingList().addItem(mItem.getName());
                 Toast.makeText(getActivity(), R.string.added_to_shopping_list, Toast.LENGTH_SHORT).show();
             }
         });
