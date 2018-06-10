@@ -91,8 +91,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="?attr/colorPrimaryDark"
-            app:menu="@menu/drawer"/>
+            android:background="?attr/colorPrimaryDark">
+
+            <com.karol.sezonnazdrowie.view.controls.SnzDrawer
+                android:id="@+id/snz_drawer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.google.android.material.navigation.NavigationView>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 

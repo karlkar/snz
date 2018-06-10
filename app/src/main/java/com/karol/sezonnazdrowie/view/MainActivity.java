@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
@@ -49,75 +51,75 @@ public class MainActivity extends AppCompatActivity {
             NavOptions navOptions = new NavOptions.Builder()
                     .setPopUpTo(R.id.mainFragment, true)
                     .build();
-            switch (menuItem.getItemId()) {
-                case R.id.menu_drawer_start: {
-                    mNavController.navigate(
-                            R.id.mainFragment,
-                            null,
-                            navOptions);
-                    return true;
-                }
-                case R.id.menu_drawer_fruits: {
-                    mNavController.getGraph().setStartDestination(R.id.listFragment);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(
-                            FragmentsActivity.INTENT_WHAT,
-                            FragmentsActivity.INTENT_WHAT_FRUITS);
-                    mNavController.navigate(
-                            R.id.listFragment,
-                            bundle,
-                            navOptions);
-                    return true;
-                }
-                case R.id.menu_drawer_vegetables: {
-                    mNavController.getGraph().setStartDestination(R.id.listFragment);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(
-                            FragmentsActivity.INTENT_WHAT,
-                            FragmentsActivity.INTENT_WHAT_VEGETABLES);
-                    mNavController.navigate(
-                            R.id.listFragment,
-                            bundle,
-                            navOptions);
-                    return true;
-                }
-                case R.id.menu_drawer_incoming: {
-                    mNavController.getGraph().setStartDestination(R.id.listFragment);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(
-                            FragmentsActivity.INTENT_WHAT,
-                            FragmentsActivity.INTENT_WHAT_INCOMING);
-                    mNavController.navigate(
-                            R.id.listFragment,
-                            bundle,
-                            navOptions);
-                    return true;
-                }
-                case R.id.menu_drawer_calendar: {
-                    mNavController.getGraph().setStartDestination(R.id.calendarFragment);
-                    mNavController.navigate(
-                            R.id.calendarFragment,
-                            null,
-                            navOptions);
-                    return true;
-                }
-                case R.id.menu_drawer_shopping_list: {
-                    mNavController.getGraph().setStartDestination(R.id.shoppingListFragment);
-                    mNavController.navigate(
-                            R.id.shoppingListFragment,
-                            null,
-                            navOptions);
-                    return true;
-                }
-                case R.id.menu_drawer_settings: {
-                    mNavController.getGraph().setStartDestination(R.id.settingsFragment);
-                    mNavController.navigate(
-                            R.id.settingsFragment,
-                            null,
-                            navOptions);
-                    return true;
-                }
-            }
+//            switch (menuItem.getItemId()) {
+//                case R.id.menu_drawer_start: {
+//                    mNavController.navigate(
+//                            R.id.mainFragment,
+//                            null,
+//                            navOptions);
+//                    return true;
+//                }
+//                case R.id.menu_drawer_fruits: {
+//                    mNavController.getGraph().setStartDestination(R.id.listFragment);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(
+//                            FragmentsActivity.INTENT_WHAT,
+//                            FragmentsActivity.INTENT_WHAT_FRUITS);
+//                    mNavController.navigate(
+//                            R.id.listFragment,
+//                            bundle,
+//                            navOptions);
+//                    return true;
+//                }
+//                case R.id.menu_drawer_vegetables: {
+//                    mNavController.getGraph().setStartDestination(R.id.listFragment);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(
+//                            FragmentsActivity.INTENT_WHAT,
+//                            FragmentsActivity.INTENT_WHAT_VEGETABLES);
+//                    mNavController.navigate(
+//                            R.id.listFragment,
+//                            bundle,
+//                            navOptions);
+//                    return true;
+//                }
+//                case R.id.menu_drawer_incoming: {
+//                    mNavController.getGraph().setStartDestination(R.id.listFragment);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(
+//                            FragmentsActivity.INTENT_WHAT,
+//                            FragmentsActivity.INTENT_WHAT_INCOMING);
+//                    mNavController.navigate(
+//                            R.id.listFragment,
+//                            bundle,
+//                            navOptions);
+//                    return true;
+//                }
+//                case R.id.menu_drawer_calendar: {
+//                    mNavController.getGraph().setStartDestination(R.id.calendarFragment);
+//                    mNavController.navigate(
+//                            R.id.calendarFragment,
+//                            null,
+//                            navOptions);
+//                    return true;
+//                }
+//                case R.id.menu_drawer_shopping_list: {
+//                    mNavController.getGraph().setStartDestination(R.id.shoppingListFragment);
+//                    mNavController.navigate(
+//                            R.id.shoppingListFragment,
+//                            null,
+//                            navOptions);
+//                    return true;
+//                }
+//                case R.id.menu_drawer_settings: {
+//                    mNavController.getGraph().setStartDestination(R.id.settingsFragment);
+//                    mNavController.navigate(
+//                            R.id.settingsFragment,
+//                            null,
+//                            navOptions);
+//                    return true;
+//                }
+//            }
             return false;
         }
     }
@@ -140,6 +142,65 @@ public class MainActivity extends AppCompatActivity {
         final NavigationView navigationView = findViewById(R.id.left_drawer);
         navigationView.setNavigationItemSelectedListener(
                 new MyNavigationItemSelectedListener());
+
+        ListView drawer = findViewById(R.id.snz_drawer);
+        drawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(R.id.mainFragment, true)
+                        .build();
+                String text = (String) parent.getItemAtPosition(position);
+                if (text.equals(getString(R.string.season_vegetables))) {
+                    mNavController.getGraph().setStartDestination(R.id.listFragment);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(
+                            FragmentsActivity.INTENT_WHAT,
+                            FragmentsActivity.INTENT_WHAT_VEGETABLES);
+                    mNavController.navigate(
+                            R.id.listFragment,
+                            bundle,
+                            navOptions);
+                } else if (text.equals(getString(R.string.season_fruits))) {
+                    mNavController.getGraph().setStartDestination(R.id.listFragment);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(
+                            FragmentsActivity.INTENT_WHAT,
+                            FragmentsActivity.INTENT_WHAT_FRUITS);
+                    mNavController.navigate(
+                            R.id.listFragment,
+                            bundle,
+                            navOptions);
+                } else if (text.equals(getString(R.string.season_incoming))) {
+                    mNavController.getGraph().setStartDestination(R.id.listFragment);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(
+                            FragmentsActivity.INTENT_WHAT,
+                            FragmentsActivity.INTENT_WHAT_INCOMING);
+                    mNavController.navigate(
+                            R.id.listFragment,
+                            bundle,
+                            navOptions);
+                } else if (text.equals(getString(R.string.calendar))) {
+                    mNavController.getGraph().setStartDestination(R.id.calendarFragment);
+                    mNavController.navigate(
+                            R.id.calendarFragment,
+                            null,
+                            navOptions);
+                } else if (text.equals(getString(R.string.shopping_list))) {
+                    mNavController.getGraph().setStartDestination(R.id.shoppingListFragment);
+                    mNavController.navigate(
+                            R.id.shoppingListFragment,
+                            null,
+                            navOptions);
+                } else if (text.equals(getString(R.string.settings))) {
+                    mNavController.navigate(
+                            R.id.settingsFragment,
+                            null,
+                            navOptions);
+                }
+            }
+        });
 
         NavigationUI.setupActionBarWithNavController(this, mNavController, mDrawerLayout);
 
