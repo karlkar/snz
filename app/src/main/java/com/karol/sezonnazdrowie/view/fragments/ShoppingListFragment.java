@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.view.MainActivity;
+import com.karol.sezonnazdrowie.model.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 public class ShoppingListFragment extends Fragment {
 
@@ -39,6 +40,14 @@ public class ShoppingListFragment extends Fragment {
 
     private ArrayAdapter<String> mAdapter = null;
     private InputMethodManager mInputMethodManager;
+    private MainViewModel mMainViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mMainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+    }
 
     @Nullable
     @Override
@@ -47,7 +56,7 @@ public class ShoppingListFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
-        ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.shopping_list));
+        mMainViewModel.setActionBarTitle(getString(R.string.shopping_list));
 
         mInputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -81,6 +90,7 @@ public class ShoppingListFragment extends Fragment {
                 builder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
+                        //TODO: Move to ViewModel
                         mAdapter.remove(selectedItem);
                         SharedPreferences prefs1 = PreferenceManager.getDefaultSharedPreferences(getActivity());
                         Set<String> stringSet = prefs1.getStringSet(PREF_SHOPPING_LIST, null);
@@ -146,6 +156,7 @@ public class ShoppingListFragment extends Fragment {
         if (editText.getText().toString().isEmpty()) {
             Toast.makeText(getActivity(), R.string.empty_product_name_message, Toast.LENGTH_LONG).show();
         } else {
+            //TODO: Move to viewModel
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             Set<String> stringSet = prefs.getStringSet(PREF_SHOPPING_LIST, null);
             if (stringSet == null) {

@@ -9,16 +9,26 @@ import android.view.ViewGroup;
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.model.MainViewModel;
 import com.karol.sezonnazdrowie.view.MainActivity;
 
 import java.util.ArrayList;
 
+import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
 public class SettingsItemsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private MainViewModel mMainViewModel;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        mMainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -28,10 +38,10 @@ public class SettingsItemsFragment extends PreferenceFragmentCompat
         ArrayList<FoodItem> list = null;
         if (getArguments().getString(MainActivity.INTENT_WHAT)
                 .equals(MainActivity.INTENT_WHAT_FRUITS)) {
-            list = Database.getInstance().getAllFruits();
+            list = mMainViewModel.getDatabase().getAllFruits();
         } else if (getArguments().getString(MainActivity.INTENT_WHAT)
                 .equals(MainActivity.INTENT_WHAT_VEGETABLES)) {
-            list = Database.getInstance().getAllVegetables();
+            list = mMainViewModel.getDatabase().getAllVegetables();
         }
 
         for (FoodItem item : list) {
@@ -45,7 +55,7 @@ public class SettingsItemsFragment extends PreferenceFragmentCompat
             screen.addPreference(pref);
         }
 
-//        ((MainActivity)getActivity()).setSettingsItemsChanged(false);
+        mMainViewModel.setSettingsItemChanged(false);
     }
 
     @Override
@@ -62,11 +72,6 @@ public class SettingsItemsFragment extends PreferenceFragmentCompat
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-//        ((MainActivity)getActivity()).setSettingsItemsChanged(true);
+        mMainViewModel.setSettingsItemChanged(true);
     }
-
-//    @Override
-//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        ((MainActivity)getActivity()).setSettingsItemsChanged(true);
-//    }
 }

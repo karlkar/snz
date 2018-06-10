@@ -12,15 +12,15 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.data.Database;
-import com.karol.sezonnazdrowie.data.FoodItem;
-
-import java.util.ArrayList;
+import com.karol.sezonnazdrowie.model.MainViewModel;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavController mNavController;
+    private MainViewModel mMainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,50 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
+        setupDrawer();
+
+        NavigationUI.setupActionBarWithNavController(this, mNavController, mDrawerLayout);
+
+        setupAdView();
+
+        setupNavController();
+
+        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mMainViewModel.getActionBarTitle().observe(
+                this,
+                new Observer<String>() {
+                    @Override
+                    public void onChanged(@Nullable String title) {
+                        mActionBarTitle.setText(title);
+                    }
+                });
+    }
+
+    private void setupNavController() {
+        mNavController.addOnNavigatedListener(new NavController.OnNavigatedListener() {
+            @Override
+            public void onNavigated(
+                    @NonNull NavController controller,
+                    @NonNull NavDestination destination) {
+                switch (destination.getId()) {
+                    case R.id.mainFragment:
+                        getSupportActionBar().hide();
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                        mAdBackground.setVisibility(View.GONE);
+                        mDrawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED);
+                        break;
+                    default:
+                        getSupportActionBar().show();
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                        mAdBackground.setVisibility(View.VISIBLE);
+                        mDrawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void setupDrawer() {
         ListView drawer = findViewById(R.id.snz_drawer);
         drawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -120,37 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        NavigationUI.setupActionBarWithNavController(this, mNavController, mDrawerLayout);
-
-        setupAdView();
-
-        mNavController.addOnNavigatedListener(new NavController.OnNavigatedListener() {
-            @Override
-            public void onNavigated(
-                    @NonNull NavController controller,
-                    @NonNull NavDestination destination) {
-                switch (destination.getId()) {
-                    case R.id.mainFragment:
-                        getSupportActionBar().hide();
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                        mAdBackground.setVisibility(View.GONE);
-                        mDrawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED);
-                        break;
-                    default:
-                        getSupportActionBar().show();
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                        mAdBackground.setVisibility(View.VISIBLE);
-                        mDrawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED);
-                        break;
-                }
-            }
-        });
-
-        ArrayList<FoodItem> allFruits = Database.getInstance().getAllFruits();
-        if (allFruits == null || allFruits.size() == 0) {
-            Database.getInstance().loadData(this);
-        }
     }
 
     private void setupAdView() {
@@ -173,10 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 mAdView.loadAd(adRequest);
             }
         }, 500);
-    }
-
-    public void setActionBarTitle(String text) {
-        mActionBarTitle.setText(text);
     }
 
     @Override

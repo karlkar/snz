@@ -13,8 +13,7 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            Database.getInstance().loadData(context);
-            SnzAlarmManager.setAlarms(context);
+            SnzAlarmManager.setAlarms(context, null);
         }
     }
 }

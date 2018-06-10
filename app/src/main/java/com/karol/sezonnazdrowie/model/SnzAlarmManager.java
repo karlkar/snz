@@ -23,22 +23,31 @@ public class SnzAlarmManager {
 
     private final static String TAG = "SNZALARMMANAGER";
 
-    public static void startSetAlarmsTask(final Context ctx) {
+    public static void startSetAlarmsTask(final Context ctx, final Database database) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                SnzAlarmManager.setAlarms(ctx);
+                SnzAlarmManager.setAlarms(ctx, database);
                 return null;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    static void setAlarms(Context ctx) {
+    static void setAlarms(Context ctx, Database database) {
+        if (database == null) {
+            database = new Database();
+            database.loadData(ctx);
+        }
+        ArrayList<FoodItem> allFruits = database.getAllFruits();
+        if (allFruits == null || allFruits.isEmpty()) {
+            database.loadData(ctx);
+        }
+
         HashMap<CalendarDay, ArrayList<FoodItem>> startMap = new HashMap<>();
         HashMap<CalendarDay, ArrayList<FoodItem>> endMap = new HashMap<>();
 
-        fillMapWithItems(startMap, endMap, Database.getInstance().getAllFruits());
-        fillMapWithItems(startMap, endMap, Database.getInstance().getAllVegetables());
+        fillMapWithItems(startMap, endMap, database.getAllFruits());
+        fillMapWithItems(startMap, endMap, database.getAllVegetables());
 
         ArrayList<Integer> startDays = new ArrayList<>();
         Set<String> seasonStart = PreferenceManager.getDefaultSharedPreferences(ctx).getStringSet("pref_season_start", null);

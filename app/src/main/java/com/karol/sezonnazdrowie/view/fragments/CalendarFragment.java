@@ -1,15 +1,7 @@
 package com.karol.sezonnazdrowie.view.fragments;
 
-import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.core.content.ContextCompat;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.model.MainViewModel;
 import com.karol.sezonnazdrowie.model.SnzAdapter;
-import com.karol.sezonnazdrowie.view.MainActivity;
 import com.karol.sezonnazdrowie.view.MainActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -34,6 +26,16 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.util.Calendar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CalendarFragment extends Fragment {
     private static final String TAG = "CALENDARFRAGMENT";
@@ -67,8 +69,9 @@ public class CalendarFragment extends Fragment {
             mVegetableAdapter.enableItemAt(foodItem.isFruit() ? -1 : position);
             mVegetableAdapter.notifyDataSetChanged();
 
-            if (mGridViewMode)
+            if (mGridViewMode) {
                 Toast.makeText(getActivity(), mSelectedFoodItem.getName(), Toast.LENGTH_SHORT).show();
+            }
             mFruitsRv.smoothScrollToPosition(0);
             mVegetablesRv.smoothScrollToPosition(0);
             mAppBarLayout.setExpanded(true, true);
@@ -92,11 +95,18 @@ public class CalendarFragment extends Fragment {
             return true;
         }
     };
+    private MainViewModel mMainViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
-        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.calendar));
+        mMainViewModel.setActionBarTitle(getString(R.string.calendar));
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
@@ -120,13 +130,13 @@ public class CalendarFragment extends Fragment {
             mVegetablesRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
         mFruitAdapter = new SnzAdapter(
-                Database.getInstance().getAllFruits(),
+                mMainViewModel.getDatabase().getAllFruits(),
                 mGridViewMode,
                 mOnItemClickListener,
                 mOnItemLongClickListener);
         mFruitsRv.setAdapter(mFruitAdapter);
         mVegetableAdapter = new SnzAdapter(
-                Database.getInstance().getAllVegetables(),
+                mMainViewModel.getDatabase().getAllVegetables(),
                 mGridViewMode,
                 mOnItemClickListener,
                 mOnItemLongClickListener);

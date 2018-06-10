@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.model.MainViewModel;
 import com.karol.sezonnazdrowie.view.MainActivity;
 import com.karol.sezonnazdrowie.view.MainActivity;
 
@@ -24,11 +25,19 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 public class ListFragment extends Fragment {
 
     private static final String TAG = "LISTFRAGMENT";
+    private MainViewModel mMainViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+    }
 
     @Nullable
     @Override
@@ -37,33 +46,28 @@ public class ListFragment extends Fragment {
         String what = getArguments().getString(MainActivity.INTENT_WHAT);
         switch (what) {
             case MainActivity.INTENT_WHAT_FRUITS:
-                ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_fruits));
+                mMainViewModel.setActionBarTitle(getString(R.string.season_fruits));
                 break;
             case MainActivity.INTENT_WHAT_VEGETABLES:
-                ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_vegetables));
+                mMainViewModel.setActionBarTitle(getString(R.string.season_vegetables));
                 break;
             case MainActivity.INTENT_WHAT_INCOMING:
-                ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.season_incoming));
+                mMainViewModel.setActionBarTitle(getString(R.string.season_incoming));
                 break;
         }
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        ArrayList<FoodItem> allFruits = Database.getInstance().getAllFruits();
-        if (allFruits == null || allFruits.isEmpty()) {
-            Database.getInstance().loadData(getActivity());
-        }
-
         ArrayList<FoodItem> items = null;
         switch (what) {
             case MainActivity.INTENT_WHAT_FRUITS:
-                items = Database.getInstance().getCurrentFruits();
+                items = mMainViewModel.getDatabase().getCurrentFruits();
                 break;
             case MainActivity.INTENT_WHAT_VEGETABLES:
-                items = Database.getInstance().getCurrentVegetables();
+                items = mMainViewModel.getDatabase().getCurrentVegetables();
                 break;
             case MainActivity.INTENT_WHAT_INCOMING:
-                items = Database.getInstance().getIncomingItems();
+                items = mMainViewModel.getDatabase().getIncomingItems();
                 break;
         }
 

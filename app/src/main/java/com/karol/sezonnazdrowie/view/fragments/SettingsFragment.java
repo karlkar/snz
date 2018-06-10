@@ -3,9 +3,12 @@ package com.karol.sezonnazdrowie.view.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.model.MainViewModel;
 import com.karol.sezonnazdrowie.model.SnzAlarmManager;
 import com.karol.sezonnazdrowie.view.MainActivity;
 import com.karol.sezonnazdrowie.view.controls.TimePreference;
@@ -13,9 +16,8 @@ import com.karol.sezonnazdrowie.view.controls.TimePreferenceDialogFragmentCompat
 
 import java.util.Set;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -24,6 +26,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
     private static final String TAG = "SETTINGSFRAGMENT";
+    private MainViewModel mMainViewModel;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mMainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -37,20 +47,20 @@ public class SettingsFragment extends PreferenceFragmentCompat
         findPreference("pref_notification_vegetable").setOnPreferenceClickListener(this);
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.settings));
-//        return inflater.inflate(R.layout.fragment_settings, container, false);
-//    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mMainViewModel.setActionBarTitle(getString(R.string.settings));
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-//        if (((MainActivity)getActivity()).getSettingsItemsChanged()) {
-//            SnzAlarmManager.startSetAlarmsTask(getActivity());
-//        }
-//        ((MainActivity)getActivity()).setSettingsItemsChanged(false);
+        if (mMainViewModel.isSettingsItemChanged()) {
+            SnzAlarmManager.startSetAlarmsTask(getActivity(), mMainViewModel.getDatabase());
+        }
+        mMainViewModel.setSettingsItemChanged(false);
     }
 
     @Override
@@ -75,7 +85,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         }
 
         if (!key.equals("maxReqCode")) {
-            SnzAlarmManager.startSetAlarmsTask(getActivity());
+            SnzAlarmManager.startSetAlarmsTask(getActivity(), mMainViewModel.getDatabase());
         }
     }
 
