@@ -40,13 +40,14 @@ android {
 }
 
 dependencies {
+    def room_version = "1.1.0"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha3'
     implementation 'com.google.android.material:material:1.0.0-alpha3'
     implementation 'androidx.browser:browser:1.0.0-alpha3'
     implementation 'androidx.preference:preference:1.0.0-alpha3'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
 
     implementation 'com.google.android.material:material:1.0.0-alpha3'
 
@@ -62,10 +63,14 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha3'
     androidTestImplementation 'androidx.test:rules:1.1.0-alpha3'
 
-    implementation "android.arch.navigation:navigation-fragment:1.0.0-alpha01"
-    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha01"
+    implementation "android.arch.navigation:navigation-fragment:1.0.0-alpha02"
+    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha02"
 
     implementation "android.arch.lifecycle:extensions:1.1.1"
+
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+
 }
 
 apply plugin: 'com.google.gms.google-services'

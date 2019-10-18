@@ -3,7 +3,13 @@ package com.karol.sezonnazdrowie.data;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.room.Dao;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -18,50 +24,59 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
 
-public class FoodItem implements Parcelable, Comparable<FoodItem> {
+@Entity
+public class FoodItem implements Comparable<FoodItem> {
 
     private static final String TAG = "FoodItem";
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("d.MM", Locale.getDefault());
     public static final SimpleDateFormat DATE_FORMAT_TEXT = new SimpleDateFormat("d MMMM", Locale.getDefault());
 
-    private final String mName;
+    public FoodItem() {}
+
+    @PrimaryKey @NonNull
+    private String mName;
 	private String mConjugatedName;
+
+	@Ignore
     private CalendarDay mStartDay1 = null;
+    @Ignore
     private CalendarDay mEndDay1 = null;
+    @Ignore
     private CalendarDay mStartDay2 = null;
+    @Ignore
     private CalendarDay mEndDay2 = null;
 
-    private final String mImageResourceId;
-    private final String mDesc;
-    private final String mLink;
-    private final boolean mIsFruit;
+    private String mImageResourceId;
+    private String mDesc;
+    private String mLink;
+    private boolean mIsFruit;
 
-    private final String mWater;
-    private final String mEnergy;
-    private final String mProtein;
-    private final String mFat;
-    private final String mCarbohydrates;
-    private final String mFiber;
-    private final String mSugars;
+    private String mWater;
+    private String mEnergy;
+    private String mProtein;
+    private String mFat;
+    private String mCarbohydrates;
+    private String mFiber;
+    private String mSugars;
 
-    private final String mCalcium;
-    private final String mIron;
-    private final String mMagnesium;
-    private final String mPhosphorus;
-    private final String mPotassium;
-    private final String mSodium;
-    private final String mZinc;
+    private String mCalcium;
+    private String mIron;
+    private String mMagnesium;
+    private String mPhosphorus;
+    private String mPotassium;
+    private String mSodium;
+    private String mZinc;
 
-    private final String mVitC;
-    private final String mThiamin;
-    private final String mRiboflavin;
-    private final String mNiacin;
-    private final String mVitB6;
-    private final String mFolate;
-    private final String mVitA;
-    private final String mVitE;
-    private final String mVitK;
+    private String mVitC;
+    private String mThiamin;
+    private String mRiboflavin;
+    private String mNiacin;
+    private String mVitB6;
+    private String mFolate;
+    private String mVitA;
+    private String mVitE;
+    private String mVitK;
 
     private boolean mEnabled = false;
 
@@ -114,92 +129,35 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
         }
     }
 
-    private FoodItem(Parcel in) {
-        mName = in.readString();
-        mStartDay1 = (CalendarDay) in.readValue(CalendarDay.class.getClassLoader());
-        mEndDay1 = (CalendarDay) in.readValue(CalendarDay.class.getClassLoader());
-        mStartDay2 = (CalendarDay) in.readValue(CalendarDay.class.getClassLoader());
-        mEndDay2 = (CalendarDay) in.readValue(CalendarDay.class.getClassLoader());
-        mImageResourceId = in.readString();
-        mDesc = in.readString();
-        mLink = in.readString();
-        mIsFruit = in.readByte() != 0x00;
-        mWater = in.readString();
-        mEnergy = in.readString();
-        mProtein = in.readString();
-        mFat = in.readString();
-        mCarbohydrates = in.readString();
-        mFiber = in.readString();
-        mSugars = in.readString();
-        mCalcium = in.readString();
-        mIron = in.readString();
-        mMagnesium = in.readString();
-        mPhosphorus = in.readString();
-        mPotassium = in.readString();
-        mSodium = in.readString();
-        mZinc = in.readString();
-        mVitC = in.readString();
-        mThiamin = in.readString();
-        mRiboflavin = in.readString();
-        mNiacin = in.readString();
-        mVitB6 = in.readString();
-        mFolate = in.readString();
-        mVitA = in.readString();
-        mVitE = in.readString();
-        mVitK = in.readString();
-    }
+    public FoodItem(
+            String name,
+            String subname,
+            String file,
+            String startDate1,
+            String endDate1,
+            String startDate2,
+            String endDate2,
+            String desc, String link, String Water, String Energy, String Protein, String fat, String Carbohydrate, String Fiber, String Sugars, String Calcium, String Iron, String Magnesium, String Phosphorus, String Potassium, String Sodium, String Zinc, String VitaminC, String Thiamin, String Riboflavin, String Niacin, String VitaminB6, String Folate, String VitaminA, String VitaminE, String VitaminK) {
+        mName = name;
+        mConjugatedName = subname;
+        mImageResourceId = file;
 
-    public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
-        @Override
-        public FoodItem createFromParcel(Parcel in) {
-            return new FoodItem(in);
+        try {
+            if (!startDate1.isEmpty() && !endDate1.isEmpty() && !startDate1.equals("-")) {
+                mStartDay1 = CalendarDay.from(DATE_FORMAT.parse(startDate1));
+                mEndDay1 = CalendarDay.from(DATE_FORMAT.parse(endDate1));
+            }
+            if (!startDate2.isEmpty() && !endDate2.isEmpty() && !startDate2.equals("-")) {
+                mStartDay2 = CalendarDay.from(DATE_FORMAT.parse(startDate2));
+                mEndDay2 = CalendarDay.from(DATE_FORMAT.parse(endDate2));
+            }
+        } catch (ParseException e) {
+            Log.e(TAG, "Failed to parse", e);
         }
 
-        @Override
-        public FoodItem[] newArray(int size) {
-            return new FoodItem[size];
-        }
-    };
+        mDesc = desc;
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mName);
-        dest.writeValue(mStartDay1);
-        dest.writeValue(mEndDay1);
-        dest.writeValue(mStartDay2);
-        dest.writeValue(mEndDay2);
-        dest.writeString(mImageResourceId);
-        dest.writeString(mDesc);
-        dest.writeString(mLink);
-        dest.writeByte((byte) (mIsFruit ? 0x01 : 0x00));
-        dest.writeString(mWater);
-        dest.writeString(mEnergy);
-        dest.writeString(mProtein);
-        dest.writeString(mFat);
-        dest.writeString(mCarbohydrates);
-        dest.writeString(mFiber);
-        dest.writeString(mSugars);
-        dest.writeString(mCalcium);
-        dest.writeString(mIron);
-        dest.writeString(mMagnesium);
-        dest.writeString(mPhosphorus);
-        dest.writeString(mPotassium);
-        dest.writeString(mSodium);
-        dest.writeString(mZinc);
-        dest.writeString(mVitC);
-        dest.writeString(mThiamin);
-        dest.writeString(mRiboflavin);
-        dest.writeString(mNiacin);
-        dest.writeString(mVitB6);
-        dest.writeString(mFolate);
-        dest.writeString(mVitA);
-        dest.writeString(mVitE);
-        dest.writeString(mVitK);
+        mIsFruit = true;
     }
 
     public static ArrayList<FoodItem> createItems(Context context, int resId, boolean isFruit) {
@@ -286,6 +244,10 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
 
     public boolean isFruit() {
         return mIsFruit;
+    }
+
+    public void setIsFruit(boolean isFruit) {
+        mIsFruit = isFruit;
     }
 
     public String getWater() {
@@ -387,7 +349,143 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
     public void setEnabled(boolean enabled) {
         mEnabled = enabled;
     }
-	
+
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public void setConjugatedName(String conjugatedName) {
+        mConjugatedName = conjugatedName;
+    }
+
+    public void setStartDay1(CalendarDay startDay1) {
+        mStartDay1 = startDay1;
+    }
+
+    public void setEndDay1(CalendarDay endDay1) {
+        mEndDay1 = endDay1;
+    }
+
+    public void setStartDay2(CalendarDay startDay2) {
+        mStartDay2 = startDay2;
+    }
+
+    public void setEndDay2(CalendarDay endDay2) {
+        mEndDay2 = endDay2;
+    }
+
+    public String getImageResourceId() {
+        return mImageResourceId;
+    }
+
+    public void setImageResourceId(String imageResourceId) {
+        mImageResourceId = imageResourceId;
+    }
+
+    public void setDesc(String desc) {
+        mDesc = desc;
+    }
+
+    public void setLink(String link) {
+        mLink = link;
+    }
+
+    public void setFruit(boolean fruit) {
+        mIsFruit = fruit;
+    }
+
+    public void setWater(String water) {
+        mWater = water;
+    }
+
+    public void setEnergy(String energy) {
+        mEnergy = energy;
+    }
+
+    public void setProtein(String protein) {
+        mProtein = protein;
+    }
+
+    public void setFat(String fat) {
+        mFat = fat;
+    }
+
+    public void setCarbohydrates(String carbohydrates) {
+        mCarbohydrates = carbohydrates;
+    }
+
+    public void setFiber(String fiber) {
+        mFiber = fiber;
+    }
+
+    public void setSugars(String sugars) {
+        mSugars = sugars;
+    }
+
+    public void setCalcium(String calcium) {
+        mCalcium = calcium;
+    }
+
+    public void setIron(String iron) {
+        mIron = iron;
+    }
+
+    public void setMagnesium(String magnesium) {
+        mMagnesium = magnesium;
+    }
+
+    public void setPhosphorus(String phosphorus) {
+        mPhosphorus = phosphorus;
+    }
+
+    public void setPotassium(String potassium) {
+        mPotassium = potassium;
+    }
+
+    public void setSodium(String sodium) {
+        mSodium = sodium;
+    }
+
+    public void setZinc(String zinc) {
+        mZinc = zinc;
+    }
+
+    public void setVitC(String vitC) {
+        mVitC = vitC;
+    }
+
+    public void setThiamin(String thiamin) {
+        mThiamin = thiamin;
+    }
+
+    public void setRiboflavin(String riboflavin) {
+        mRiboflavin = riboflavin;
+    }
+
+    public void setNiacin(String niacin) {
+        mNiacin = niacin;
+    }
+
+    public void setVitB6(String vitB6) {
+        mVitB6 = vitB6;
+    }
+
+    public void setFolate(String folate) {
+        mFolate = folate;
+    }
+
+    public void setVitA(String vitA) {
+        mVitA = vitA;
+    }
+
+    public void setVitE(String vitE) {
+        mVitE = vitE;
+    }
+
+    public void setVitK(String vitK) {
+        mVitK = vitK;
+    }
+
     @Override
     public String toString() {
         return mName;
@@ -419,11 +517,13 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
     public String getNearestSeasonString() {
         CalendarDay today = CalendarDay.today();
         CalendarDay start = getNearestSeasonStart(today);
-        if (start == null)
+        if (start == null) {
             return "";
+        }
         CalendarDay end = getNearestSeasonEnd(today);
-        if (end == null)
+        if (end == null) {
             return "";
+        }
         String startDayStr = DATE_FORMAT_TEXT.format(start.getDate());
         String endDayStr = DATE_FORMAT_TEXT.format(end.getDate());
         return startDayStr + " - " + endDayStr;
@@ -446,84 +546,98 @@ public class FoodItem implements Parcelable, Comparable<FoodItem> {
     }
 
     public CalendarDay getNearestSeasonDay(@NonNull CalendarDay rel) {
-        if (mStartDay1 == null)
+        if (mStartDay1 == null) {
             return rel;
+        }
 
-        if (existsAt(rel))
+        if (existsAt(rel)) {
             return rel;
+        }
 
         return getNearestSeasonStart(rel);
     }
 
 	public CalendarDay getNearestSeasonStart(@NonNull CalendarDay rel) {
-        if (mStartDay1 == null)
+        if (mStartDay1 == null) {
             return null;
+        }
         int relInDays = rel.getMonth() * 30 + rel.getDay();
         int start1InDays = mStartDay1.getMonth() * 30 + mStartDay1.getDay();
 
         CalendarDay retVal1;
-        if (start1InDays >= relInDays)
+        if (start1InDays >= relInDays) {
             retVal1 = CalendarDay.from(rel.getYear(), mStartDay1.getMonth(), mStartDay1.getDay());
-        else
+        } else {
             retVal1 = CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
+        }
 
-        if (mStartDay2 == null)
+        if (mStartDay2 == null) {
             return retVal1;
+        }
 
         int start2InDays = mStartDay2.getMonth() * 30 + mStartDay2.getDay();
         CalendarDay retVal2;
-        if (start2InDays >= relInDays)
+        if (start2InDays >= relInDays) {
             retVal2 = CalendarDay.from(rel.getYear(), mStartDay2.getMonth(), mStartDay2.getDay());
-        else
+        } else {
             retVal2 = CalendarDay.from(rel.getYear() + 1, mStartDay2.getMonth(), mStartDay2.getDay());
+        }
 
         int start1Diff = start1InDays - relInDays;
         int start2Diff = start2InDays - relInDays;
 
         if (start1Diff >= 0 && start2Diff >= 0) {
-            if (start1Diff < start2Diff)
+            if (start1Diff < start2Diff) {
                 return retVal1;
-            else
+            } else {
                 return retVal2;
-        } else if (start1Diff < 0 && start2Diff >= 0)
+            }
+        } else if (start1Diff < 0 && start2Diff >= 0) {
             return retVal2;
-        else
+        } else {
             return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
+        }
 	}
 	
 	public CalendarDay getNearestSeasonEnd(@NonNull CalendarDay rel) {
-        if (mEndDay1 == null)
+        if (mEndDay1 == null) {
             return null;
+        }
         int relInDays = rel.getMonth() * 30 + rel.getDay();
         int end1InDays = mEndDay1.getMonth() * 30 + mEndDay1.getDay();
 
         CalendarDay retVal1;
-        if (end1InDays >= relInDays)
+        if (end1InDays >= relInDays) {
             retVal1 = CalendarDay.from(rel.getYear(), mEndDay1.getMonth(), mEndDay1.getDay());
-        else
+        } else {
             retVal1 = CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
+        }
 
-        if (mEndDay2 == null)
+        if (mEndDay2 == null) {
             return retVal1;
+        }
 
         int end2InDays = mEndDay2.getMonth() * 30 + mEndDay2.getDay();
         CalendarDay retVal2;
-        if (end2InDays >= relInDays)
+        if (end2InDays >= relInDays) {
             retVal2 = CalendarDay.from(rel.getYear(), mEndDay2.getMonth(), mEndDay2.getDay());
-        else
+        } else {
             retVal2 = CalendarDay.from(rel.getYear() + 1, mEndDay2.getMonth(), mEndDay2.getDay());
+        }
 
         int start1Diff = end1InDays - relInDays;
         int start2Diff = end2InDays - relInDays;
 
         if (start1Diff >= 0 && start2Diff >= 0) {
-            if (start1Diff < start2Diff)
+            if (start1Diff < start2Diff) {
                 return retVal1;
-            else
+            } else {
                 return retVal2;
-        } else if (start1Diff < 0 && start2Diff >= 0)
+            }
+        } else if (start1Diff < 0 && start2Diff >= 0) {
             return retVal2;
-        else
+        } else {
             return CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
+        }
 	}
 }

@@ -17,6 +17,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class SnzAlarmManager {
@@ -34,15 +35,6 @@ public class SnzAlarmManager {
     }
 
     static void setAlarms(Context ctx, Database database) {
-        if (database == null) {
-            database = new Database();
-            database.loadData(ctx);
-        }
-        ArrayList<FoodItem> allFruits = database.getAllFruits();
-        if (allFruits == null || allFruits.isEmpty()) {
-            database.loadData(ctx);
-        }
-
         HashMap<CalendarDay, ArrayList<FoodItem>> startMap = new HashMap<>();
         HashMap<CalendarDay, ArrayList<FoodItem>> endMap = new HashMap<>();
 
@@ -171,9 +163,10 @@ public class SnzAlarmManager {
         PreferenceManager.getDefaultSharedPreferences(ctx).edit().putBoolean("pref_alarms_set", true).apply();
     }
 
-    private static void fillMapWithItems(HashMap<CalendarDay, ArrayList<FoodItem>> startMap,
-                                  HashMap<CalendarDay, ArrayList<FoodItem>> endMap,
-                                  ArrayList<FoodItem> items) {
+    private static void fillMapWithItems(
+            HashMap<CalendarDay, ArrayList<FoodItem>> startMap,
+            HashMap<CalendarDay, ArrayList<FoodItem>> endMap,
+            List<FoodItem> items) {
         for (FoodItem item : items) {
             if (item.getStartDay1() == null)
                 continue;

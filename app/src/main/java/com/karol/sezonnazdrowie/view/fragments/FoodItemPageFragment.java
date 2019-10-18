@@ -39,7 +39,8 @@ public class FoodItemPageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_food_item_page, container, false);
-        mItem = getArguments().getParcelable(MainActivity.INTENT_ITEM);
+        String itemName = getArguments().getString(MainActivity.INTENT_ITEM);
+        mItem = mMainViewModel.getDatabase().getItem(itemName);
         mMainViewModel.setActionBarTitle(mItem.getName());
 
         ImageView pagePreviewImageView = view.findViewById(R.id.pagePreviewImageView);

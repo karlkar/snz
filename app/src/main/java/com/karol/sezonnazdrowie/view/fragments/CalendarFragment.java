@@ -89,7 +89,7 @@ public class CalendarFragment extends Fragment {
         @Override
         public boolean onItemLongClick(FoodItem foodItem, int position) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MainActivity.INTENT_ITEM, foodItem);
+            bundle.putString(MainActivity.INTENT_ITEM, foodItem.getName());
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
                     .navigate(R.id.foodItemPageFragment, bundle);
             return true;

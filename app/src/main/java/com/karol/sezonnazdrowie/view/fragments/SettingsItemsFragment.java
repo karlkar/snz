@@ -2,17 +2,13 @@ package com.karol.sezonnazdrowie.view.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
 import com.karol.sezonnazdrowie.model.MainViewModel;
 import com.karol.sezonnazdrowie.view.MainActivity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.CheckBoxPreference;
@@ -35,7 +31,7 @@ public class SettingsItemsFragment extends PreferenceFragmentCompat
         setPreferencesFromResource(R.xml.prefs_list, rootKey);
 
         PreferenceScreen screen = this.getPreferenceScreen();
-        ArrayList<FoodItem> list = null;
+        List<FoodItem> list = null;
         if (getArguments().getString(MainActivity.INTENT_WHAT)
                 .equals(MainActivity.INTENT_WHAT_FRUITS)) {
             list = mMainViewModel.getDatabase().getAllFruits();
