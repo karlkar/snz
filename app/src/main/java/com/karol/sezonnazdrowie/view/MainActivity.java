@@ -2,22 +2,16 @@ package com.karol.sezonnazdrowie.view;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.model.MainViewModel;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,7 +19,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.model.MainViewModel;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
 import static androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED;
@@ -44,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mActionBarTitle;
     private View mAdBackground;
     private DrawerLayout mDrawerLayout;
-    private Toolbar mToolbar;
     private NavController mNavController;
-    private MainViewModel mMainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         mNavController = Navigation.findNavController(
                 this,
                 R.id.nav_host_fragment);
-        mToolbar = findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mActionBarTitle = mToolbar.findViewById(R.id.action_bar_title);
@@ -65,13 +67,21 @@ public class MainActivity extends AppCompatActivity {
 
         setupDrawer();
 
-        NavigationUI.setupActionBarWithNavController(this, mNavController, mDrawerLayout);
+        Set<Integer> topLevelDestinationIds = new HashSet<>();
+        topLevelDestinationIds.add(R.id.listFragment);
+        topLevelDestinationIds.add(R.id.calendarFragment);
+        topLevelDestinationIds.add(R.id.shoppingListFragment);
+        topLevelDestinationIds.add(R.id.settingsFragment);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinationIds)
+                .setDrawerLayout(mDrawerLayout)
+                .build();
+        NavigationUI.setupActionBarWithNavController(this, mNavController, appBarConfiguration);
 
         setupAdView();
 
         setupNavController();
 
-        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        MainViewModel mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         mMainViewModel.getActionBarTitle().observe(
                 this,
                 new Observer<String>() {
@@ -83,24 +93,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupNavController() {
-        mNavController.addOnNavigatedListener(new NavController.OnNavigatedListener() {
+        mNavController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
-            public void onNavigated(
+            public void onDestinationChanged(
                     @NonNull NavController controller,
-                    @NonNull NavDestination destination) {
-                switch (destination.getId()) {
-                    case R.id.mainFragment:
-                        getSupportActionBar().hide();
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                        mAdBackground.setVisibility(View.GONE);
-                        mDrawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED);
-                        break;
-                    default:
-                        getSupportActionBar().show();
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                        mAdBackground.setVisibility(View.VISIBLE);
-                        mDrawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED);
-                        break;
+                    @NonNull NavDestination destination,
+                    @Nullable Bundle arguments
+            ) {
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                }
+                int destinationId = destination.getId();
+                if (destinationId == R.id.mainFragment) {
+                    getSupportActionBar().hide();
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    mAdBackground.setVisibility(View.GONE);
+                    mDrawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED);
+                } else {
+                    getSupportActionBar().show();
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    mAdBackground.setVisibility(View.VISIBLE);
+                    mDrawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED);
                 }
             }
         });
@@ -170,10 +183,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupAdView() {
         mAdBackground = findViewById(R.id.adBackground);
         mAdView = findViewById(R.id.adView);
-        final AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.adMobTestDeviceS5))
-                .addTestDevice(getString(R.string.adMobTestDeviceS7))
-                .build();
+        final AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -194,8 +204,9 @@ public class MainActivity extends AppCompatActivity {
         int curDestId = mNavController.getCurrentDestination().getId();
         if (curDestId == R.id.listFragment
                 || curDestId == R.id.calendarFragment
-                || curDestId == R.id.shoppingListFragment) {
-            mDrawerLayout.openDrawer(Gravity.START);
+                || curDestId == R.id.shoppingListFragment
+                || curDestId == R.id.settingsFragment) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
         return mNavController.navigateUp();

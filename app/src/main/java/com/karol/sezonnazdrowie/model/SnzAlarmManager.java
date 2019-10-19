@@ -9,8 +9,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.data.Database;
 import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.data.SnzDatabase;
 import com.karol.sezonnazdrowie.view.controls.TimePreference;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -24,7 +24,7 @@ public class SnzAlarmManager {
 
     private final static String TAG = "SNZALARMMANAGER";
 
-    public static void startSetAlarmsTask(final Context ctx, final Database database) {
+    public static void startSetAlarmsTask(final Context ctx, final SnzDatabase database) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -34,7 +34,7 @@ public class SnzAlarmManager {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    static void setAlarms(Context ctx, Database database) {
+    static void setAlarms(Context ctx, SnzDatabase database) {
         HashMap<CalendarDay, ArrayList<FoodItem>> startMap = new HashMap<>();
         HashMap<CalendarDay, ArrayList<FoodItem>> endMap = new HashMap<>();
 

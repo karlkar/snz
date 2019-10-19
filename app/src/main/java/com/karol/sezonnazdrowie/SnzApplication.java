@@ -1,25 +1,26 @@
 package com.karol.sezonnazdrowie;
 
-import android.app.Application;
-
-import com.karol.sezonnazdrowie.data.Database;
-
-import java.util.concurrent.Executors;
-
 import androidx.annotation.NonNull;
+import androidx.multidex.MultiDexApplication;
+import androidx.preference.PreferenceManager;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-public class SnzApplication extends Application {
+import com.karol.sezonnazdrowie.data.SnzDatabase;
+import com.karol.sezonnazdrowie.model.SnzAlarmManager;
 
-    private Database mDatabase;
+import java.util.concurrent.Executors;
+
+public class SnzApplication extends MultiDexApplication {
+
+    private SnzDatabase mDatabase;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mDatabase = Room
-                .databaseBuilder(this, Database.class, "snz.db")
+                .databaseBuilder(this, SnzDatabase.class, "snz.db")
                 .allowMainThreadQueries()
                 .addCallback(new RoomDatabase.Callback() {
                     @Override
@@ -29,14 +30,24 @@ public class SnzApplication extends Application {
                             @Override
                             public void run() {
                                 mDatabase.populate();
+
+                                boolean alarmsSet = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                        .getBoolean("pref_alarms_set", false);
+                                if (!alarmsSet) {
+                                    SnzAlarmManager.startSetAlarmsTask(getApplicationContext(), mDatabase);
+                                }
                             }
                         });
                     }
                 })
                 .build();
+
+        // In order to populate the database
+        mDatabase.beginTransaction();
+        mDatabase.endTransaction();
     }
 
-    public Database getDatabase() {
+    public SnzDatabase getDatabase() {
         return mDatabase;
     }
 }

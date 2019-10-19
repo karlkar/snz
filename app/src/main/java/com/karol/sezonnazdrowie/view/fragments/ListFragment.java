@@ -2,7 +2,6 @@ package com.karol.sezonnazdrowie.view.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +11,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.data.Database;
-import com.karol.sezonnazdrowie.data.FoodItem;
-import com.karol.sezonnazdrowie.model.MainViewModel;
-import com.karol.sezonnazdrowie.view.MainActivity;
-import com.karol.sezonnazdrowie.view.MainActivity;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.data.FoodItem;
+import com.karol.sezonnazdrowie.model.MainViewModel;
+import com.karol.sezonnazdrowie.view.MainActivity;
+
+import java.util.List;
 
 public class ListFragment extends Fragment {
 
@@ -58,7 +54,7 @@ public class ListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        ArrayList<FoodItem> items = null;
+        List<FoodItem> items = null;
         switch (what) {
             case MainActivity.INTENT_WHAT_FRUITS:
                 items = mMainViewModel.getDatabase().getCurrentFruits();
@@ -72,7 +68,7 @@ public class ListFragment extends Fragment {
         }
 
         ListView listView = view.findViewById(R.id.listView);
-        ArrayAdapter adapter;
+        ArrayAdapter<FoodItem> adapter;
         if (what.equals(MainActivity.INTENT_WHAT_INCOMING)) {
             adapter = new IncomingAdapter(getActivity(), items);
         } else {
@@ -84,7 +80,7 @@ public class ListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view1, int position, long id) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(MainActivity.INTENT_ITEM, (Parcelable) parent.getItemAtPosition(position));
+                bundle.putString(MainActivity.INTENT_ITEM, ((FoodItem)parent.getItemAtPosition(position)).getName());
                 Navigation.findNavController(view1).navigate(R.id.action_food_detail, bundle);
             }});
         return view;
@@ -106,7 +102,7 @@ public class ListFragment extends Fragment {
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.row_incoming_layout, parent, false);
                 holder = new ViewHolder();
                 holder.mName = convertView.findViewById(R.id.rowText);

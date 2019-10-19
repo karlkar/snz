@@ -4,13 +4,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.karol.sezonnazdrowie.R;
 import com.karol.sezonnazdrowie.data.FoodItem;
@@ -70,7 +71,7 @@ public class SnzAdapter extends RecyclerView.Adapter<SnzAdapter.SnzViewHolder> {
         final FoodItem item = mItems.get(position);
         if (mGridMode) {
             Context context = holder.image.getContext();
-            Picasso.with(context).load(
+            Picasso.get().load(
                     context.getResources().getIdentifier("mini_" + item.getImage(), "drawable",
                             context.getPackageName()))
                     .placeholder(android.R.drawable.ic_menu_gallery)

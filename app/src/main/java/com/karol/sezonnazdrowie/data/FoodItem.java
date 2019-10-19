@@ -1,27 +1,16 @@
 package com.karol.sezonnazdrowie.data;
 
-import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.room.Dao;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Locale;
 
 @Entity
@@ -32,19 +21,17 @@ public class FoodItem implements Comparable<FoodItem> {
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("d.MM", Locale.getDefault());
     public static final SimpleDateFormat DATE_FORMAT_TEXT = new SimpleDateFormat("d MMMM", Locale.getDefault());
 
-    public FoodItem() {}
+    public FoodItem() {
+    }
 
-    @PrimaryKey @NonNull
+    @PrimaryKey
+    @NonNull
     private String mName;
-	private String mConjugatedName;
+    private String mConjugatedName;
 
-	@Ignore
     private CalendarDay mStartDay1 = null;
-    @Ignore
     private CalendarDay mEndDay1 = null;
-    @Ignore
     private CalendarDay mStartDay2 = null;
-    @Ignore
     private CalendarDay mEndDay2 = null;
 
     private String mImageResourceId;
@@ -82,7 +69,7 @@ public class FoodItem implements Comparable<FoodItem> {
 
     public FoodItem(String[] row, boolean isFruit) {
         mName = row[0];
-		mConjugatedName = row[1];
+        mConjugatedName = row[1];
         mImageResourceId = row[2];
         String startDate1 = row[3];
         String endDate1 = row[4];
@@ -130,6 +117,7 @@ public class FoodItem implements Comparable<FoodItem> {
     }
 
     public FoodItem(
+            boolean isFruit,
             String name,
             String subname,
             String file,
@@ -137,7 +125,32 @@ public class FoodItem implements Comparable<FoodItem> {
             String endDate1,
             String startDate2,
             String endDate2,
-            String desc, String link, String Water, String Energy, String Protein, String fat, String Carbohydrate, String Fiber, String Sugars, String Calcium, String Iron, String Magnesium, String Phosphorus, String Potassium, String Sodium, String Zinc, String VitaminC, String Thiamin, String Riboflavin, String Niacin, String VitaminB6, String Folate, String VitaminA, String VitaminE, String VitaminK) {
+            String desc,
+            String link,
+            String Water,
+            String Energy,
+            String Protein,
+            String fat,
+            String Carbohydrate,
+            String Fiber,
+            String Sugars,
+            String Calcium,
+            String Iron,
+            String Magnesium,
+            String Phosphorus,
+            String Potassium,
+            String Sodium,
+            String Zinc,
+            String VitaminC,
+            String Thiamin,
+            String Riboflavin,
+            String Niacin,
+            String VitaminB6,
+            String Folate,
+            String VitaminA,
+            String VitaminE,
+            String VitaminK
+    ) {
         mName = name;
         mConjugatedName = subname;
         mImageResourceId = file;
@@ -157,36 +170,32 @@ public class FoodItem implements Comparable<FoodItem> {
 
         mDesc = desc;
 
-        mIsFruit = true;
-    }
+        mLink = link;
+        mWater = Water;
+        mEnergy = Energy;
+        mProtein = Protein;
+        mFat = fat;
+        mCarbohydrates = Carbohydrate;
+        mFiber = Fiber;
+        mSugars = Sugars;
+        mCalcium = Calcium;
+        mIron = Iron;
+        mMagnesium = Magnesium;
+        mPhosphorus = Phosphorus;
+        mPotassium = Potassium;
+        mSodium = Sodium;
+        mZinc = Zinc;
+        mVitC = VitaminC;
+        mThiamin = Thiamin;
+        mRiboflavin = Riboflavin;
+        mNiacin = Niacin;
+        mVitB6 = VitaminB6;
+        mFolate = Folate;
+        mVitA = VitaminA;
+        mVitE = VitaminE;
+        mVitK = VitaminK;
 
-    public static ArrayList<FoodItem> createItems(Context context, int resId, boolean isFruit) {
-        ArrayList<FoodItem> items = new ArrayList<>();
-        InputStream in = context.getResources().openRawResource(resId);
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String line;
-            int cnt = 0;
-            while ((line = reader.readLine()) != null) {
-                if (cnt++ < 2)
-                    continue;
-                String[] rowData = line.split("#", -1);
-				items.add(new FoodItem(rowData, isFruit));
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        finally {
-            try {
-                if (in != null)
-                    in.close();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        Collections.sort(items);
-        return items;
+        mIsFruit = isFruit;
     }
 
     public boolean existsAt(CalendarDay date) {
@@ -225,10 +234,10 @@ public class FoodItem implements Comparable<FoodItem> {
     public String getName() {
         return mName;
     }
-	
-	public String getConjugatedName() {
-		return mConjugatedName;
-	}
+
+    public String getConjugatedName() {
+        return mConjugatedName;
+    }
 
     public String getImage() {
         return mImageResourceId;
@@ -503,7 +512,7 @@ public class FoodItem implements Comparable<FoodItem> {
     }
 
     public boolean hasMinerals() {
-        return (mCarbohydrates != null && !mCarbohydrates.isEmpty()) || (mIron != null && !mIron.isEmpty()) || (mMagnesium != null &&!mMagnesium.isEmpty())
+        return (mCarbohydrates != null && !mCarbohydrates.isEmpty()) || (mIron != null && !mIron.isEmpty()) || (mMagnesium != null && !mMagnesium.isEmpty())
                 || (mPhosphorus != null && !mPhosphorus.isEmpty()) || (mPotassium != null && !mPotassium.isEmpty()) || (mSodium != null && !mSodium.isEmpty())
                 || (mZinc != null && !mZinc.isEmpty());
     }
@@ -557,7 +566,7 @@ public class FoodItem implements Comparable<FoodItem> {
         return getNearestSeasonStart(rel);
     }
 
-	public CalendarDay getNearestSeasonStart(@NonNull CalendarDay rel) {
+    public CalendarDay getNearestSeasonStart(@NonNull CalendarDay rel) {
         if (mStartDay1 == null) {
             return null;
         }
@@ -597,9 +606,9 @@ public class FoodItem implements Comparable<FoodItem> {
         } else {
             return CalendarDay.from(rel.getYear() + 1, mStartDay1.getMonth(), mStartDay1.getDay());
         }
-	}
-	
-	public CalendarDay getNearestSeasonEnd(@NonNull CalendarDay rel) {
+    }
+
+    public CalendarDay getNearestSeasonEnd(@NonNull CalendarDay rel) {
         if (mEndDay1 == null) {
             return null;
         }
@@ -639,5 +648,5 @@ public class FoodItem implements Comparable<FoodItem> {
         } else {
             return CalendarDay.from(rel.getYear() + 1, mEndDay1.getMonth(), mEndDay1.getDay());
         }
-	}
+    }
 }

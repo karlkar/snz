@@ -34,20 +34,18 @@ public class ShoppingList {
     public List<String> getItems() {
         Set<String> stringSet = mSharedPreferences.getStringSet(
                 PREF_KEY,
-                null);
+                new HashSet<String>());
         return new ArrayList<>(stringSet);
     }
 
     public void deleteItem(String itemName) {
         Set<String> stringSet = mSharedPreferences.getStringSet(
                 PREF_KEY,
-                null);
-        if (stringSet == null) {
-            stringSet = new HashSet<>();
-        } else {
+                new HashSet<String>());
+        if (!stringSet.isEmpty()) {
             stringSet = new HashSet<>(stringSet);
+            stringSet.remove(itemName);
         }
-        stringSet.remove(itemName);
         saveData(stringSet);
     }
 

@@ -2,19 +2,19 @@ package com.karol.sezonnazdrowie.model;
 
 import android.app.Application;
 
-import com.karol.sezonnazdrowie.R;
-import com.karol.sezonnazdrowie.SnzApplication;
-import com.karol.sezonnazdrowie.data.Database;
-import com.karol.sezonnazdrowie.data.ShoppingList;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.karol.sezonnazdrowie.R;
+import com.karol.sezonnazdrowie.SnzApplication;
+import com.karol.sezonnazdrowie.data.ShoppingList;
+import com.karol.sezonnazdrowie.data.SnzDatabase;
+
 public class MainViewModel extends AndroidViewModel {
 
-    private final Database mDatabase;
+    private final SnzDatabase mDatabase;
     private MutableLiveData<String> mActionBarTitle = new MutableLiveData<>();
     private boolean mSettingsItemChanged = false;
     private ShoppingList mShoppingList;
@@ -35,7 +35,7 @@ public class MainViewModel extends AndroidViewModel {
         return mActionBarTitle;
     }
 
-    public Database getDatabase() {
+    public SnzDatabase getDatabase() {
         return mDatabase;
     }
 
