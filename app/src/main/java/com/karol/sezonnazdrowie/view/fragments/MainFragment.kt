@@ -10,7 +10,7 @@ import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.data.FoodItem
 import com.karol.sezonnazdrowie.view.MainActivity
 import kotlinx.android.synthetic.main.fragment_main.*
-import java.util.Date
+import org.threeten.bp.LocalDate
 
 class MainFragment : Fragment() {
 
@@ -23,7 +23,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val today = Date()
+        val today = LocalDate.now()
         dateTextView.text = FoodItem.DATE_FORMAT_TEXT.format(today)
 
         fruitsBtn.setOnClickListener { v ->

@@ -29,6 +29,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_calendar.*
+import org.threeten.bp.DayOfWeek
 import java.util.Calendar
 
 class CalendarFragment : Fragment(), LayoutContainer {
@@ -199,7 +200,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
         caledarArrowRight.setOnClickListener { calendarView.goToNext() }
 
         with(calendarView) {
-            state().edit().setFirstDayOfWeek(Calendar.MONDAY).commit()
+            state().edit().setFirstDayOfWeek(DayOfWeek.MONDAY).commit()
             topbarVisible = false
             setOnDateChangedListener { _, date, _ ->
                 onSelectedDateChanged(date)

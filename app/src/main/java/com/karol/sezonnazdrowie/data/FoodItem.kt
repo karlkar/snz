@@ -1,52 +1,49 @@
 package com.karol.sezonnazdrowie.data
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import android.annotation.SuppressLint
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import java.text.SimpleDateFormat
-import java.util.Calendar
+import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
 
-@Entity
 data class FoodItem(
-    var isFruit: Boolean = false,
-    @PrimaryKey var name: String,
-    var conjugatedName: String? = null,
-    var image: String? = null,
-
-    var startDay1: CalendarDay? = null, // TODO: Use tenabp MonthDay https://github.com/JakeWharton/ThreeTenABP
-    var endDay1: CalendarDay? = null,
-    var startDay2: CalendarDay? = null,
-    var endDay2: CalendarDay? = null,
-
-    var desc: String? = null,
-    var link: String? = null,
-
-    var water: String? = null,
-    var energy: String? = null,
-    var protein: String? = null,
-    var fat: String? = null,
-    var carbohydrates: String? = null,
-    var fiber: String? = null,
-    var sugars: String? = null,
-
-    var calcium: String? = null,
-    var iron: String? = null,
-    var magnesium: String? = null,
-    var phosphorus: String? = null,
-    var potassium: String? = null,
-    var sodium: String? = null,
-    var zinc: String? = null,
-
-    var vitC: String? = null,
-    var thiamin: String? = null,
-    var riboflavin: String? = null,
-    var niacin: String? = null,
-    var vitB6: String? = null,
-    var folate: String? = null,
-    var vitA: String? = null,
-    var vitE: String? = null,
-    var vitK: String? = null,
+    val isFruit: Boolean = false,
+    val name: String,
+    val conjugatedName: String? = null,
+    val image: String? = null,
+    // dates
+    val startDay1: CalendarDay? = null,
+    val endDay1: CalendarDay? = null,
+    val startDay2: CalendarDay? = null,
+    val endDay2: CalendarDay? = null,
+    // other texts
+    val desc: String? = null,
+    val link: String? = null,
+    // proximates
+    val water: String? = null,
+    val energy: String? = null,
+    val protein: String? = null,
+    val fat: String? = null,
+    val carbohydrates: String? = null,
+    val fiber: String? = null,
+    val sugars: String? = null,
+    // minerals
+    val calcium: String? = null,
+    val iron: String? = null,
+    val magnesium: String? = null,
+    val phosphorus: String? = null,
+    val potassium: String? = null,
+    val sodium: String? = null,
+    val zinc: String? = null,
+    // vitamins
+    val vitC: String? = null,
+    val thiamin: String? = null,
+    val riboflavin: String? = null,
+    val niacin: String? = null,
+    val vitB6: String? = null,
+    val folate: String? = null,
+    val vitA: String? = null,
+    val vitE: String? = null,
+    val vitK: String? = null,
 
     var isEnabled: Boolean = false
 ) : Comparable<FoodItem> {
@@ -62,61 +59,43 @@ data class FoodItem(
         }
 
     fun existsAt(date: CalendarDay): Boolean {
-        val start1 = startDay1?.calendar?.timeInMillis ?: return true
-        val end1 = endDay1?.calendar?.timeInMillis ?: return true
+        if (isFullYear()) return true
+        val relDate = CalendarDay.from(date.date.withYear(1970))
 
-        val cal = date.calendar
-        cal.set(Calendar.YEAR, 1970)
-        val relDate = cal.timeInMillis
+        val isInFirstRange = isDateInRange(relDate, startDay1!!, endDay1!!)
+        if (isInFirstRange) return true
 
-        if (start1 <= end1) {
-            if (relDate in start1..end1) {
-                return true
-            }
+        if (startDay2 == null || endDay2 == null) return false
+
+        return isDateInRange(relDate, startDay2, endDay2)
+    }
+
+    private fun isDateInRange(date: CalendarDay, start: CalendarDay, end: CalendarDay): Boolean {
+        return if (start == end || start.isBefore(end)) {
+            date.isInRange(start, end)
         } else {
-            if (relDate !in end1..start1) {
-                return true
-            }
-        }
-
-        val start2 = startDay2?.calendar?.timeInMillis ?: return false
-        val end2 = endDay2?.calendar?.timeInMillis ?: return false
-
-        return if (start2 <= end2) {
-            relDate in start2..end2
-        } else {
-            relDate !in start2..end2
+            !date.isInRange(end, start)
         }
     }
 
-    override fun toString(): String {
-        return name
-    }
+    override fun toString(): String = name
 
-    override fun compareTo(other: FoodItem): Int {
-        return name.compareTo(other.name)
-    }
+    override fun compareTo(other: FoodItem): Int = name.compareTo(other.name)
 
-    fun hasProximates(): Boolean {
-        return (water != null && !water!!.isEmpty() || energy != null && !energy!!.isEmpty() || protein != null && !protein!!.isEmpty()
-                || fat != null && !fat!!.isEmpty() || carbohydrates != null && !carbohydrates!!.isEmpty() || fiber != null && !fiber!!.isEmpty()
-                || sugars != null && !sugars!!.isEmpty())
-    }
+    fun hasProximates(): Boolean =
+        listOfNotNull(water, energy, protein, fat, carbohydrates, fiber, sugars)
+            .any { it.isNotEmpty() }
 
-    fun hasMinerals(): Boolean {
-        return (carbohydrates != null && !carbohydrates!!.isEmpty() || iron != null && !iron!!.isEmpty() || magnesium != null && !magnesium!!.isEmpty()
-                || phosphorus != null && !phosphorus!!.isEmpty() || potassium != null && !potassium!!.isEmpty() || sodium != null && !sodium!!.isEmpty()
-                || zinc != null && !zinc!!.isEmpty())
-    }
+    fun hasMinerals(): Boolean =
+        listOfNotNull(calcium, iron, magnesium, phosphorus, potassium, sodium, zinc)
+            .any{ it.isNotEmpty() }
 
-    fun hasVitamins(): Boolean {
-        return (vitC != null && !vitC!!.isEmpty() || thiamin != null && !thiamin!!.isEmpty() || riboflavin != null && !riboflavin!!.isEmpty()
-                || niacin != null && !niacin!!.isEmpty() || vitB6 != null && !vitB6!!.isEmpty() || folate != null && !folate!!.isEmpty()
-                || vitA != null && !vitA!!.isEmpty() || vitE != null && !vitE!!.isEmpty() || vitK != null && !vitK!!.isEmpty())
-    }
+    fun hasVitamins(): Boolean =
+        listOfNotNull(vitC, thiamin, riboflavin, niacin, vitB6, folate, vitA, vitE, vitK)
+            .any{ it.isNotEmpty() }
 
     fun getNearestSeasonDay(rel: CalendarDay): CalendarDay? {
-        return if (startDay1 == null) {
+        return if (isFullYear()) {
             rel
         } else {
             if (existsAt(rel)) {
@@ -128,42 +107,26 @@ data class FoodItem(
     }
 
     fun getNearestSeasonStart(rel: CalendarDay): CalendarDay? {
-        if (startDay1 == null) {
-            return null
-        }
-        val relInDays = rel.month * 30 + rel.day
-        val start1InDays = startDay1!!.month * 30 + startDay1!!.day
+        val startDay1 = CalendarDay.from(startDay1?.date?.withYear(rel.year) ?: return null)
 
-        val retVal1 = if (start1InDays >= relInDays) {
-            CalendarDay.from(rel.year, startDay1!!.month, startDay1!!.day)
+        val retVal1 = if (startDay1 == rel || startDay1.isAfter(rel)) {
+            startDay1
         } else {
-            CalendarDay.from(rel.year + 1, startDay1!!.month, startDay1!!.day)
+            CalendarDay.from(startDay1.date.withYear(startDay1.year + 1))
         }
 
-        if (startDay2 == null) {
-            return retVal1
-        }
+        val startDay2 = CalendarDay.from(startDay2?.date?.withYear(rel.year) ?: return retVal1)
 
-        val start2InDays = startDay2!!.month * 30 + startDay2!!.day
-        val retVal2 = if (start2InDays >= relInDays) {
-            CalendarDay.from(rel.year, startDay2!!.month, startDay2!!.day)
+        val retVal2 = if (startDay2 == rel || startDay2.isAfter(rel)) {
+            startDay2
         } else {
-            CalendarDay.from(rel.year + 1, startDay2!!.month, startDay2!!.day)
+            CalendarDay.from(startDay2.date.withYear(startDay2.year + 1))
         }
 
-        val start1Diff = start1InDays - relInDays
-        val start2Diff = start2InDays - relInDays
-
-        return if (start1Diff >= 0 && start2Diff >= 0) {
-            if (start1Diff < start2Diff) {
-                retVal1
-            } else {
-                retVal2
-            }
-        } else if (start1Diff < 0 && start2Diff >= 0) {
+        return if (retVal1.isBefore(retVal2)) {
+            retVal1
+        } else {
             retVal2
-        } else {
-            CalendarDay.from(rel.year + 1, startDay1!!.month, startDay1!!.day)
         }
     }
 
@@ -172,23 +135,23 @@ data class FoodItem(
             return null
         }
         val relInDays = rel.month * 30 + rel.day
-        val end1InDays = endDay1!!.month * 30 + endDay1!!.day
+        val end1InDays = endDay1.month * 30 + endDay1.day
 
         val retVal1 = if (end1InDays >= relInDays) {
-            CalendarDay.from(rel.year, endDay1!!.month, endDay1!!.day)
+            CalendarDay.from(rel.year, endDay1.month, endDay1.day)
         } else {
-            CalendarDay.from(rel.year + 1, endDay1!!.month, endDay1!!.day)
+            CalendarDay.from(rel.year + 1, endDay1.month, endDay1.day)
         }
 
         if (endDay2 == null) {
             return retVal1
         }
 
-        val end2InDays = endDay2!!.month * 30 + endDay2!!.day
+        val end2InDays = endDay2.month * 30 + endDay2.day
         val retVal2 = if (end2InDays >= relInDays) {
-            CalendarDay.from(rel.year, endDay2!!.month, endDay2!!.day)
+            CalendarDay.from(rel.year, endDay2.month, endDay2.day)
         } else {
-            CalendarDay.from(rel.year + 1, endDay2!!.month, endDay2!!.day)
+            CalendarDay.from(rel.year + 1, endDay2.month, endDay2.day)
         }
 
         val start1Diff = end1InDays - relInDays
@@ -203,12 +166,16 @@ data class FoodItem(
         } else if (start1Diff < 0 && start2Diff >= 0) {
             retVal2
         } else {
-            CalendarDay.from(rel.year + 1, endDay1!!.month, endDay1!!.day)
+            CalendarDay.from(rel.year + 1, endDay1.month, endDay1.day)
         }
     }
 
+    private fun isFullYear() = startDay1 == null || endDay1 == null
+
     companion object {
 
-        val DATE_FORMAT_TEXT = SimpleDateFormat("d MMMM", Locale.getDefault())
+        @SuppressLint("ConstantLocale")
+        val DATE_FORMAT_TEXT: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("d MMMM", Locale.getDefault())
     }
 }

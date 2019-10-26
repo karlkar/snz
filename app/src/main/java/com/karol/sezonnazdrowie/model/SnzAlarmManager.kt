@@ -11,7 +11,9 @@ import com.karol.sezonnazdrowie.data.FoodItem
 import com.karol.sezonnazdrowie.data.SnzDatabase
 import com.karol.sezonnazdrowie.view.controls.TimePreference
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import java.util.Calendar
+import org.threeten.bp.LocalDate
+import org.threeten.bp.ZoneId
+import org.threeten.bp.temporal.ChronoField
 import java.util.concurrent.Executors
 
 object SnzAlarmManager {
@@ -55,7 +57,7 @@ object SnzAlarmManager {
         val notiHour = TimePreference.getHour(notiTime!!)
         val notiMinute = TimePreference.getMinute(notiTime)
 
-        val today = Calendar.getInstance()
+        val today = LocalDate.now()
         startMap.entries.forEach {
             val strBuilder = StringBuilder()
             for (item in it.value) {
@@ -85,23 +87,23 @@ object SnzAlarmManager {
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
-                    val calendar = it.key.calendar.clone() as Calendar
-                    with(calendar) {
-                        set(Calendar.YEAR, today.get(Calendar.YEAR))
-                        add(Calendar.DAY_OF_MONTH, -dayDiff)
-                        if (before(today)) {
-                            add(Calendar.YEAR, 1)
+                    val localDate = it.key.date
+                    with(localDate) {
+                        withYear(today.get(ChronoField.YEAR))
+                        minusDays(dayDiff.toLong())
+                        if (isBefore(today)) {
+                            plusYears(1)
                         }
-                        set(Calendar.HOUR_OF_DAY, notiHour)
-                        set(Calendar.MINUTE, notiMinute)
-                        set(Calendar.SECOND, 0)
                     }
 
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
+                    alarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+                        alarmIntent
+                    )
                     Log.d(
                         TAG,
-                        "setAlarms: Start Alarm set @ " +
-                                "${calendar.get(Calendar.DAY_OF_MONTH)}.${calendar.get(Calendar.MONTH)}"
+                        "setAlarms: Start Alarm set @ ${localDate.dayOfMonth}.${localDate.month}"
                     )
                 }
             }
@@ -151,23 +153,23 @@ object SnzAlarmManager {
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
-                    val calendar = it.key.calendar.clone() as Calendar
-                    with(calendar) {
-                        set(Calendar.YEAR, today.get(Calendar.YEAR))
-                        add(Calendar.DAY_OF_MONTH, -dayDiff)
-                        if (before(today)) {
-                            add(Calendar.YEAR, 1)
+                    val localDate = it.key.date
+                    with(localDate) {
+                        withYear(today.get(ChronoField.YEAR))
+                        minusDays(dayDiff.toLong())
+                        if (isBefore(today)) {
+                            plusYears(1)
                         }
-                        set(Calendar.HOUR_OF_DAY, notiHour)
-                        set(Calendar.MINUTE, notiMinute)
-                        set(Calendar.SECOND, 0)
                     }
 
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
+                    alarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+                        alarmIntent
+                    )
                     Log.d(
                         TAG,
-                        "setAlarms: End Alarm set @ " +
-                                "${calendar.get(Calendar.DAY_OF_MONTH)}.${calendar.get(Calendar.MONTH)}"
+                        "setAlarms: End Alarm set @ ${localDate.dayOfMonth}.${localDate.month}"
                     )
                 }
             }

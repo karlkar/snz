@@ -46,7 +46,8 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.2.0-alpha01'
 
-    implementation 'com.prolificinteractive:material-calendarview:1.4.3'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
 
     implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-ads:18.2.0'
