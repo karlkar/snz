@@ -68,11 +68,11 @@ class CalendarFragment : Fragment(), LayoutContainer {
         appbar_layout.setExpanded(true, true)
 
         val currentDay = calendarView.currentDate
-        val properDay = foodItem.getNearestSeasonDay(currentDay)
-        if (properDay == null || currentDay.month == properDay.month) {
+        val properDay = foodItem.getNearestSeasonDay(currentDay.date)
+        if (properDay == null || currentDay.month == properDay.month.value) {
             calendarView.invalidateDecorators()
         } else {
-            calendarView.setCurrentDate(properDay, true)
+            calendarView.setCurrentDate(CalendarDay.from(properDay), true)
         }
     }
 
@@ -264,7 +264,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
     private inner class SeasonDayDecorator : DayViewDecorator {
 
         override fun shouldDecorate(day: CalendarDay): Boolean =
-            day.month == currentMonth && selectedFoodItem?.existsAt(day) == true
+            day.month == currentMonth && selectedFoodItem?.existsAt(day.date) == true
 
         override fun decorate(view: DayViewFacade) {
             view.setSelectionDrawable(
@@ -279,7 +279,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
     private inner class SeasonOuterDayDecorator : DayViewDecorator {
 
         override fun shouldDecorate(day: CalendarDay): Boolean =
-            day.month != currentMonth && selectedFoodItem?.existsAt(day) == true
+            day.month != currentMonth && selectedFoodItem?.existsAt(day.date) == true
 
         override fun decorate(view: DayViewFacade) {
             view.setSelectionDrawable(

@@ -1,7 +1,8 @@
 package com.karol.sezonnazdrowie.data
 
 import android.annotation.SuppressLint
-import com.prolificinteractive.materialcalendarview.CalendarDay
+import org.threeten.bp.LocalDate
+import org.threeten.bp.MonthDay
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
 
@@ -11,10 +12,10 @@ data class FoodItem(
     val conjugatedName: String? = null,
     val image: String? = null,
     // dates
-    val startDay1: CalendarDay? = null,
-    val endDay1: CalendarDay? = null,
-    val startDay2: CalendarDay? = null,
-    val endDay2: CalendarDay? = null,
+    val startDay1: MonthDay? = null,
+    val endDay1: MonthDay? = null,
+    val startDay2: MonthDay? = null,
+    val endDay2: MonthDay? = null,
     // other texts
     val desc: String? = null,
     val link: String? = null,
@@ -50,31 +51,30 @@ data class FoodItem(
 
     val nearestSeasonString: String
         get() {
-            val today = CalendarDay.today()
+            val today = LocalDate.now()
             val start = getNearestSeasonStart(today) ?: return ""
             val end = getNearestSeasonEnd(today) ?: return ""
-            val startDayStr = DATE_FORMAT_TEXT.format(start.date)
-            val endDayStr = DATE_FORMAT_TEXT.format(end.date)
+            val startDayStr = DATE_FORMAT_TEXT.format(start)
+            val endDayStr = DATE_FORMAT_TEXT.format(end)
             return "$startDayStr - $endDayStr"
         }
 
-    fun existsAt(date: CalendarDay): Boolean {
+    fun existsAt(date: LocalDate): Boolean {
         if (isFullYear()) return true
-        val relDate = CalendarDay.from(date.date.withYear(1970))
 
-        val isInFirstRange = isDateInRange(relDate, startDay1!!, endDay1!!)
+        val isInFirstRange = isDateInRange(MonthDay.from(date), startDay1!!, endDay1!!)
         if (isInFirstRange) return true
 
         if (startDay2 == null || endDay2 == null) return false
 
-        return isDateInRange(relDate, startDay2, endDay2)
+        return isDateInRange(MonthDay.from(date), startDay2, endDay2)
     }
 
-    private fun isDateInRange(date: CalendarDay, start: CalendarDay, end: CalendarDay): Boolean {
-        return if (start == end || start.isBefore(end)) {
-            date.isInRange(start, end)
+    private fun isDateInRange(date: MonthDay, start: MonthDay, end: MonthDay): Boolean {
+        return if (start <= end) {
+            date.isAfter(start) && date.isBefore(end)
         } else {
-            !date.isInRange(end, start)
+            date.isAfter(start) || date.isBefore(end)
         }
     }
 
@@ -94,7 +94,7 @@ data class FoodItem(
         listOfNotNull(vitC, thiamin, riboflavin, niacin, vitB6, folate, vitA, vitE, vitK)
             .any{ it.isNotEmpty() }
 
-    fun getNearestSeasonDay(rel: CalendarDay): CalendarDay? {
+    fun getNearestSeasonDay(rel: LocalDate): LocalDate? {
         return if (isFullYear()) {
             rel
         } else {
@@ -106,67 +106,38 @@ data class FoodItem(
         }
     }
 
-    fun getNearestSeasonStart(rel: CalendarDay): CalendarDay? {
-        val startDay1 = CalendarDay.from(startDay1?.date?.withYear(rel.year) ?: return null)
-
-        val retVal1 = if (startDay1 == rel || startDay1.isAfter(rel)) {
-            startDay1
+    private fun MonthDay.findFirstOccurrenceAfter(date: LocalDate): LocalDate {
+        val localDate = this.atYear(date.year)
+        return if (localDate >= date) {
+            localDate
         } else {
-            CalendarDay.from(startDay1.date.withYear(startDay1.year + 1))
+            localDate.plusYears(1)
         }
+    }
 
-        val startDay2 = CalendarDay.from(startDay2?.date?.withYear(rel.year) ?: return retVal1)
+    fun getNearestSeasonStart(rel: LocalDate): LocalDate? {
+        if (isFullYear()) return null
 
-        val retVal2 = if (startDay2 == rel || startDay2.isAfter(rel)) {
-            startDay2
-        } else {
-            CalendarDay.from(startDay2.date.withYear(startDay2.year + 1))
-        }
+        val retVal1 = startDay1!!.findFirstOccurrenceAfter(rel)
+        val retVal2 = startDay2?.findFirstOccurrenceAfter(rel) ?: return retVal1
 
-        return if (retVal1.isBefore(retVal2)) {
+        return if (retVal1 <= retVal2) {
             retVal1
         } else {
             retVal2
         }
     }
 
-    fun getNearestSeasonEnd(rel: CalendarDay): CalendarDay? {
-        if (endDay1 == null) {
-            return null
-        }
-        val relInDays = rel.month * 30 + rel.day
-        val end1InDays = endDay1.month * 30 + endDay1.day
+    fun getNearestSeasonEnd(rel: LocalDate): LocalDate? {
+        if (isFullYear()) return null
 
-        val retVal1 = if (end1InDays >= relInDays) {
-            CalendarDay.from(rel.year, endDay1.month, endDay1.day)
+        val retVal1 = endDay1!!.findFirstOccurrenceAfter(rel)
+        val retVal2 = endDay2?.findFirstOccurrenceAfter(rel) ?: return retVal1
+
+        return if (retVal1 <= retVal2) {
+            retVal1
         } else {
-            CalendarDay.from(rel.year + 1, endDay1.month, endDay1.day)
-        }
-
-        if (endDay2 == null) {
-            return retVal1
-        }
-
-        val end2InDays = endDay2.month * 30 + endDay2.day
-        val retVal2 = if (end2InDays >= relInDays) {
-            CalendarDay.from(rel.year, endDay2.month, endDay2.day)
-        } else {
-            CalendarDay.from(rel.year + 1, endDay2.month, endDay2.day)
-        }
-
-        val start1Diff = end1InDays - relInDays
-        val start2Diff = end2InDays - relInDays
-
-        return if (start1Diff >= 0 && start2Diff >= 0) {
-            if (start1Diff < start2Diff) {
-                retVal1
-            } else {
-                retVal2
-            }
-        } else if (start1Diff < 0 && start2Diff >= 0) {
             retVal2
-        } else {
-            CalendarDay.from(rel.year + 1, endDay1.month, endDay1.day)
         }
     }
 

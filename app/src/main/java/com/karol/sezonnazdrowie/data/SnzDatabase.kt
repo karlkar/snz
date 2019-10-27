@@ -1,46 +1,44 @@
 package com.karol.sezonnazdrowie.data
 
-import com.prolificinteractive.materialcalendarview.CalendarDay
+import org.threeten.bp.LocalDate
+import org.threeten.bp.MonthDay
+import org.threeten.bp.Period
 import java.util.Comparator
 
 class SnzDatabase {
 
-    init {
-        populate()
-    }
+    private val currentFruitsCache = mutableMapOf<LocalDate, List<FoodItem>>()
+    private val currentVegetablesCache = mutableMapOf<LocalDate, List<FoodItem>>()
+    private val incomingCache = mutableMapOf<LocalDate, List<FoodItem>>()
 
-    private val currentFruitsCache = mutableMapOf<CalendarDay, List<FoodItem>>()
-    private val currentVegetablesCache = mutableMapOf<CalendarDay, List<FoodItem>>()
-    private val incomingCache = mutableMapOf<CalendarDay, List<FoodItem>>()
-
-    private val allItems = mutableListOf<FoodItem>()
+    private val allItems = populate()
 
     val currentFruits: List<FoodItem>
         get() {
-            val today = CalendarDay.today()
+            val today = LocalDate.now()
             return currentFruitsCache[today]
                 ?: allFruits.filter { it.existsAt(today) }.also { currentFruitsCache[today] = it }
         }
 
     val currentVegetables: List<FoodItem>
         get() {
-            val today = CalendarDay.today()
+            val today = LocalDate.now()
             return currentVegetablesCache[today]
                 ?: allVegetables.filter { it.existsAt(today) }.also {
                     currentVegetablesCache[today] = it
                 }
         }
 
-    private fun isDayDiffSmallerThanLimit(seasonStart: CalendarDay, today: CalendarDay): Boolean {
-        val daysDiff = seasonStart.date.dayOfYear - today.date.dayOfYear
+    private fun isDayDiffSmallerThanLimit(seasonStart: MonthDay, today: LocalDate): Boolean {
+        val daysDiff = Period.between(seasonStart.atYear(today.year), today).days
         return daysDiff in 0 until INCOMING_SEASON_DAYS_DIFF
     }
 
-    private fun FoodItem.seasonStartsSoon(today: CalendarDay): Boolean =
+    private fun FoodItem.seasonStartsSoon(today: LocalDate): Boolean =
         startDay1?.let { isDayDiffSmallerThanLimit(it, today) } ?: false
                 || startDay2?.let { isDayDiffSmallerThanLimit(it, today) } ?: false
 
-    private class FoodItemStartDayComparator(private val today: CalendarDay) :
+    private class FoodItemStartDayComparator(private val today: LocalDate) :
         Comparator<FoodItem> {
 
         override fun compare(lhs: FoodItem?, rhs: FoodItem?): Int {
@@ -62,7 +60,7 @@ class SnzDatabase {
 
     val incomingItems: List<FoodItem>
         get() {
-            val today = CalendarDay.today()
+            val today = LocalDate.now()
             incomingCache[today]?.let { return it }
 
             val everything = mutableListOf(*allFruits.toTypedArray(), *allVegetables.toTypedArray())
@@ -83,15 +81,15 @@ class SnzDatabase {
 
     fun getItem(itemName: String): FoodItem = allItems.first { it.name == itemName }
 
-    private fun populate() {
-        val items = listOf(
+    private fun populate(): List<FoodItem> {
+        return listOf(
             FoodItem(
                 true,
                 "AGREST",
                 "agrest",
                 "agrest",
-                CalendarDay.from(1970, 6, 1),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(5, 1),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 "Agrest jest bogaty w błonnik pokarmowy oraz kwasy: jabłkowy i cytrynowy, które wspomagają trawienie. Ponadto zawiera znaczne ilości witaminy C oraz wapń, żelazo, magnez, fosfor i potas.",
@@ -124,8 +122,8 @@ class SnzDatabase {
                 "ARBUZ",
                 "arbuza",
                 "arbuz1",
-                CalendarDay.from(1970, 8, 15),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(7, 15),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 "Arbuz doskonale nawadnia, ponad 90% masy całego owocu stanowi woda. Ponadto zawiera dużo witamin i minerałów, głównie witaminę A, magnez, fosfor, potas. Z plastrem 300 g (plaster 5 cm, arbuz o średnicy 30 cm) dostarczymy organizmowi 84 µg witaminy A, to już 1/10 dziennego zapotrzebowania, a kto poprzestanie na jednym plastrze?",
@@ -159,32 +157,32 @@ class SnzDatabase {
                 "ARONIA",
                 "aronię",
                 "aronia",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 10, 30)
+                MonthDay.of(8, 1),
+                MonthDay.of(9, 30)
             ),
             FoodItem(
                 true,
                 "BERBERYS",
                 "berberysa",
                 "berberys",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 31)
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 31)
             ),
             FoodItem(
                 true,
                 "BORÓWKA AMERYKAŃSKA",
                 "borówkę amerykańską",
                 "borowka",
-                CalendarDay.from(1970, 8, 15),
-                CalendarDay.from(1970, 10, 30)
+                MonthDay.of(7, 15),
+                MonthDay.of(9, 30)
             ),
             FoodItem(
                 true,
                 "BRZOSKWINIA",
                 "brzoskwinię",
                 "brzoskwinia1",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 10, 30),
+                MonthDay.of(7, 1),
+                MonthDay.of(9, 30),
                 null,
                 null,
                 null,
@@ -218,16 +216,16 @@ class SnzDatabase {
                 "BRUSZNICA BORÓWKA",
                 "brusznicę borówkę",
                 "brusznica_borowka",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 31)
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 31)
             ),
             FoodItem(
                 true,
                 "CZARNY BEZ",
                 "czarny bez",
                 "czarny_bez",
-                CalendarDay.from(1970, 9, 15),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(8, 15),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 null,
@@ -259,8 +257,8 @@ class SnzDatabase {
                 "CZEREŚNIE",
                 "czereśnie",
                 "czeresnia1",
-                CalendarDay.from(1970, 7, 15),
-                CalendarDay.from(1970, 9, 15),
+                MonthDay.of(6, 15),
+                MonthDay.of(8, 15),
                 null,
                 null,
                 "Czereśnie są bogatym źródłem antyoksydantów, które chronią nas przed wolnymi rodnikami, kwasów owocowych, witamin i soli mineralnych. Są także dobrym źródłem jodu, nie ustępują w tym morskim rybom. Polecane są szczególnie osobom, którym doskwiera dna moczanowa, ponieważ spożywanie czereśni zmniejsza ilość kwasu moczowego we krwi. ",
@@ -294,24 +292,24 @@ class SnzDatabase {
                 "DEREŃ",
                 "dereń",
                 "deren",
-                CalendarDay.from(1970, 9, 15),
-                CalendarDay.from(1970, 10, 30)
+                MonthDay.of(8, 15),
+                MonthDay.of(9, 30)
             ),
             FoodItem(
                 true,
                 "GŁÓG",
                 "głóg",
                 "glog",
-                CalendarDay.from(1970, 9, 15),
-                CalendarDay.from(1970, 11, 31)
+                MonthDay.of(8, 15),
+                MonthDay.of(10, 31)
             ),
             FoodItem(
                 true,
                 "JAGODA CZARNA",
                 "czarną jagodę",
                 "jagody2",
-                CalendarDay.from(1970, 7, 1),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(6, 1),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 "Jagody bogate są głównie w błonnik i antyoksydanty. Dzięki dużej zawartości garbników uszczelniają błony śluzowe żołądka, neutralizują szkodliwe produkty przemiany materii i spowalniają ruchy robaczkowe jelit. Sok z jagód wspomaga organizm podczas zatrucia pokarmowego, gdyż wychwytuje z organizmu wszelkie toksyny.",
@@ -345,8 +343,8 @@ class SnzDatabase {
                 "JEŻYNY",
                 "jeżyny",
                 "jezyna2",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(7, 1),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 null,
@@ -380,8 +378,8 @@ class SnzDatabase {
                 "MALINY",
                 "maliny",
                 "malina1",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 10, 30),
+                MonthDay.of(7, 1),
+                MonthDay.of(9, 30),
                 null,
                 null,
                 null,
@@ -415,16 +413,16 @@ class SnzDatabase {
                 "MIRABELKI",
                 "mirabelki",
                 "mirabelka1",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 10, 30)
+                MonthDay.of(8, 1),
+                MonthDay.of(9, 30)
             ),
             FoodItem(
                 true,
                 "MORELE",
                 "morele",
                 "morela",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(7, 1),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 null,
@@ -458,8 +456,8 @@ class SnzDatabase {
                 "MORWA BIAŁA I CZARNA",
                 "morwę białą i czarną",
                 "morwa",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(7, 1),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 null,
@@ -493,8 +491,8 @@ class SnzDatabase {
                 "NEKTARYNKI",
                 "nektarynki",
                 "nektarynka1",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 10, 30),
+                MonthDay.of(7, 1),
+                MonthDay.of(9, 30),
                 null,
                 null,
                 null,
@@ -528,8 +526,8 @@ class SnzDatabase {
                 "PIGWA",
                 "pigwę",
                 "pigwa1",
-                CalendarDay.from(1970, 10, 1),
-                CalendarDay.from(1970, 12, 30),
+                MonthDay.of(9, 1),
+                MonthDay.of(11, 30),
                 null,
                 null,
                 "Pigwa zawiera witaminę C, garbniki, pektyny i olejek lotny.",
@@ -561,8 +559,8 @@ class SnzDatabase {
                 "PORZECZKA CZARNA",
                 "czarną porzeczkę",
                 "czarna_porzeczka",
-                CalendarDay.from(1970, 7, 15),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(6, 15),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 "Czarna porzeczka jest skarbnicą witaminy C, już 50 g owoców pokrywa dzienne zapotrzebowanie na nią u osoby dorosłej. Owoce czarnej porzeczki bogate są także w żelazo, pektyny (węglowodany o żelujących właściwościach, wspomagające odchudzanie) oraz liczne antyoksydanty.",
@@ -595,8 +593,8 @@ class SnzDatabase {
                 "PORZECZKA BIAŁA I CZERWONA",
                 "białą i czerwoną porzeczkę",
                 "porzeczka1",
-                CalendarDay.from(1970, 7, 15),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(6, 15),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 "Porzeczka dostarcza nam duże ilości błonnika, aż 4,3 g /100g owocu. Jest bogata w witaminę C, witaminę K i żelazo. W 100g owoców znajduje się 1mg żelaza, to 1/10 zapotrzebowania dorosłego mężczyzny i 1/18 zapotrzebowania dorosłej kobiety. Dzięki dużej zawartości polifenoli, porzeczki zmniejszają bóle miesiączkowe i towarzyszące im skurcze.",
@@ -630,8 +628,8 @@ class SnzDatabase {
                 "POZIOMKI",
                 "poziomki",
                 "poziomka1",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(7, 1),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 "Poziomki podnoszą odporność organizmu, już około 130g tych owoców wystarczy, aby pokryć dzienne zapotrzebowanie dorosłego człowieka na witaminę C. Zawierają antyoksydanty (karotenoidy), które zwalczają wolne rodniki i garbniki (katechiny, ellagotaniny), które mają właściwości ściągające, działają przeciwbiegunkowo, przeciwzapalnie i przeciwkrwotocznie. "
@@ -641,8 +639,8 @@ class SnzDatabase {
                 "ROKITNIK",
                 "rokitnika",
                 "rokitnik",
-                CalendarDay.from(1970, 10, 1),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(9, 1),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 "Rokitnik zawiera mnóstwo substancji, które mają pozytywny wpływ na zdrowie jak: antyoksydanty, flawonoidy, aminokwasy, a także nienasycone kwasy tłuszczowe, mikroelementy (m. in. potas, żelazo, fosfor, mangan, bor, wapń i krzem) oraz witaminy (A, B, C, D, E, K, P) i prowitaminy. Owoce rokitnika zaraz po dzikiej róży zawierają najwięcej witaminy C, około 200mg/100g. "
@@ -652,8 +650,8 @@ class SnzDatabase {
                 "DZIKA RÓŻA",
                 "dziką różę",
                 "dzika_roza",
-                CalendarDay.from(1970, 9, 15),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(8, 15),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 "Owoce dzikiej róży zawierają rekordowe ilości witaminy C - mają jej około 15 razy więcej niż cytrusy. Jest w nich też wiele innych witamin - A, B1, B2, E, K, kwas foliowy, karotenoidy, flawonoidy, kwasy organiczne, garbniki, pektyny. Owoce dzikiej róży stosuje się w nadciśnieniu, chorobach serca, wątroby i jako lek witaminowy. "
@@ -663,8 +661,8 @@ class SnzDatabase {
                 "ŚLIWKI",
                 "śliwki",
                 "sliwka1",
-                CalendarDay.from(1970, 9, 15),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(8, 15),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Śliwki znane są ze swoich właściwości przeczyszczających, za sprawą dużej zawartości pektyn (rodzaj błonnika). Zawierają także polifenole, w tym katechiny i kwas chlorogenowy, dzięki którym dieta obfitująca w śliwki ma działanie antynowotworowe oraz przeciwmiażdżycowe.",
@@ -698,8 +696,8 @@ class SnzDatabase {
                 "TARNINA ŚLIWA",
                 "tarninę śliwę",
                 "tarnina_sliwa",
-                CalendarDay.from(1970, 10, 1),
-                CalendarDay.from(1970, 12, 30),
+                MonthDay.of(9, 1),
+                MonthDay.of(11, 30),
                 null,
                 null,
                 "Tarnina śliwa swoją ciemnogranatową barwę zawdzięcza flawonoidom i antocyjanom, przeciwutleniaczom które chronią nas przed wolnymi rodnikami. Za sprawą zawartych w owocach tarniny garbników, mają one działanie przeciwbiegunkowe. Dodatkowo spowalniają ruchy robaczkowe jelit oraz wykazują działanie przeciwzapalne i antybakteryjne."
@@ -709,8 +707,8 @@ class SnzDatabase {
                 "TRUSKAWKI",
                 "truskawki",
                 "truskawka1",
-                CalendarDay.from(1970, 7, 1),
-                CalendarDay.from(1970, 7, 30),
+                MonthDay.of(6, 1),
+                MonthDay.of(6, 30),
                 null,
                 null,
                 "Truskawki podnoszą odporność organizmu, już około 130g tych owoców wystarczy, aby pokryć dzienne zapotrzebowanie dorosłego człowieka na witaminę C. Zawarte w nich pektyny pobudzają pracę jelit, a kwasy organiczne regulują trawienie i przyśpieszają przemianę materii. Dodatkowo truskawki mają tylko 32 kcal/100g.",
@@ -744,8 +742,8 @@ class SnzDatabase {
                 "WINOGRONA",
                 "winogrona",
                 "winogrona1",
-                CalendarDay.from(1970, 9, 15),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(8, 15),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 "Winogrona zawierają antyoksydanty, które chronią organizm m. in. przed nowotworami i procesami starzenia, gdyż neutralizują wolne rodniki. Dostarczają jodu, który jest niezbędny dla funkcjonowania tarczycy, oraz są zasadotwórcze, co pomaga w pozbyciu się nagromadzonych w organizmie kwasów.",
@@ -779,8 +777,8 @@ class SnzDatabase {
                 "WIŚNIE",
                 "wiśnie",
                 "wisnia1",
-                CalendarDay.from(1970, 7, 1),
-                CalendarDay.from(1970, 8, 31),
+                MonthDay.of(6, 1),
+                MonthDay.of(7, 31),
                 null,
                 null,
                 "Wiśnie zawierają dużo antyoksydantów (400 mg/100 g), które chronią organizm m. in. przed nowotworami i procesem starzenia, gdyż neutralizują wolne rodniki. Są także źródłem błonnika i zawierają stosunkowo niewiele kalorii.",
@@ -814,8 +812,8 @@ class SnzDatabase {
                 "ŻURAWINA",
                 "żurawinę",
                 "zurawina1",
-                CalendarDay.from(1970, 10, 1),
-                CalendarDay.from(1970, 12, 15),
+                MonthDay.of(9, 1),
+                MonthDay.of(11, 15),
                 null,
                 null,
                 "Żurawina znana jest z dobrego wpływu na drogi moczowe, ma działanie przeciwbakteryjne i przeciwgrzybicze. Zawarte w niej przeciwutleniacze (procyjanidyny i fruktoza) uniemożliwiają przyczepianie się bakterii (w tym m.in. E.coli) do ścian nabłonka dróg moczowych i pęcherza, hamując tym samym ich rozwój. Żurawina jest także źródłem witaminy E i błonnika.",
@@ -990,8 +988,8 @@ class SnzDatabase {
                 "BAKŁAŻAN",
                 "bakłażan",
                 "baklazan1",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Bakłażany mają mało kalorii i dużą zawartość błonnika, przez co zalecane są osobom na diecie redukcyjnej. Niestety nie wszystkim, ponieważ są ciężkostrawne.",
@@ -1025,8 +1023,8 @@ class SnzDatabase {
                 "BOĆWINA",
                 "boćwinę",
                 "bocwina",
-                CalendarDay.from(1970, 7, 1),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(6, 1),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 "Boćwina bogata jest w żelazo, magnez, witaminę A, C, E oraz K. 100 gramów boćwiny pokrywa niemal połowę dziennego zapotrzebowania osoby dorosłej na witaminę A oraz C.",
@@ -1060,8 +1058,8 @@ class SnzDatabase {
                 "BOTWINA",
                 "botwinę",
                 "botwina",
-                CalendarDay.from(1970, 5, 15),
-                CalendarDay.from(1970, 8, 31),
+                MonthDay.of(4, 15),
+                MonthDay.of(7, 31),
                 null,
                 null,
                 "Botwina zawiera dużo witamin, zwłaszcza A i C, żelaza i wapnia. Ze względu na zawartość żelaza jest wskazana szczególnie dla wegetarian. Botwina pobudza apetyt i koi nerwy. Jest lekkostrawna i odświeżająca, dlatego warto ją jeść podczas infekcji."
@@ -1071,8 +1069,8 @@ class SnzDatabase {
                 "BÓB",
                 "bób",
                 "bob1",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 9, 31),
+                MonthDay.of(7, 1),
+                MonthDay.of(8, 31),
                 null,
                 null,
                 "Bób zawiera duże ilości kwasu foliowego (ponad 1/3 dziennego zapotrzebowania w 100g bobu), błonnika pokarmowego (ponad 1/4 dziennego zapotrzebowania w 100g bobu), żelazo, cynk, witaminę E, K, B3 i wiele innych witamin i minerałów.",
@@ -1106,8 +1104,8 @@ class SnzDatabase {
                 "BROKUŁY",
                 "brokuły",
                 "brokuly1",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(7, 1),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 "Brokuły zawierają mnóstwo witamin i minerałów, przede wszystkim duże ilości witaminy C (już 100 g tego warzywa pokrywa dzienne zapotrzebowanie osoby dorosłej), witaminy K, witaminę E, A, kwas foliowy, wapń, żelazo, magnez, fosfor, potas, cynk i dużo błonnika.",
@@ -1141,8 +1139,8 @@ class SnzDatabase {
                 "BRUKIEW",
                 "brukiew",
                 "brukiew",
-                CalendarDay.from(1970, 9, 15),
-                CalendarDay.from(1970, 5, 30),
+                MonthDay.of(8, 15),
+                MonthDay.of(4, 30),
                 null,
                 null,
                 null,
@@ -1176,8 +1174,8 @@ class SnzDatabase {
                 "BRUKSELKA",
                 "brukselkę",
                 "brukselka",
-                CalendarDay.from(1970, 11, 1),
-                CalendarDay.from(1970, 4, 15),
+                MonthDay.of(10, 1),
+                MonthDay.of(3, 15),
                 null,
                 null,
                 "Porcja 110 g brukselki pokrywa dzienne zapotrzebowanie osoby dorosłej na witaminę C",
@@ -1211,8 +1209,8 @@ class SnzDatabase {
                 "CEBULA DYMKA",
                 "cebulę dymkę",
                 "cebula_dymka1",
-                CalendarDay.from(1970, 5, 15),
-                CalendarDay.from(1970, 9, 15),
+                MonthDay.of(4, 15),
+                MonthDay.of(8, 15),
                 null,
                 null,
                 "Cebula dymka zawiera dużo żelaza (kilka razy więcej niż zwykła cebula), magnezu, witaminy A, C, E oraz K, a także kwas foliowy.",
@@ -1246,8 +1244,8 @@ class SnzDatabase {
                 "CHRZAN KORZEŃ",
                 "korzeń chrzanu",
                 "chrzan1",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 12, 31),
+                MonthDay.of(7, 1),
+                MonthDay.of(12, 31),
                 null,
                 null,
                 "Chrzan pobudza wydzielanie soków trawiennych, poprawia przemianę materii, zawiera fitoncydy, substancje antybakteryjne, działające na organizm podobnie jak syntetyczne antybiotyki. Zawiera też glukozynolany, które zmniejszają prawdopodobieństwo rozwoju choroby nowotworowej. Chrzan starty zawiera sporo cynku, witaminy C, kwasu foliowego i magnezu.",
@@ -1281,8 +1279,8 @@ class SnzDatabase {
                 "CUKINIA",
                 "cukinię",
                 "cukinia",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(7, 1),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Cukinia jest niskokaloryczna, zawiera dużo witamin i minerałów, między innymi: żelazo, magnez, cynk, witaminy A, C oraz kwas foliowy. ",
@@ -1316,8 +1314,8 @@ class SnzDatabase {
                 "CYKORIA",
                 "cykorię",
                 "cykoria",
-                CalendarDay.from(1970, 11, 1),
-                CalendarDay.from(1970, 3, 28),
+                MonthDay.of(10, 1),
+                MonthDay.of(2, 28),
                 null,
                 null,
                 null,
@@ -1349,8 +1347,8 @@ class SnzDatabase {
                 "DYNIA",
                 "dynię",
                 "dynia3",
-                CalendarDay.from(1970, 9, 15),
-                CalendarDay.from(1970, 4, 31),
+                MonthDay.of(8, 15),
+                MonthDay.of(3, 31),
                 null,
                 null,
                 null,
@@ -1384,8 +1382,8 @@ class SnzDatabase {
                 "ENDYWIA",
                 "endywię",
                 "endywia",
-                CalendarDay.from(1970, 11, 1),
-                CalendarDay.from(1970, 3, 28),
+                MonthDay.of(10, 1),
+                MonthDay.of(2, 28),
                 null,
                 null,
                 null,
@@ -1419,8 +1417,8 @@ class SnzDatabase {
                 "FASOLKA SZPARAGOWA",
                 "fasolkę szapragową",
                 "fasolka_szparagowa",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 10, 30),
+                MonthDay.of(7, 1),
+                MonthDay.of(9, 30),
                 null,
                 null,
                 "Fasolka szparagowa zawiera znaczące ilości błonnika, wapnia, żelaza, magnezu, witaminy C, K i kwasu foliowego, a przy tym jest niskokaloryczna.",
@@ -1454,8 +1452,8 @@ class SnzDatabase {
                 "FENKUŁ",
                 "fenkuł",
                 "fenkul",
-                CalendarDay.from(1970, 8, 15),
-                CalendarDay.from(1970, 10, 30),
+                MonthDay.of(7, 15),
+                MonthDay.of(9, 30),
                 null,
                 null,
                 "Fenkuł bogaty jest w błonnik, wapń, żelazo, witaminy: A, C, E, K oraz kwas foliowy.",
@@ -1489,8 +1487,8 @@ class SnzDatabase {
                 "GROSZEK ZIELONY",
                 "groszek zielony",
                 "groszek1",
-                CalendarDay.from(1970, 6, 1),
-                CalendarDay.from(1970, 9, 15),
+                MonthDay.of(5, 1),
+                MonthDay.of(8, 15),
                 null,
                 null,
                 "Zielony groszek jest źródłem żelaza, magnezu, fosforu, potasu, cynku, witaminy A, C, witamin z grupy B, K, kwasu foliowego oraz błonnika. 100 gramów zielonego groszku pokrywa połowę dziennego zapotrzebowania na witaminę C i K oraz więcej niż 1/5 zapotrzebowania osoby dorosłej na błonnik.",
@@ -1524,8 +1522,8 @@ class SnzDatabase {
                 "JARMUŻ",
                 "jarmuż",
                 "jarmuz1",
-                CalendarDay.from(1970, 11, 15),
-                CalendarDay.from(1970, 3, 28),
+                MonthDay.of(10, 15),
+                MonthDay.of(2, 28),
                 null,
                 null,
                 null,
@@ -1559,8 +1557,8 @@ class SnzDatabase {
                 "KABACZEK",
                 "kabaczek",
                 "kabaczek",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(7, 1),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Kabaczek jest niskokaloryczny, zawiera dużo witamin i minerałów, między innymi: żelazo, magnez, cynk, witaminy A, C oraz kwas foliowy. ",
@@ -1594,8 +1592,8 @@ class SnzDatabase {
                 "KALAFIOR",
                 "kalafior",
                 "kalafior1",
-                CalendarDay.from(1970, 7, 15),
-                CalendarDay.from(1970, 12, 31),
+                MonthDay.of(6, 15),
+                MonthDay.of(12, 31),
                 null,
                 null,
                 "Kalafior jest dobrym źródłem błonnika, witaminy C, witaminy K i kwasu foliowego. Zawiera też wiele innych witamin i minerałów, oraz antyoksydanty.",
@@ -1629,8 +1627,8 @@ class SnzDatabase {
                 "KALAREPA",
                 "kalarepę",
                 "kalarepa1",
-                CalendarDay.from(1970, 7, 1),
-                CalendarDay.from(1970, 4, 31),
+                MonthDay.of(6, 1),
+                MonthDay.of(3, 31),
                 null,
                 null,
                 "Kalarepa zawiera wiele witamin i minerałów, ale szczególnie bogata jest w witaminę C i błonnik. Jest źródłem luteiny, która jest niezbędna do prawidłowego funkcjonowania wzroku, oraz izotiocyjanów i indoli, które wykazują działanie grzybo- i bakteriobójcze. Młodą kalarepę można jeść na surowo, starsza może wywołać bóle żołądka u wrażliwych, dlatego lepiej poddać ją obróbce termicznej.",
@@ -1664,8 +1662,8 @@ class SnzDatabase {
                 "KARCZOCHY",
                 "karczochy",
                 "karczochy",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 null,
@@ -1699,8 +1697,8 @@ class SnzDatabase {
                 "KUKURYDZA",
                 "kukurydzę",
                 "kukurydza1",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 null,
@@ -1734,8 +1732,8 @@ class SnzDatabase {
                 "OGÓREK",
                 "ogórek",
                 "ogorek1",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 10, 15),
+                MonthDay.of(7, 1),
+                MonthDay.of(9, 15),
                 null,
                 null,
                 "Ogórek zawiera przede wszystkim mnóstwo wody, ale i wiele cennych substancji, takich jak przeciwutleniacze, kukurbitacyny (substancje przeciwnowotworowe), flawonoidy, luteinę, kwas mlekowy, oraz witaminy i minerały.",
@@ -1769,8 +1767,8 @@ class SnzDatabase {
                 "PAPRYKA ZIELONA",
                 "paprykę zieloną",
                 "papryka_zielona",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Porcja 110g zielonej papryki (nieduża papryka) pokrywa dzienne zapotrzebowanie osoby dorosłej na witaminę C.",
@@ -1804,8 +1802,8 @@ class SnzDatabase {
                 "PAPRYKA CZERWONA",
                 "paprykę czerwoną",
                 "papryka_czerwona",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Już 70g czerwonej papryki (połówka średniej wielkości papryki) pokrywa dzienne zapotrzebowanie osoby dorosłej na witaminę C.",
@@ -1839,8 +1837,8 @@ class SnzDatabase {
                 "PAPRYKA ŻÓŁTA",
                 "paprykę żółtą",
                 "papryka_zolta",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Już 50g żółtej papryki (połówka niedużej papryki) pokrywa dzienne zapotrzebowanie osoby dorosłej na witaminę C.",
@@ -1907,16 +1905,16 @@ class SnzDatabase {
                 "PATISON",
                 "patison",
                 "patison",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 31)
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 31)
             ),
             FoodItem(
                 false,
                 "PIETRUSZKA NATKA",
                 "natkę pietruszki",
                 "pietruszka_natka2",
-                CalendarDay.from(1970, 5, 1),
-                CalendarDay.from(1970, 12, 30),
+                MonthDay.of(4, 1),
+                MonthDay.of(11, 30),
                 null,
                 null,
                 "Natka pietruszki zawiera ogromne ilości żelaza, dużo witaminy A, C, B3, K, kwasu foliowego, wapnia, magnezu i cynku. Zalecana jest szczególnie osobom z anemią, kamicą moczową, oraz problemami trawiennymi, nie tylko jako przyprawa, ale także jako główny składnik sałatek i koktajli.",
@@ -1950,8 +1948,8 @@ class SnzDatabase {
                 "POMIDORY",
                 "pomidory",
                 "pomidor2",
-                CalendarDay.from(1970, 9, 1),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(8, 1),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 null,
@@ -1985,10 +1983,10 @@ class SnzDatabase {
                 "ROSZPONKA",
                 "roszponkę",
                 "roszponka",
-                CalendarDay.from(1970, 3, 15),
-                CalendarDay.from(1970, 5, 30),
-                CalendarDay.from(1970, 11, 1),
-                CalendarDay.from(1970, 12, 31),
+                MonthDay.of(2, 15),
+                MonthDay.of(4, 30),
+                MonthDay.of(10, 1),
+                MonthDay.of(12, 31),
                 "Roszponka jest bogata w żelazo, wapń, fosfor, potas, witaminę A i C. Pozytywnie wpływa na trawienie oraz wykazuje działanie uspokajające.",
                 "https://ndb.nal.usda.gov/ndb/foods/show/2945?manu=&fgcd",
                 "92.80 g",
@@ -2017,8 +2015,8 @@ class SnzDatabase {
                 "RUKOLA",
                 "rukolę",
                 "rukola1",
-                CalendarDay.from(1970, 6, 15),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(5, 15),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 "Rukola bogata jest w wapń, żelazo, magnez, witaminę A, witaminę K i kwas foliowy. 100g rukoli pokrywa 1/4 dziennego zapotrzebowania na kwas foliowy i ma tylko 25 kcal.",
@@ -2052,10 +2050,10 @@ class SnzDatabase {
                 "RZODKIEWKA",
                 "rzodkiewkę",
                 "rzodkiewka1",
-                CalendarDay.from(1970, 5, 15),
-                CalendarDay.from(1970, 7, 30),
-                CalendarDay.from(1970, 10, 1),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(4, 15),
+                MonthDay.of(6, 30),
+                MonthDay.of(9, 1),
+                MonthDay.of(10, 31),
                 "Rzodkiewka bogata jest w witaminy i minerały, szczególnie w potas i kwas foliowy. Dzięki zawartości związków siarki zapobiega łamaniu włosów i paznokci. Pobudza łaknienie oraz trawienie i ma tylko 16 kcal/100g. ",
                 "https://ndb.nal.usda.gov/ndb/foods/show/3147?fgcd=&manu=&lfacet=&format=&count=&max=35&offset=&sort=&qlookup=radishes+",
                 "95.27 g",
@@ -2087,8 +2085,8 @@ class SnzDatabase {
                 "RZODKIEW BIAŁA, CZARNA, CZERWONA",
                 "rzodkiew białą, czarną, czerwoną",
                 "rzodkiew1",
-                CalendarDay.from(1970, 7, 15),
-                CalendarDay.from(1970, 4, 31),
+                MonthDay.of(6, 15),
+                MonthDay.of(3, 31),
                 null,
                 null,
                 "Rzodkiew jest niskokaloryczna, zawiera tylko 14 kcal w 100g. Do tego bogata jest w błonnik, żelazo i witaminę C.",
@@ -2119,8 +2117,8 @@ class SnzDatabase {
                 "RZEPA CZARNA",
                 "czarną rzepę",
                 "czarna_rzepa",
-                CalendarDay.from(1970, 8, 1),
-                CalendarDay.from(1970, 4, 15),
+                MonthDay.of(7, 1),
+                MonthDay.of(3, 15),
                 null,
                 null,
                 "Korzeń rzepy zawiera związki siarkowe (rafanina i rafanol) o działaniu odkażającym i przeciwłojotokowym. Zawiera cukry, enzymy, duże ilości witaminy C, B1 i B2, PP oraz sole mineralne- głównie potasu, żelaza, wapnia, magnezu, siarki i fosforu. Rzepa jest bogata w fitoncydy, czyli substancje podobne do antybiotyków, które hamują rozwój mikroorganizmów chorobotwórczych.  Zwiększa także wydzielanie soków trawiennych, działa żółciopędnie i przeciwbakteryjnie w przewodzie pokarmowym."
@@ -2130,18 +2128,18 @@ class SnzDatabase {
                 "SKORZONERA",
                 "skorzonerę",
                 "skorzonera",
-                CalendarDay.from(1970, 10, 15),
-                CalendarDay.from(1970, 4, 31)
+                MonthDay.of(9, 15),
+                MonthDay.of(3, 31)
             ),
             FoodItem(
                 false,
                 "SAŁATY",
                 "sałatę",
                 "salata",
-                CalendarDay.from(1970, 5, 15),
-                CalendarDay.from(1970, 7, 30),
-                CalendarDay.from(1970, 10, 1),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(4, 15),
+                MonthDay.of(6, 30),
+                MonthDay.of(9, 1),
+                MonthDay.of(10, 31),
                 "Sałata zawiera żelazo, znaczne ilości potasu, witaminy A, witaminy K oraz niemałe ilości kwasu foliowego. Zawarty w niej chlorofil ma działanie bakteriobójcze, a  luteina i zeaksantyna chronią przed zwyrodnieniem plamki żółtej.",
                 "https://ndb.nal.usda.gov/ndb/foods/show/3003?fgcd=&manu=&lfacet=&format=&count=&max=35&offset=&sort=&qlookup=lettuces+",
                 "94.98 g",
@@ -2173,8 +2171,8 @@ class SnzDatabase {
                 "SELER-LIŚCIE",
                 "liście selera",
                 "seler_liscie",
-                CalendarDay.from(1970, 7, 1),
-                CalendarDay.from(1970, 11, 31),
+                MonthDay.of(6, 1),
+                MonthDay.of(10, 31),
                 null,
                 null,
                 "Seler naciowy cieszy się ogromną popularnością, szczególnie w dietach redukcyjnych. Zawiera tylko 16 kcal /100 g, ponieważ w ponad 95% składa się z wody, można się więc nim zajadać bez żadnych wyrzutów. Pozostałe 5 % bogate jest w błonnik, witaminy i minerały. ",
@@ -2208,8 +2206,8 @@ class SnzDatabase {
                 "SZCZAW ZWYCZAJNY",
                 "szczaw zwyczajny",
                 "szczaw",
-                CalendarDay.from(1970, 6, 1),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(5, 1),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Szczaw jest niskokaloryczny, zawiera znaczne ilości potasu, wapnia, żelaza, witaminy C, oraz beta-karotenu. Obecne w liściach flawonoidy wykazują silne działanie przeciwutleniające, opóźniające procesy starzenia. Szczaw łagodzi także kaszel i katar, pobudza trawienie, wzmacnia apetyt, pomaga przy schorzeniach serca, usprawnia pracę wątroby oraz woreczka żółciowego. Nie można jednak przesadzać z ilością spożywanego szczawiu ze względu na obecne w nim szczawiany, które mogą odwapniać organizm, a także odkładać się w nerkach i pęcherzu. W związku z tym szczaw należy spożywać z dodatkiem nabiału."
@@ -2219,8 +2217,8 @@ class SnzDatabase {
                 "SZCZYPIOREK",
                 "szczypiorek",
                 "szczypiorek",
-                CalendarDay.from(1970, 5, 15),
-                CalendarDay.from(1970, 11, 15),
+                MonthDay.of(4, 15),
+                MonthDay.of(10, 15),
                 null,
                 null,
                 "Szczypiorek zawiera dużo błonnika, żelaza, magnezu, cynku, witaminy A, C, kwasu foliowego i ogromne ilości witaminy K. Wystarczy około 30 g, aby pokryć dzienną wystarczającą normę spożycia witaminy K.   ",
@@ -2254,8 +2252,8 @@ class SnzDatabase {
                 "SZPARAGI",
                 "szparagi",
                 "szparagi2",
-                CalendarDay.from(1970, 5, 15),
-                CalendarDay.from(1970, 7, 30),
+                MonthDay.of(4, 15),
+                MonthDay.of(6, 30),
                 null,
                 null,
                 "Szparagi są źródłem wielu witamin i minerałów, ale szczególnie bogate są w witaminę E, B3, K, kwas foliowy, żelazo, cynk, fosfor oraz błonnik. Powinny je spożywać szczególnie kobiety ze względu na to, że mają dużo większe zapotrzebowanie na żelazo. Kwas foliowy oraz witamina E spowalniają procesy starzenia i pomagają w regeneracji uszkodzonych komórek.",
@@ -2289,8 +2287,8 @@ class SnzDatabase {
                 "SZPINAK",
                 "szpinak",
                 "szpinak1",
-                CalendarDay.from(1970, 6, 15),
-                CalendarDay.from(1970, 12, 15),
+                MonthDay.of(5, 15),
+                MonthDay.of(11, 15),
                 null,
                 null,
                 "Szpinak zawiera mnóstwo witamin i minerałów. Porcja 100 g pokrywa dzienne zapotrzebowanie na witaminę K, ponad połowę zapotrzebowania na witaminę A, oraz prawie połowę dziennego zapotrzebowania na kwas foliowy u osoby dorosłej. Ponadto dostarcza znaczące ilości witaminy E, witamin z grupy B, witaminy C, wapnia, żelaza, magnezu, fosforu, potasu oraz cynku.",
@@ -2324,8 +2322,8 @@ class SnzDatabase {
                 "TOPINAMBUR",
                 "topinambur",
                 "topinambur1",
-                CalendarDay.from(1970, 11, 1),
-                CalendarDay.from(1970, 12, 30),
+                MonthDay.of(10, 1),
+                MonthDay.of(11, 30),
                 null,
                 null,
                 "Bulwa topinambura dostarcza znaczące ilości żelaza oraz witamin z grupy B.",
@@ -2359,8 +2357,8 @@ class SnzDatabase {
                 "MŁODE ZIEMNIAKI",
                 "młode ziemniaki",
                 "ziemniak1",
-                CalendarDay.from(1970, 7, 1),
-                CalendarDay.from(1970, 8, 31),
+                MonthDay.of(6, 1),
+                MonthDay.of(7, 31),
                 null,
                 null,
                 "Nie doceniany ostatnimi czasy ziemniak dostarcza nam 3.24 mg żelaza/100 g co pokrywa 1/3 dziennego zapotrzebowania dorosłego mężczyzny i prawie 1/5 zapotrzebowania dorosłej kobiety. Ponadto zawiera dużo błonnika i niewiele kalorii.",
@@ -2725,8 +2723,8 @@ class SnzDatabase {
                 "RABARBAR",
                 "rabarbar",
                 "rabarbar1",
-                CalendarDay.from(1970, 5, 1),
-                CalendarDay.from(1970, 7, 30),
+                MonthDay.of(4, 1),
+                MonthDay.of(6, 30),
                 null,
                 null,
                 "Rabarbar jest źródłem błonnika pokarmowego, potasu oraz witaminy K. Pieczony ma działanie przeciwnowotworowe, ponieważ pod wpływem temperatury w roślinie wytwarzają się polifenole. Natomiast korzeń rabarbaru jest znany od wieków jako lekarstwo o właściwościach oczyszczających i dezynfekujących przewód pokarmowy, pobudza także wydzielanie żółci, przez co ułatwia trawienie. Nie można jednak przesadzać z ilością spożywanego rabarbaru ze względu na obecny w nim kwas szczawiowy, który może odwapniać organizm.",
@@ -2756,7 +2754,6 @@ class SnzDatabase {
                 "29.3 µg"
             )
         ).sorted()
-        allItems.addAll(items)
     }
 
     companion object {

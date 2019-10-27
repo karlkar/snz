@@ -72,7 +72,7 @@ class SnzAdapter(
 
     fun enableItemsAt(date: CalendarDay) {
         items.forEach {
-            it.isEnabled = it.existsAt(date)
+            it.isEnabled = it.existsAt(date.date)
         }
         sortItems()
     }

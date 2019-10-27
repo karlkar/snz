@@ -10,10 +10,9 @@ import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.data.FoodItem
 import com.karol.sezonnazdrowie.data.SnzDatabase
 import com.karol.sezonnazdrowie.view.controls.TimePreference
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import org.threeten.bp.LocalDate
-import org.threeten.bp.ZoneId
-import org.threeten.bp.temporal.ChronoField
+import org.threeten.bp.MonthDay
+import org.threeten.bp.OffsetDateTime
 import java.util.concurrent.Executors
 
 object SnzAlarmManager {
@@ -30,6 +29,8 @@ object SnzAlarmManager {
         val allItems = database.allFruits + database.allVegetables
         val startMap = groupByStartDates(allItems)
         val endMap = groupByEndDates(allItems)
+
+        val zoneOffset = OffsetDateTime.now().offset
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx)
 
@@ -76,34 +77,35 @@ object SnzAlarmManager {
                         30 -> ctx.getString(R.string.season_starts_month)
                         else -> ""
                     }
-                    intent = Intent(ctx, Receiver::class.java)
-                    intent.putExtra("type", "start")
-                    intent.putExtra("reqCode", reqCode)
-                    intent.putExtra("title", title)
-                    intent.putExtra("text", strBuilder.toString())
+                    intent = Intent(ctx, Receiver::class.java).apply {
+                        putExtra("type", "start")
+                        putExtra("reqCode", reqCode)
+                        putExtra("title", title)
+                        putExtra("text", strBuilder.toString())
+                    }
                     alarmIntent = PendingIntent.getBroadcast(
                         ctx,
                         reqCode++,
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
-                    val localDate = it.key.date
-                    with(localDate) {
-                        withYear(today.get(ChronoField.YEAR))
+                    val nextNotificationDate = it.key.atYear(today.year)
+                    with(nextNotificationDate) {
                         minusDays(dayDiff.toLong())
                         if (isBefore(today)) {
                             plusYears(1)
                         }
                     }
+                    val notificationTime = nextNotificationDate.atTime(notiHour, notiMinute)
 
                     alarmManager.set(
                         AlarmManager.RTC_WAKEUP,
-                        localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+                        notificationTime.toInstant(zoneOffset).toEpochMilli(),
                         alarmIntent
                     )
                     Log.d(
                         TAG,
-                        "setAlarms: Start Alarm set @ ${localDate.dayOfMonth}.${localDate.month}"
+                        "setAlarms: Start Alarm set @ ${nextNotificationDate.dayOfMonth}.${nextNotificationDate.month}"
                     )
                 }
             }
@@ -153,23 +155,25 @@ object SnzAlarmManager {
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
-                    val localDate = it.key.date
-                    with(localDate) {
-                        withYear(today.get(ChronoField.YEAR))
+
+                    val nextNotificationDate = it.key.atYear(today.year)
+                    with(nextNotificationDate) {
                         minusDays(dayDiff.toLong())
                         if (isBefore(today)) {
                             plusYears(1)
                         }
                     }
+                    val nextNotificationTime = nextNotificationDate
+                        .atTime(notiHour, notiMinute)
 
                     alarmManager.set(
                         AlarmManager.RTC_WAKEUP,
-                        localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+                        nextNotificationTime.toInstant(zoneOffset).toEpochMilli(),
                         alarmIntent
                     )
                     Log.d(
                         TAG,
-                        "setAlarms: End Alarm set @ ${localDate.dayOfMonth}.${localDate.month}"
+                        "setAlarms: End Alarm set @ ${nextNotificationDate.dayOfMonth}.${nextNotificationDate.month}"
                     )
                 }
             }
@@ -192,14 +196,14 @@ object SnzAlarmManager {
         sharedPreferences.edit().putBoolean("pref_alarms_set", true).apply()
     }
 
-    private fun groupByStartDates(items: List<FoodItem>): Map<CalendarDay, List<FoodItem>> {
+    private fun groupByStartDates(items: List<FoodItem>): Map<MonthDay, List<FoodItem>> {
         val itemsByStartDay1 = items.filter { it.startDay1 != null }.groupBy { it.startDay1!! }
         val itemsByStartDay2 = items.filter { it.startDay2 != null }.groupBy { it.startDay2!! }
 
         return itemsByStartDay1 + itemsByStartDay2
     }
 
-    private fun groupByEndDates(items: List<FoodItem>): Map<CalendarDay, List<FoodItem>> {
+    private fun groupByEndDates(items: List<FoodItem>): Map<MonthDay, List<FoodItem>> {
         val itemsByEndDay1 = items.filter { it.endDay1 != null }.groupBy { it.endDay1!! }
         val itemsByEndDay2 = items.filter { it.endDay2 != null }.groupBy { it.endDay2!! }
 

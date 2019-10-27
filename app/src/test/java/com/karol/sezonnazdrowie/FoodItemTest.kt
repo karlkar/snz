@@ -1,13 +1,14 @@
 package com.karol.sezonnazdrowie
 
 import com.karol.sezonnazdrowie.data.FoodItem
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertNull
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 
 import org.junit.Test
+import org.threeten.bp.LocalDate
+import org.threeten.bp.MonthDay
 
 class FoodItemTest {
 
@@ -16,78 +17,78 @@ class FoodItemTest {
         // check all year items
         var item = FoodItem(true, "WHATEVER")
         assertEquals(
-            CalendarDay.from(2016, 3, 14),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 3, 14))
+            LocalDate.of(2016, 3, 14),
+            item.getNearestSeasonDay(LocalDate.of(2016, 3, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 10, 30),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 10, 30))
+            LocalDate.of(2016, 10, 30),
+            item.getNearestSeasonDay(LocalDate.of(2016, 10, 30))
         )
 
         item = FoodItem(
             true,
             "WHATEVER",
-            startDay1 = CalendarDay.from(1970, 2, 15),
-            endDay1 = CalendarDay.from(1970, 4, 30)
+            startDay1 = MonthDay.of(2, 15),
+            endDay1 = MonthDay.of(4, 30)
         )
         assertEquals(
-            CalendarDay.from(2016, 2, 15),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 2, 14))
+            LocalDate.of(2016, 2, 15),
+            item.getNearestSeasonDay(LocalDate.of(2016, 2, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 3, 14),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 3, 14))
+            LocalDate.of(2016, 3, 14),
+            item.getNearestSeasonDay(LocalDate.of(2016, 3, 14))
         )
 
         //check items with two seasons
         item = FoodItem(
             true,
             "ROSZPONKA",
-            startDay1 = CalendarDay.from(1970, 2, 15),
-            endDay1 = CalendarDay.from(1970, 4, 30),
-            startDay2 = CalendarDay.from(1970, 10, 1),
-            endDay2 = CalendarDay.from(1970, 1, 10)
+            startDay1 = MonthDay.of(2, 15),
+            endDay1 = MonthDay.of(4, 30),
+            startDay2 = MonthDay.of(10, 1),
+            endDay2 = MonthDay.of(1, 10)
         )
         assertEquals(
-            CalendarDay.from(2016, 2, 15),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 2, 14))
+            LocalDate.of(2016, 2, 15),
+            item.getNearestSeasonDay(LocalDate.of(2016, 2, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 3, 14),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 3, 14))
+            LocalDate.of(2016, 3, 14),
+            item.getNearestSeasonDay(LocalDate.of(2016, 3, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 10, 1),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 6, 14))
+            LocalDate.of(2016, 10, 1),
+            item.getNearestSeasonDay(LocalDate.of(2016, 6, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 10, 1),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 10, 1))
+            LocalDate.of(2016, 10, 1),
+            item.getNearestSeasonDay(LocalDate.of(2016, 10, 1))
         )
         assertEquals(
-            CalendarDay.from(2016, 10, 19),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 10, 19))
+            LocalDate.of(2016, 10, 19),
+            item.getNearestSeasonDay(LocalDate.of(2016, 10, 19))
         )
 
         assertEquals(
-            CalendarDay.from(2016, 10, 1),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 9, 1))
+            LocalDate.of(2016, 10, 1),
+            item.getNearestSeasonDay(LocalDate.of(2016, 9, 1))
         )
 
         // TODO Use kluent
         item = FoodItem(
             true,
             "ROSZPONKA",
-            startDay1 = CalendarDay.from(1970, 12, 15),
-            endDay1 = CalendarDay.from(1970, 4, 30)
+            startDay1 = MonthDay.of(12, 15),
+            endDay1 = MonthDay.of(4, 30)
         )
         assertEquals(
-            CalendarDay.from(2016, 12, 15),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 7, 14))
+            LocalDate.of(2016, 12, 15),
+            item.getNearestSeasonDay(LocalDate.of(2016, 7, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 3, 10),
-            item.getNearestSeasonDay(CalendarDay.from(2016, 3, 10))
+            LocalDate.of(2016, 3, 10),
+            item.getNearestSeasonDay(LocalDate.of(2016, 3, 10))
         )
     }
 
@@ -95,77 +96,77 @@ class FoodItemTest {
     fun testGetNearestSeasonStart() {
         // check all year items
         var item = FoodItem(true, "WHATEVER")
-        assertNull(item.getNearestSeasonStart(CalendarDay.from(2016, 2, 14)))
-        assertNull(item.getNearestSeasonStart(CalendarDay.from(2016, 3, 14)))
+        assertNull(item.getNearestSeasonStart(LocalDate.of(2016, 2, 14)))
+        assertNull(item.getNearestSeasonStart(LocalDate.of(2016, 3, 14)))
 
         // check items with one season
         item = FoodItem(
             true,
             "WHATEVER",
-            startDay1 = CalendarDay.from(1970, 2, 15),
-            endDay1 = CalendarDay.from(1970, 4, 30)
+            startDay1 = MonthDay.of(2, 15),
+            endDay1 = MonthDay.of(4, 30)
         )
         assertEquals(
-            CalendarDay.from(2016, 2, 15),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 2, 14))
+            LocalDate.of(2016, 2, 15),
+            item.getNearestSeasonStart(LocalDate.of(2016, 2, 14))
         )
         assertEquals(
-            CalendarDay.from(2017, 2, 15),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 3, 14))
+            LocalDate.of(2017, 2, 15),
+            item.getNearestSeasonStart(LocalDate.of(2016, 3, 14))
         )
 
         //check items with two seasons
         item = FoodItem(
             true,
             "ROSZPONKA",
-            startDay1 = CalendarDay.from(1970, 2, 15),
-            endDay1 = CalendarDay.from(1970, 4, 30),
-            startDay2 = CalendarDay.from(1970, 10, 1),
-            endDay2 = CalendarDay.from(1970, 12, 31)
+            startDay1 = MonthDay.of(2, 15),
+            endDay1 = MonthDay.of(4, 30),
+            startDay2 = MonthDay.of(10, 1),
+            endDay2 = MonthDay.of(12, 31)
         )
         assertEquals(
-            CalendarDay.from(2016, 2, 15),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 2, 14))
+            LocalDate.of(2016, 2, 15),
+            item.getNearestSeasonStart(LocalDate.of(2016, 2, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 10, 1),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 3, 14))
+            LocalDate.of(2016, 10, 1),
+            item.getNearestSeasonStart(LocalDate.of(2016, 3, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 10, 1),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 9, 13))
+            LocalDate.of(2016, 10, 1),
+            item.getNearestSeasonStart(LocalDate.of(2016, 9, 13))
         )
 
         // check days equal as compare days
         assertEquals(
-            CalendarDay.from(2016, 10, 1),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 10, 1))
+            LocalDate.of(2016, 10, 1),
+            item.getNearestSeasonStart(LocalDate.of(2016, 10, 1))
         )
         assertEquals(
-            CalendarDay.from(2016, 2, 15),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 2, 15))
+            LocalDate.of(2016, 2, 15),
+            item.getNearestSeasonStart(LocalDate.of(2016, 2, 15))
         )
 
         //check when date is after second season start
         assertEquals(
-            CalendarDay.from(2017, 2, 15),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 10, 15))
+            LocalDate.of(2017, 2, 15),
+            item.getNearestSeasonStart(LocalDate.of(2016, 10, 15))
         )
 
         // check when end date is before start date
         item = FoodItem(
             true,
             "BRUKSELKA",
-            startDay1 = CalendarDay.from(1970, 10, 1),
-            endDay1 = CalendarDay.from(1970, 3, 15)
+            startDay1 = MonthDay.of(10, 1),
+            endDay1 = MonthDay.of(3, 15)
         )
         assertEquals(
-            CalendarDay.from(2016, 10, 1),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 10, 1))
+            LocalDate.of(2016, 10, 1),
+            item.getNearestSeasonStart(LocalDate.of(2016, 10, 1))
         )
         assertEquals(
-            CalendarDay.from(2017, 10, 1),
-            item.getNearestSeasonStart(CalendarDay.from(2016, 10, 10))
+            LocalDate.of(2017, 10, 1),
+            item.getNearestSeasonStart(LocalDate.of(2016, 10, 10))
         )
     }
 
@@ -173,59 +174,59 @@ class FoodItemTest {
     fun testGetNearestSeasonEnd() {
         // check all year items
         var item = FoodItem(true, "WHATEVER")
-        assertNull(item.getNearestSeasonEnd(CalendarDay.from(2016, 2, 14)))
-        assertNull(item.getNearestSeasonEnd(CalendarDay.from(2016, 5, 14)))
+        assertNull(item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14)))
+        assertNull(item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14)))
 
         // check items with one season
         item = FoodItem(
             true,
             "WHATEVER",
-            startDay1 = CalendarDay.from(1970, 2, 15),
-            endDay1 = CalendarDay.from(1970, 4, 30)
+            startDay1 = MonthDay.of(2, 15),
+            endDay1 = MonthDay.of(4, 30)
         )
         assertEquals(
-            CalendarDay.from(2016, 4, 30),
-            item.getNearestSeasonEnd(CalendarDay.from(2016, 2, 14))
+            LocalDate.of(2016, 4, 30),
+            item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14))
         )
         assertEquals(
-            CalendarDay.from(2017, 4, 30),
-            item.getNearestSeasonEnd(CalendarDay.from(2016, 5, 14))
+            LocalDate.of(2017, 4, 30),
+            item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14))
         )
 
         //check items with two seasons
         item = FoodItem(
             true,
             "ROSZPONKA",
-            startDay1 = CalendarDay.from(1970, 2, 15),
-            endDay1 = CalendarDay.from(1970, 4, 30),
-            startDay2 = CalendarDay.from(1970, 10, 1),
-            endDay2 = CalendarDay.from(1970, 12, 10)
+            startDay1 = MonthDay.of(2, 15),
+            endDay1 = MonthDay.of(4, 30),
+            startDay2 = MonthDay.of(10, 1),
+            endDay2 = MonthDay.of(12, 10)
         )
         assertEquals(
-            CalendarDay.from(2016, 4, 30),
-            item.getNearestSeasonEnd(CalendarDay.from(2016, 2, 14))
+            LocalDate.of(2016, 4, 30),
+            item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 12, 10),
-            item.getNearestSeasonEnd(CalendarDay.from(2016, 5, 14))
+            LocalDate.of(2016, 12, 10),
+            item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14))
         )
         assertEquals(
-            CalendarDay.from(2016, 12, 10),
-            item.getNearestSeasonEnd(CalendarDay.from(2016, 9, 13))
+            LocalDate.of(2016, 12, 10),
+            item.getNearestSeasonEnd(LocalDate.of(2016, 9, 13))
         )
         assertEquals(
-            CalendarDay.from(2017, 4, 30),
-            item.getNearestSeasonEnd(CalendarDay.from(2016, 12, 13))
+            LocalDate.of(2017, 4, 30),
+            item.getNearestSeasonEnd(LocalDate.of(2016, 12, 13))
         )
 
         // check days equal as compare days
         assertEquals(
-            CalendarDay.from(2016, 12, 10),
-            item.getNearestSeasonEnd(CalendarDay.from(2016, 12, 10))
+            LocalDate.of(2016, 12, 10),
+            item.getNearestSeasonEnd(LocalDate.of(2016, 12, 10))
         )
         assertEquals(
-            CalendarDay.from(2016, 4, 30),
-            item.getNearestSeasonEnd(CalendarDay.from(2016, 4, 30))
+            LocalDate.of(2016, 4, 30),
+            item.getNearestSeasonEnd(LocalDate.of(2016, 4, 30))
         )
     }
 

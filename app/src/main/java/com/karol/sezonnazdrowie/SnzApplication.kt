@@ -11,7 +11,6 @@ class SnzApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-
         val alarmsSet =
             PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 .getBoolean("pref_alarms_set", false)

@@ -72,16 +72,16 @@ class FoodItemPageFragment : Fragment(), LayoutContainer {
                 additionalTextsLayout.addView(this)
             }
         } else {
-            var from = FoodItem.DATE_FORMAT_TEXT.format(foodItem.startDay1!!.date)
-            var to = FoodItem.DATE_FORMAT_TEXT.format(foodItem.endDay1!!.date)
+            var from = FoodItem.DATE_FORMAT_TEXT.format(foodItem.startDay1!!)
+            var to = FoodItem.DATE_FORMAT_TEXT.format(foodItem.endDay1!!)
             TextView(activity).apply {
                 text = getString(R.string.season_from_to, from, to)
                 additionalTextsLayout.addView(this)
             }
 
             if (foodItem.startDay2 != null) {
-                from = FoodItem.DATE_FORMAT_TEXT.format(foodItem.startDay2!!.date)
-                to = FoodItem.DATE_FORMAT_TEXT.format(foodItem.endDay2!!.date)
+                from = FoodItem.DATE_FORMAT_TEXT.format(foodItem.startDay2!!)
+                to = FoodItem.DATE_FORMAT_TEXT.format(foodItem.endDay2!!)
                 TextView(activity).apply {
                     text = getString(R.string.food_detail_item, from, to)
                     additionalTextsLayout.addView(this)
