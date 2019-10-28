@@ -30,6 +30,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import org.threeten.bp.DayOfWeek
+import org.threeten.bp.MonthDay
 import java.util.Calendar
 
 class CalendarFragment : Fragment(), LayoutContainer {
@@ -41,10 +42,13 @@ class CalendarFragment : Fragment(), LayoutContainer {
 
     private lateinit var menuItemViewModeSwitch: MenuItem
 
+    // TODO Should be in viewModel
     private var currentMonth: Int = 0
     private var selectedDate: CalendarDay? = null
     private var selectedFoodItem: FoodItem? = null
     private var gridViewMode = true
+
+    // TODO Fix bug: 1. open calendar, 2. choose any item, 3. long press it, 4. go back => sorting is lost
 
     private val onItemClickListener: OnItemClickListener = { foodItem, position ->
         selectedDate = null
@@ -192,7 +196,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
 
     private fun prepareCalendarView() {
         calendarHeader.text = String.format(
-            resources.getStringArray(R.array.monthsWithYear)[Calendar.getInstance().get(Calendar.MONTH)],
+            resources.getStringArray(R.array.monthsWithYear)[MonthDay.now().month.value],
             Calendar.getInstance().get(Calendar.YEAR)
         )
 
@@ -208,7 +212,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
             setOnMonthChangedListener { _, date ->
                 calendarHeader.text =
                     String.format(
-                        resources.getStringArray(R.array.monthsWithYear)[date.month],
+                        resources.getStringArray(R.array.monthsWithYear)[date.month - 1],
                         date.year
                     )
                 currentMonth = date.month

@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.data.FoodItem
+import com.karol.sezonnazdrowie.data.getImageResource
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.rv_item.view.*
@@ -36,13 +37,8 @@ class SnzAdapter(
         val item = items[position]
         if (gridMode) {
             val context = holder.image.context
-            Picasso.get().load(
-                context.resources.getIdentifier(
-                    "mini_" + item.image,
-                    "drawable",
-                    context.packageName
-                )
-            )
+            Picasso.get()
+                .load(item.getImageResource(context))
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .into(holder.image)
             with(holder) {

@@ -11,7 +11,9 @@ import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.view.MainActivity
-import java.util.Calendar
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.temporal.ChronoUnit
 
 private const val CHANNEL_ID = "SezonNaZdrowie"
 
@@ -29,9 +31,9 @@ class Receiver : BroadcastReceiver() {
             putExtra(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_INCOMING)
         }
         val pIntent = TaskStackBuilder.create(context)
-                .addParentStack(MainActivity::class.java)
-                .addNextIntent(notiIntent)
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            .addParentStack(MainActivity::class.java)
+            .addNextIntent(notiIntent)
+            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
@@ -46,16 +48,23 @@ class Receiver : BroadcastReceiver() {
         val notiMgr = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notiMgr.notify(if (type == "start") 0 else 1, notification)
 
-        val calendar = Calendar.getInstance().apply {
-            add(Calendar.YEAR, 1) // TODO: It is in order to display notification for next year...
-            set(Calendar.HOUR, 8)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-        }
+        val zoneOffset = OffsetDateTime.now().offset
+        val dateTime = LocalDateTime.now()
+            .plusYears(1)
+            .withHour(8)
+            .truncatedTo(ChronoUnit.HOURS)
 
+        val alarmIntent = PendingIntent.getBroadcast(
+            context,
+            reqCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent =
-            PendingIntent.getBroadcast(context, reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
+        alarmManager.set(
+            AlarmManager.RTC_WAKEUP,
+            dateTime.toInstant(zoneOffset).toEpochMilli(),
+            alarmIntent
+        )
     }
 }

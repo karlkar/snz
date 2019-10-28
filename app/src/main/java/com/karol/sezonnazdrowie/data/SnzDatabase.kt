@@ -16,17 +16,13 @@ class SnzDatabase {
     val currentFruits: List<FoodItem>
         get() {
             val today = LocalDate.now()
-            return currentFruitsCache[today]
-                ?: allFruits.filter { it.existsAt(today) }.also { currentFruitsCache[today] = it }
+            return currentFruitsCache.getOrPut(today) { allFruits.filter { it.existsAt(today) } }
         }
 
     val currentVegetables: List<FoodItem>
         get() {
             val today = LocalDate.now()
-            return currentVegetablesCache[today]
-                ?: allVegetables.filter { it.existsAt(today) }.also {
-                    currentVegetablesCache[today] = it
-                }
+            return currentVegetablesCache.getOrPut(today) { allVegetables.filter { it.existsAt(today) } }
         }
 
     private fun isDayDiffSmallerThanLimit(seasonStart: MonthDay, today: LocalDate): Boolean {

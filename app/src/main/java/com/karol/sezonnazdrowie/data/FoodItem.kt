@@ -1,6 +1,7 @@
 package com.karol.sezonnazdrowie.data
 
 import android.annotation.SuppressLint
+import android.content.Context
 import org.threeten.bp.LocalDate
 import org.threeten.bp.MonthDay
 import org.threeten.bp.format.DateTimeFormatter
@@ -72,9 +73,9 @@ data class FoodItem(
 
     private fun isDateInRange(date: MonthDay, start: MonthDay, end: MonthDay): Boolean {
         return if (start <= end) {
-            date.isAfter(start) && date.isBefore(end)
+            date in start..end
         } else {
-            date.isAfter(start) || date.isBefore(end)
+            date !in start..end
         }
     }
 
@@ -88,11 +89,11 @@ data class FoodItem(
 
     fun hasMinerals(): Boolean =
         listOfNotNull(calcium, iron, magnesium, phosphorus, potassium, sodium, zinc)
-            .any{ it.isNotEmpty() }
+            .any { it.isNotEmpty() }
 
     fun hasVitamins(): Boolean =
         listOfNotNull(vitC, thiamin, riboflavin, niacin, vitB6, folate, vitA, vitE, vitK)
-            .any{ it.isNotEmpty() }
+            .any { it.isNotEmpty() }
 
     fun getNearestSeasonDay(rel: LocalDate): LocalDate? {
         return if (isFullYear()) {
@@ -149,4 +150,12 @@ data class FoodItem(
         val DATE_FORMAT_TEXT: DateTimeFormatter =
             DateTimeFormatter.ofPattern("d MMMM", Locale.getDefault())
     }
+}
+
+fun FoodItem.getImageResource(context: Context): Int {
+    return context.resources.getIdentifier(
+        "mini_" + this.image,
+        "drawable",
+        context.packageName
+    )
 }

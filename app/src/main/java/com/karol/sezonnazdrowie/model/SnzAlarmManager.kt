@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
 import com.karol.sezonnazdrowie.R
@@ -25,167 +26,189 @@ object SnzAlarmManager {
         }
     }
 
+    private interface PrecedingDaysObtainer {
+        fun getPrecedingDays(): List<Int>
+    }
+
+    private class StartPrecedingDaysObtainer(
+        private val ctx: Context,
+        private val sharedPreferences: SharedPreferences
+    ) : PrecedingDaysObtainer {
+
+        override fun getPrecedingDays(): List<Int> {
+            val notificationShowPreceding = mutableListOf<Int>()
+            val seasonStart = sharedPreferences.getStringSet("pref_season_start", null)
+            if (seasonStart == null) {
+                notificationShowPreceding.add(7)
+            } else {
+                if (seasonStart.contains(ctx.getString(R.string.at_the_start_day))) {
+                    notificationShowPreceding.add(0)
+                }
+                if (seasonStart.contains(ctx.getString(R.string.week_before))) {
+                    notificationShowPreceding.add(7)
+                }
+                if (seasonStart.contains(ctx.getString(R.string.month_before))) {
+                    notificationShowPreceding.add(30)
+                }
+            }
+            return notificationShowPreceding
+        }
+    }
+
+    private class EndPrecedingDaysObtainer(
+        private val ctx: Context,
+        private val sharedPreferences: SharedPreferences
+    ) : PrecedingDaysObtainer {
+
+        override fun getPrecedingDays(): List<Int> {
+            val notificationEndShowPreceding = mutableListOf<Int>()
+            val seasonEnd = sharedPreferences.getStringSet("pref_season_end", null)
+            if (seasonEnd == null) {
+                notificationEndShowPreceding.add(7)
+            } else {
+                if (seasonEnd.contains(ctx.getString(R.string.at_the_end_day))) {
+                    notificationEndShowPreceding.add(0)
+                }
+                if (seasonEnd.contains(ctx.getString(R.string.week_before))) {
+                    notificationEndShowPreceding.add(7)
+                }
+            }
+            return notificationEndShowPreceding
+        }
+    }
+
+    private interface PrecedingDaysMapper {
+        fun mapToString(daysAmount: Int): String
+    }
+
+    private class StartPrecedingDaysMapper(private val ctx: Context) : PrecedingDaysMapper {
+
+        override fun mapToString(daysAmount: Int): String {
+            return when (daysAmount) {
+                0 -> ctx.getString(R.string.season_starts_soon)
+                7 -> ctx.getString(R.string.season_starts_week)
+                30 -> ctx.getString(R.string.season_starts_month)
+                else -> throw IllegalArgumentException("Unsupported amount of $daysAmount days.")
+            }
+        }
+    }
+
+    private class EndPrecedingDaysMapper(private val ctx: Context) : PrecedingDaysMapper {
+
+        override fun mapToString(daysAmount: Int): String {
+            return when (daysAmount) {
+                0 -> ctx.getString(R.string.season_ends_soon)
+                7 -> ctx.getString(R.string.season_ends_week)
+                else -> throw IllegalArgumentException("Unsupported amount of $daysAmount days.")
+            }
+        }
+    }
+
+    private fun createAlarmsFor(
+        map: Map<MonthDay, List<FoodItem>>,
+        precedingDaysObtainer: PrecedingDaysObtainer,
+        precedingDaysMapper: PrecedingDaysMapper,
+        isStart: Boolean,
+        ctx: Context,
+        sharedPreferences: SharedPreferences,
+        alarmManager: AlarmManager
+    ): Int {
+        val today = LocalDate.now()
+        val zoneOffset = OffsetDateTime.now().offset
+
+        var reqCode = 1
+
+        val notiTime = sharedPreferences.getString("pref_notification_hour", "20:00")
+        val notiHour = TimePreference.getHour(notiTime!!)
+        val notiMinute = TimePreference.getMinute(notiTime)
+
+        val precedingDays = precedingDaysObtainer.getPrecedingDays()
+
+        map.entries.forEach {
+            val notificationText = it.value
+                .filter { foodItem ->
+                    sharedPreferences.getBoolean("pref_noti_${foodItem.name}", true)
+                }
+                .map { foodItem -> foodItem.conjugatedName }
+                .joinToString()
+
+            if (notificationText.isEmpty()) {
+                daysIter@ for (dayDiff in precedingDays) {
+                    val title: String
+                    try {
+                        title = precedingDaysMapper.mapToString(dayDiff)
+                    } catch (ex: IllegalArgumentException) {
+                        continue@daysIter
+                    }
+                    val intent = Intent(ctx, Receiver::class.java).apply {
+                        putExtra("type", if (isStart) "start" else "end")
+                        putExtra("reqCode", reqCode)
+                        putExtra("title", title)
+                        putExtra("text", notificationText)
+                    }
+                    val alarmIntent = PendingIntent.getBroadcast(
+                        ctx,
+                        reqCode++,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                    val notificationDate = it.key.atYear(today.year)
+                    with(notificationDate) {
+                        minusDays(dayDiff.toLong())
+                        if (isBefore(today)) {
+                            plusYears(1)
+                        }
+                    }
+                    val notificationDateTime = notificationDate.atTime(notiHour, notiMinute)
+
+                    alarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        notificationDateTime.toInstant(zoneOffset).toEpochMilli(),
+                        alarmIntent
+                    )
+                    Log.d(TAG, "setAlarms: Alarm set @ $notificationDateTime")
+                }
+            }
+        }
+        return reqCode
+    }
+
     internal fun setAlarms(ctx: Context, database: SnzDatabase) {
         val allItems = database.allFruits + database.allVegetables
         val startMap = groupByStartDates(allItems)
         val endMap = groupByEndDates(allItems)
 
-        val zoneOffset = OffsetDateTime.now().offset
-
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx)
-
-        val startDays = mutableListOf<Int>()
-        val seasonStart = sharedPreferences.getStringSet("pref_season_start", null)
-        if (seasonStart == null) {
-            startDays.add(7)
-        } else {
-            if (seasonStart.contains(ctx.getString(R.string.at_the_start_day))) {
-                startDays.add(0)
-            }
-            if (seasonStart.contains(ctx.getString(R.string.week_before))) {
-                startDays.add(7)
-            }
-            if (seasonStart.contains(ctx.getString(R.string.month_before))) {
-                startDays.add(30)
-            }
-        }
-
-        var intent: Intent
-        var alarmIntent: PendingIntent
         val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        var reqCode = 1
-        val notiTime = sharedPreferences.getString("pref_notification_hour", "20:00")
-        val notiHour = TimePreference.getHour(notiTime!!)
-        val notiMinute = TimePreference.getMinute(notiTime)
 
-        val today = LocalDate.now()
-        startMap.entries.forEach {
-            val strBuilder = StringBuilder()
-            for (item in it.value) {
-                if (sharedPreferences.getBoolean("pref_noti_${item.name}", true)) {
-                    if (strBuilder.isNotEmpty()) {
-                        strBuilder.append(", ")
-                    }
-                    strBuilder.append(item.conjugatedName)
-                }
-            }
-            if (strBuilder.isNotEmpty()) {
-                for (dayDiff in startDays) {
-                    val title = when (dayDiff) {
-                        0 -> ctx.getString(R.string.season_starts_soon)
-                        7 -> ctx.getString(R.string.season_starts_week)
-                        30 -> ctx.getString(R.string.season_starts_month)
-                        else -> ""
-                    }
-                    intent = Intent(ctx, Receiver::class.java).apply {
-                        putExtra("type", "start")
-                        putExtra("reqCode", reqCode)
-                        putExtra("title", title)
-                        putExtra("text", strBuilder.toString())
-                    }
-                    alarmIntent = PendingIntent.getBroadcast(
-                        ctx,
-                        reqCode++,
-                        intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                    val nextNotificationDate = it.key.atYear(today.year)
-                    with(nextNotificationDate) {
-                        minusDays(dayDiff.toLong())
-                        if (isBefore(today)) {
-                            plusYears(1)
-                        }
-                    }
-                    val notificationTime = nextNotificationDate.atTime(notiHour, notiMinute)
+        var reqCode = createAlarmsFor(
+            startMap,
+            StartPrecedingDaysObtainer(ctx, sharedPreferences),
+            StartPrecedingDaysMapper(ctx),
+            true,
+            ctx,
+            sharedPreferences,
+            alarmManager
+        )
 
-                    alarmManager.set(
-                        AlarmManager.RTC_WAKEUP,
-                        notificationTime.toInstant(zoneOffset).toEpochMilli(),
-                        alarmIntent
-                    )
-                    Log.d(
-                        TAG,
-                        "setAlarms: Start Alarm set @ ${nextNotificationDate.dayOfMonth}.${nextNotificationDate.month}"
-                    )
-                }
-            }
-        }
+        reqCode += createAlarmsFor(
+            endMap,
+            EndPrecedingDaysObtainer(ctx, sharedPreferences),
+            EndPrecedingDaysMapper(ctx),
+            false,
+            ctx,
+            sharedPreferences,
+            alarmManager
+        )
 
-        val endDays = mutableListOf<Int>()
-        val seasonEnd = sharedPreferences.getStringSet("pref_season_end", null)
-        if (seasonEnd == null) {
-            endDays.add(7)
-        } else {
-            if (seasonEnd.contains(ctx.getString(R.string.at_the_end_day))) {
-                endDays.add(0)
-            }
-            if (seasonEnd.contains(ctx.getString(R.string.week_before))) {
-                endDays.add(7)
-            }
-        }
-
-        endMap.entries.forEach {
-            val strBuilder = StringBuilder()
-            for (item in it.value) {
-                if (sharedPreferences.getBoolean("pref_noti_${item.name}", true)) {
-                    if (strBuilder.isNotEmpty()) {
-                        strBuilder.append(", ")
-                    }
-                    strBuilder.append(item.conjugatedName)
-                } else {
-                    Log.d(TAG, "setAlarms: Skipping the item ${item.name}")
-                }
-            }
-            if (strBuilder.isNotEmpty()) {
-                for (dayDiff in endDays) {
-                    val title = when (dayDiff) {
-                        0 -> ctx.getString(R.string.season_ends_soon)
-                        7 -> ctx.getString(R.string.season_ends_week)
-                        else -> ""
-                    }
-                    intent = Intent(ctx, Receiver::class.java).apply {
-                        putExtra("type", "end")
-                        putExtra("reqCode", reqCode)
-                        putExtra("title", title)
-                        putExtra("text", strBuilder.toString())
-                    }
-                    alarmIntent = PendingIntent.getBroadcast(
-                        ctx,
-                        reqCode++,
-                        intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-
-                    val nextNotificationDate = it.key.atYear(today.year)
-                    with(nextNotificationDate) {
-                        minusDays(dayDiff.toLong())
-                        if (isBefore(today)) {
-                            plusYears(1)
-                        }
-                    }
-                    val nextNotificationTime = nextNotificationDate
-                        .atTime(notiHour, notiMinute)
-
-                    alarmManager.set(
-                        AlarmManager.RTC_WAKEUP,
-                        nextNotificationTime.toInstant(zoneOffset).toEpochMilli(),
-                        alarmIntent
-                    )
-                    Log.d(
-                        TAG,
-                        "setAlarms: End Alarm set @ ${nextNotificationDate.dayOfMonth}.${nextNotificationDate.month}"
-                    )
-                }
-            }
-        }
         val prevMaxReqCode = sharedPreferences.getInt("maxReqCode", 0)
         Log.d(TAG, "setAlarms: Ending with $reqCode, previous ending $prevMaxReqCode")
         sharedPreferences.edit().putInt("maxReqCode", reqCode).apply()
 
-        intent = Intent(ctx, Receiver::class.java)
+        val intent = Intent(ctx, Receiver::class.java)
         while (prevMaxReqCode > reqCode) {
             Log.d(TAG, "setAlarms: Cancelling an alarm of reqCode = $reqCode")
-            alarmIntent = PendingIntent.getBroadcast(
+            val alarmIntent = PendingIntent.getBroadcast(
                 ctx,
                 reqCode++,
                 intent,
