@@ -17,7 +17,7 @@ import org.threeten.bp.OffsetDateTime
 import java.util.concurrent.Executors
 
 object SnzAlarmManager {
-
+// TODO Write tests
     private const val TAG = "SNZALARMMANAGER"
 
     fun startSetAlarmsTask(ctx: Context, database: SnzDatabase) {
