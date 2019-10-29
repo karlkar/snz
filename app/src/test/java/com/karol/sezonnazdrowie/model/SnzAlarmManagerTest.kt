@@ -174,7 +174,7 @@ class SnzAlarmManagerTest {
             )
         )
         setupMocks(
-            seasonStartSet = setOf("w dniu początku", "tydzień przed", "miesiąc przed")
+            seasonStartSet = setOf("DAY", "WEEK", "MONTH")
         )
 
         // when
@@ -210,7 +210,7 @@ class SnzAlarmManagerTest {
             )
         )
         setupMocks(
-            seasonStartSet = setOf("w dniu początku", "tydzień przed", "miesiąc przed")
+            seasonStartSet = setOf("DAY", "WEEK", "MONTH")
         )
 
         // when
@@ -279,20 +279,14 @@ class SnzAlarmManagerTest {
 
     private fun setupMocks(
         notificationTime: String = "20:00",
-        seasonStartSet: Set<String> = setOf("w dniu początku"),
-        seasonEndSet: Set<String> = setOf("w dniu końca")
+        seasonStartSet: Set<String> = setOf("DAY"),
+        seasonEndSet: Set<String> = setOf("DAY")
     ) {
         whenever(sharedPreferences.getString(eq("pref_notification_hour"), any()))
             .doReturn(notificationTime)
         whenever(sharedPreferences.getBoolean(any(), any())).doReturn(true)
         whenever(sharedPreferences.getStringSet("pref_season_start", null))
             .doReturn(seasonStartSet)
-        whenever(context.getString(R.string.at_the_start_day))
-            .doReturn("w dniu początku")
-        whenever(context.getString(R.string.week_before))
-            .doReturn("tydzień przed")
-        whenever(context.getString(R.string.month_before))
-            .doReturn("miesiąc przed")
         whenever(context.getString(R.string.season_starts_soon))
             .doReturn("Wkrótce zacznie się sezon na")
         whenever(context.getString(R.string.season_starts_week))

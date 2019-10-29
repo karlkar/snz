@@ -46,7 +46,6 @@ object SnzAlarmManager {
     }
 
     private class StartPrecedingDaysObtainer(
-        private val ctx: Context,
         private val sharedPreferences: SharedPreferences
     ) : PrecedingDaysObtainer {
 
@@ -56,13 +55,13 @@ object SnzAlarmManager {
             if (seasonStart == null) {
                 notificationShowPreceding.add(7)
             } else {
-                if (seasonStart.contains(ctx.getString(R.string.at_the_start_day))) {
+                if (seasonStart.contains("DAY")) {
                     notificationShowPreceding.add(0)
                 }
-                if (seasonStart.contains(ctx.getString(R.string.week_before))) {
+                if (seasonStart.contains("WEEK")) {
                     notificationShowPreceding.add(7)
                 }
-                if (seasonStart.contains(ctx.getString(R.string.month_before))) {
+                if (seasonStart.contains("MONTH")) {
                     notificationShowPreceding.add(30)
                 }
             }
@@ -71,7 +70,6 @@ object SnzAlarmManager {
     }
 
     private class EndPrecedingDaysObtainer(
-        private val ctx: Context,
         private val sharedPreferences: SharedPreferences
     ) : PrecedingDaysObtainer {
 
@@ -81,10 +79,10 @@ object SnzAlarmManager {
             if (seasonEnd == null) {
                 notificationEndShowPreceding.add(7)
             } else {
-                if (seasonEnd.contains(ctx.getString(R.string.at_the_end_day))) {
+                if (seasonEnd.contains("DAY")) {
                     notificationEndShowPreceding.add(0)
                 }
-                if (seasonEnd.contains(ctx.getString(R.string.week_before))) {
+                if (seasonEnd.contains("WEEK")) {
                     notificationEndShowPreceding.add(7)
                 }
             }
@@ -144,9 +142,7 @@ object SnzAlarmManager {
             val notificationText = it.value
                 .filter { foodItem ->
                     sharedPreferences.getBoolean("pref_noti_${foodItem.name}", true)
-                }
-                .map { foodItem -> foodItem.conjugatedName }
-                .joinToString()
+                }.joinToString { foodItem -> foodItem.conjugatedName }
 
             if (notificationText.isNotEmpty()) {
                 daysIter@ for (dayDiff in precedingDays) {
@@ -202,7 +198,7 @@ object SnzAlarmManager {
         var reqCode = createAlarmsFor(
             currentDayProvider,
             startMap,
-            StartPrecedingDaysObtainer(ctx, sharedPreferences),
+            StartPrecedingDaysObtainer(sharedPreferences),
             StartPrecedingDaysMapper(ctx),
             true,
             ctx,
@@ -213,7 +209,7 @@ object SnzAlarmManager {
         reqCode += createAlarmsFor(
             currentDayProvider,
             endMap,
-            EndPrecedingDaysObtainer(ctx, sharedPreferences),
+            EndPrecedingDaysObtainer(sharedPreferences),
             EndPrecedingDaysMapper(ctx),
             false,
             ctx,
