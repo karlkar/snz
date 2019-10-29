@@ -8,22 +8,37 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
 import com.karol.sezonnazdrowie.R
+import com.karol.sezonnazdrowie.data.Database
 import com.karol.sezonnazdrowie.data.FoodItem
 import com.karol.sezonnazdrowie.data.SnzDatabase
 import com.karol.sezonnazdrowie.view.controls.TimePreference
 import org.threeten.bp.LocalDate
 import org.threeten.bp.MonthDay
 import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.ZoneOffset
 import java.util.concurrent.Executors
 
 object SnzAlarmManager {
-// TODO Write tests
     private const val TAG = "SNZALARMMANAGER"
 
     fun startSetAlarmsTask(ctx: Context, database: SnzDatabase) {
+        val currentDayProvider = TimeDataProviderImpl()
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
         Executors.newSingleThreadExecutor().submit {
-            setAlarms(ctx, database)
+            setAlarms(ctx, currentDayProvider, sharedPreferences, alarmManager, database)
         }
+    }
+
+    interface TimeDataProvider {
+        fun getCurrentDay(): LocalDate
+        fun getZoneOffset(): ZoneOffset
+    }
+
+    class TimeDataProviderImpl: TimeDataProvider {
+        override fun getCurrentDay(): LocalDate = LocalDate.now()
+        override fun getZoneOffset(): ZoneOffset = OffsetDateTime.now().offset
     }
 
     private interface PrecedingDaysObtainer {
@@ -105,6 +120,7 @@ object SnzAlarmManager {
     }
 
     private fun createAlarmsFor(
+        timeDataProvider: TimeDataProvider,
         map: Map<MonthDay, List<FoodItem>>,
         precedingDaysObtainer: PrecedingDaysObtainer,
         precedingDaysMapper: PrecedingDaysMapper,
@@ -113,8 +129,8 @@ object SnzAlarmManager {
         sharedPreferences: SharedPreferences,
         alarmManager: AlarmManager
     ): Int {
-        val today = LocalDate.now()
-        val zoneOffset = OffsetDateTime.now().offset
+        val today = timeDataProvider.getCurrentDay()
+        val zoneOffset = timeDataProvider.getZoneOffset()
 
         var reqCode = 1
 
@@ -132,7 +148,7 @@ object SnzAlarmManager {
                 .map { foodItem -> foodItem.conjugatedName }
                 .joinToString()
 
-            if (notificationText.isEmpty()) {
+            if (notificationText.isNotEmpty()) {
                 daysIter@ for (dayDiff in precedingDays) {
                     val title: String
                     try {
@@ -152,12 +168,11 @@ object SnzAlarmManager {
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
-                    val notificationDate = it.key.atYear(today.year)
-                    with(notificationDate) {
-                        minusDays(dayDiff.toLong())
-                        if (isBefore(today)) {
-                            plusYears(1)
-                        }
+
+                    var notificationDate = it.key.atYear(today.year)
+                    notificationDate = notificationDate.minusDays(dayDiff.toLong()) // TODO fix so it is month
+                    if (notificationDate.isBefore(today)) {
+                        notificationDate = notificationDate.plusYears(1)
                     }
                     val notificationDateTime = notificationDate.atTime(notiHour, notiMinute)
 
@@ -173,15 +188,19 @@ object SnzAlarmManager {
         return reqCode
     }
 
-    internal fun setAlarms(ctx: Context, database: SnzDatabase) {
+    internal fun setAlarms(
+        ctx: Context,
+        currentDayProvider: TimeDataProvider,
+        sharedPreferences: SharedPreferences,
+        alarmManager: AlarmManager,
+        database: Database
+    ) {
         val allItems = database.allFruits + database.allVegetables
         val startMap = groupByStartDates(allItems)
         val endMap = groupByEndDates(allItems)
 
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx)
-        val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
         var reqCode = createAlarmsFor(
+            currentDayProvider,
             startMap,
             StartPrecedingDaysObtainer(ctx, sharedPreferences),
             StartPrecedingDaysMapper(ctx),
@@ -192,6 +211,7 @@ object SnzAlarmManager {
         )
 
         reqCode += createAlarmsFor(
+            currentDayProvider,
             endMap,
             EndPrecedingDaysObtainer(ctx, sharedPreferences),
             EndPrecedingDaysMapper(ctx),

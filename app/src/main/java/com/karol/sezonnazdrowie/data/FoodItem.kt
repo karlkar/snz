@@ -5,13 +5,13 @@ import android.content.Context
 import org.threeten.bp.LocalDate
 import org.threeten.bp.MonthDay
 import org.threeten.bp.format.DateTimeFormatter
-import java.util.Locale
+import java.util.*
 
 data class FoodItem(
     val isFruit: Boolean = false,
     val name: String,
-    val conjugatedName: String? = null,
-    val image: String? = null,
+    val conjugatedName: String,
+    val image: String,
     // dates
     val startDay1: MonthDay? = null,
     val endDay1: MonthDay? = null,

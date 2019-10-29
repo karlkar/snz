@@ -3,9 +3,9 @@ package com.karol.sezonnazdrowie.data
 import org.threeten.bp.LocalDate
 import org.threeten.bp.MonthDay
 import org.threeten.bp.Period
-import java.util.Comparator
+import java.util.*
 
-class SnzDatabase {
+class SnzDatabase: Database {
 
     private val currentFruitsCache = mutableMapOf<LocalDate, List<FoodItem>>()
     private val currentVegetablesCache = mutableMapOf<LocalDate, List<FoodItem>>()
@@ -69,10 +69,10 @@ class SnzDatabase {
             return list
         }
 
-    val allFruits: List<FoodItem>
+    override val allFruits: List<FoodItem>
         get() = allItems.filter { it.isFruit }
 
-    val allVegetables: List<FoodItem>
+    override val allVegetables: List<FoodItem>
         get() = allItems.filter { !it.isFruit }
 
     fun getItem(itemName: String): FoodItem = allItems.first { it.name == itemName }

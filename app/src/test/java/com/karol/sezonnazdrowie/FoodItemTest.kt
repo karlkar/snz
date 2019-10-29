@@ -15,7 +15,7 @@ class FoodItemTest {
     @Test
     fun testGetNearestSeasonDay() {
         // check all year items
-        var item = FoodItem(true, "WHATEVER")
+        var item = FoodItem(true, "WHATEVER", "whatever", "image")
         assertEquals(
             LocalDate.of(2016, 3, 14),
             item.getNearestSeasonDay(LocalDate.of(2016, 3, 14))
@@ -28,6 +28,8 @@ class FoodItemTest {
         item = FoodItem(
             true,
             "WHATEVER",
+            "whatever",
+            "image",
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30)
         )
@@ -44,6 +46,8 @@ class FoodItemTest {
         item = FoodItem(
             true,
             "ROSZPONKA",
+            "whatever",
+            "image",
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30),
             startDay2 = MonthDay.of(10, 1),
@@ -79,6 +83,8 @@ class FoodItemTest {
         item = FoodItem(
             true,
             "ROSZPONKA",
+            "whatever",
+            "image",
             startDay1 = MonthDay.of(12, 15),
             endDay1 = MonthDay.of(4, 30)
         )
@@ -95,7 +101,7 @@ class FoodItemTest {
     @Test
     fun testGetNearestSeasonStart() {
         // check all year items
-        var item = FoodItem(true, "WHATEVER")
+        var item = FoodItem(true, "WHATEVER", "whatever", "image")
         assertNull(item.getNearestSeasonStart(LocalDate.of(2016, 2, 14)))
         assertNull(item.getNearestSeasonStart(LocalDate.of(2016, 3, 14)))
 
@@ -103,6 +109,8 @@ class FoodItemTest {
         item = FoodItem(
             true,
             "WHATEVER",
+            "whatever",
+            "image",
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30)
         )
@@ -119,6 +127,8 @@ class FoodItemTest {
         item = FoodItem(
             true,
             "ROSZPONKA",
+            "whatever",
+            "image",
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30),
             startDay2 = MonthDay.of(10, 1),
@@ -157,6 +167,8 @@ class FoodItemTest {
         item = FoodItem(
             true,
             "BRUKSELKA",
+            "whatever",
+            "image",
             startDay1 = MonthDay.of(10, 1),
             endDay1 = MonthDay.of(3, 15)
         )
@@ -173,7 +185,7 @@ class FoodItemTest {
     @Test
     fun testGetNearestSeasonEnd() {
         // check all year items
-        var item = FoodItem(true, "WHATEVER")
+        var item = FoodItem(true, "WHATEVER", "whatever", "image")
         assertNull(item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14)))
         assertNull(item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14)))
 
@@ -181,6 +193,8 @@ class FoodItemTest {
         item = FoodItem(
             true,
             "WHATEVER",
+            "whatever",
+            "image",
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30)
         )
@@ -197,6 +211,8 @@ class FoodItemTest {
         item = FoodItem(
             true,
             "ROSZPONKA",
+            "whatever",
+            "image",
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30),
             startDay2 = MonthDay.of(10, 1),
@@ -233,7 +249,7 @@ class FoodItemTest {
     @Test
     fun `given has any of proximates should return true when asked if has proximates`() {
         // given
-        val foodItem = FoodItem(false, "WHATEVER", water = "2mg")
+        val foodItem = FoodItem(false, "WHATEVER", "whatever", "image", water = "2mg")
 
         // when
         val hasProximates = foodItem.hasProximates()
@@ -245,7 +261,7 @@ class FoodItemTest {
     @Test
     fun `given has no proximates should return false when asked if has proximates`() {
         // given
-        val foodItem = FoodItem(false, "WHATEVER")
+        val foodItem = FoodItem(false, "WHATEVER", "whatever", "image")
 
         // when
         val hasProximates = foodItem.hasProximates()
@@ -257,7 +273,7 @@ class FoodItemTest {
     @Test
     fun `given has any of minerals should return true when asked if has minerals`() {
         // given
-        val foodItem = FoodItem(false, "WHATEVER", calcium = "2mg")
+        val foodItem = FoodItem(false, "WHATEVER", "whatever", "image", calcium = "2mg")
 
         // when
         val hasMinerals = foodItem.hasMinerals()
@@ -269,7 +285,7 @@ class FoodItemTest {
     @Test
     fun `given has no minerals should return false when asked if has minerals`() {
         // given
-        val foodItem = FoodItem(false, "WHATEVER")
+        val foodItem = FoodItem(false, "WHATEVER", "whatever", "image")
 
         // when
         val hasMinerals = foodItem.hasMinerals()
@@ -281,7 +297,7 @@ class FoodItemTest {
     @Test
     fun `given has any of vitamins should return true when asked if has vitamins`() {
         // given
-        val foodItem = FoodItem(false, "WHATEVER", vitA = "2mg")
+        val foodItem = FoodItem(false, "WHATEVER", "whatever", "image", vitA = "2mg")
 
         // when
         val hasVitamins = foodItem.hasVitamins()
@@ -293,7 +309,7 @@ class FoodItemTest {
     @Test
     fun `given has no vitamins should return false when asked if has vitamins`() {
         // given
-        val foodItem = FoodItem(false, "WHATEVER")
+        val foodItem = FoodItem(false, "WHATEVER", "whatever", "image")
 
         // when
         val hasVitamins = foodItem.hasVitamins()
