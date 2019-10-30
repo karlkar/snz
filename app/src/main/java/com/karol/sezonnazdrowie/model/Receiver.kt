@@ -24,7 +24,7 @@ class Receiver : BroadcastReceiver() {
 
         val type = bundle.getString("type")
         val reqCode = bundle.getInt("reqCode")
-        val title = bundle.getString("title")
+        val title = bundle.getInt("titleRes")
         val text = bundle.getString("text")
 
         val notiIntent = Intent(context, MainActivity::class.java).apply {
@@ -36,7 +36,7 @@ class Receiver : BroadcastReceiver() {
             .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle(title)
+            .setContentTitle(context.getString(title))
             .setContentText(text)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setAutoCancel(true)

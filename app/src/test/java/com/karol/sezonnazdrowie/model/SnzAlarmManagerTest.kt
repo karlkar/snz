@@ -1,6 +1,7 @@
 package com.karol.sezonnazdrowie.model
 
 import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.SharedPreferences
 import com.karol.sezonnazdrowie.R
@@ -275,6 +276,38 @@ class SnzAlarmManagerTest {
             any(),
             anyOrNull()
         )
+    }
+
+    @Test
+    fun `should clear all invalid alarms when previously more alarms were set`() {
+        // given
+        whenever(database.allFruits).doReturn(
+            listOf(
+                FoodItem(
+                    true,
+                    "Fruit",
+                    conjugatedName = "fruit",
+                    image = "image",
+                    startDay1 = MonthDay.of(1, 1),
+                    endDay1 = MonthDay.of(2, 1)
+                )
+            )
+        )
+        setupMocks()
+        whenever(sharedPreferences.getInt(eq("maxReqCode"), anyOrNull()))
+            .doReturn(10)
+
+        // when
+        SnzAlarmManager.setAlarms(
+            context,
+            currentDayProvider,
+            sharedPreferences,
+            alarmManager,
+            database
+        )
+
+        // then
+        verify(alarmManager, times(8)).cancel(anyOrNull<PendingIntent>())
     }
 
     private fun setupMocks(
