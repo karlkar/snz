@@ -235,7 +235,7 @@ class SnzAlarmManagerTest {
         )
         verify(alarmManager).set(
             eq(AlarmManager.RTC_WAKEUP),
-            eq(1575313200000L),
+            eq(1575226800000L),
             anyOrNull()
         )
     }

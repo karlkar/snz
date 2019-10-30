@@ -31,41 +31,42 @@ object SnzAlarmManager {
         }
     }
 
+    enum class PreNotiTimePeriod(val prefValue: String) {
+        AtDay("DAY"),
+        WeekBefore("WEEK"),
+        MonthBefore("MONTH");
+
+        companion object {
+            fun fromPrefValue(requestedValue: String) =
+                values().firstOrNull { it.prefValue == requestedValue }
+                    ?: throw IllegalArgumentException("Unknown period of '$requestedValue'")
+        }
+    }
+
     interface TimeDataProvider {
         fun getCurrentDay(): LocalDate
         fun getZoneOffset(): ZoneOffset
     }
 
-    class TimeDataProviderImpl: TimeDataProvider {
+    class TimeDataProviderImpl : TimeDataProvider {
         override fun getCurrentDay(): LocalDate = LocalDate.now()
         override fun getZoneOffset(): ZoneOffset = OffsetDateTime.now().offset
     }
 
     private interface PrecedingDaysObtainer {
-        fun getPrecedingDays(): List<Int>
+        fun getPrecedingDays(): List<PreNotiTimePeriod>
     }
 
     private class StartPrecedingDaysObtainer(
         private val sharedPreferences: SharedPreferences
     ) : PrecedingDaysObtainer {
 
-        override fun getPrecedingDays(): List<Int> {
-            val notificationShowPreceding = mutableListOf<Int>()
-            val seasonStart = sharedPreferences.getStringSet("pref_season_start", null)
-            if (seasonStart == null) {
-                notificationShowPreceding.add(7)
-            } else {
-                if (seasonStart.contains("DAY")) {
-                    notificationShowPreceding.add(0)
-                }
-                if (seasonStart.contains("WEEK")) {
-                    notificationShowPreceding.add(7)
-                }
-                if (seasonStart.contains("MONTH")) {
-                    notificationShowPreceding.add(30)
-                }
-            }
-            return notificationShowPreceding
+        override fun getPrecedingDays(): List<PreNotiTimePeriod> {
+            val seasonStart = sharedPreferences.getStringSet(
+                "pref_season_start",
+                null
+            ) ?: setOf(PreNotiTimePeriod.MonthBefore.prefValue)
+            return seasonStart.map { PreNotiTimePeriod.fromPrefValue(it) }
         }
     }
 
@@ -73,46 +74,37 @@ object SnzAlarmManager {
         private val sharedPreferences: SharedPreferences
     ) : PrecedingDaysObtainer {
 
-        override fun getPrecedingDays(): List<Int> {
-            val notificationEndShowPreceding = mutableListOf<Int>()
-            val seasonEnd = sharedPreferences.getStringSet("pref_season_end", null)
-            if (seasonEnd == null) {
-                notificationEndShowPreceding.add(7)
-            } else {
-                if (seasonEnd.contains("DAY")) {
-                    notificationEndShowPreceding.add(0)
-                }
-                if (seasonEnd.contains("WEEK")) {
-                    notificationEndShowPreceding.add(7)
-                }
-            }
-            return notificationEndShowPreceding
+        override fun getPrecedingDays(): List<PreNotiTimePeriod> {
+            val seasonStart = sharedPreferences.getStringSet(
+                "pref_season_end",
+                null
+            ) ?: setOf(PreNotiTimePeriod.MonthBefore.prefValue)
+            return seasonStart.map { PreNotiTimePeriod.fromPrefValue(it) }
         }
     }
 
     private interface PrecedingDaysMapper {
-        fun mapToString(daysAmount: Int): String
+        fun mapToString(daysAmount: PreNotiTimePeriod): String
     }
 
     private class StartPrecedingDaysMapper(private val ctx: Context) : PrecedingDaysMapper {
 
-        override fun mapToString(daysAmount: Int): String {
+        override fun mapToString(daysAmount: PreNotiTimePeriod): String {
             return when (daysAmount) {
-                0 -> ctx.getString(R.string.season_starts_soon)
-                7 -> ctx.getString(R.string.season_starts_week)
-                30 -> ctx.getString(R.string.season_starts_month)
-                else -> throw IllegalArgumentException("Unsupported amount of $daysAmount days.")
+                PreNotiTimePeriod.AtDay -> ctx.getString(R.string.season_starts_soon)
+                PreNotiTimePeriod.WeekBefore -> ctx.getString(R.string.season_starts_week)
+                PreNotiTimePeriod.MonthBefore -> ctx.getString(R.string.season_starts_month)
             }
         }
     }
 
     private class EndPrecedingDaysMapper(private val ctx: Context) : PrecedingDaysMapper {
 
-        override fun mapToString(daysAmount: Int): String {
+        override fun mapToString(daysAmount: PreNotiTimePeriod): String {
             return when (daysAmount) {
-                0 -> ctx.getString(R.string.season_ends_soon)
-                7 -> ctx.getString(R.string.season_ends_week)
-                else -> throw IllegalArgumentException("Unsupported amount of $daysAmount days.")
+                PreNotiTimePeriod.AtDay -> ctx.getString(R.string.season_ends_soon)
+                PreNotiTimePeriod.WeekBefore -> ctx.getString(R.string.season_ends_week)
+                PreNotiTimePeriod.MonthBefore -> throw IllegalArgumentException("Month is not supported for end dates")
             }
         }
     }
@@ -165,11 +157,20 @@ object SnzAlarmManager {
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
 
-                    var notificationDate = it.key.atYear(today.year)
-                    notificationDate = notificationDate.minusDays(dayDiff.toLong()) // TODO fix so it is month
-                    if (notificationDate.isBefore(today)) {
-                        notificationDate = notificationDate.plusYears(1)
+                    val notificationDate = when (dayDiff) {
+                        PreNotiTimePeriod.AtDay -> it.key.atYear(today.year)
+                        PreNotiTimePeriod.WeekBefore ->
+                            it.key.atYear(today.year).minusWeeks(1)
+                        PreNotiTimePeriod.MonthBefore ->
+                            it.key.atYear(today.year).minusMonths(1)
+                    }.let { obtainedDate ->
+                        if (obtainedDate.isBefore(today)) {
+                            obtainedDate.plusYears(1)
+                        } else {
+                            obtainedDate
+                        }
                     }
+
                     val notificationDateTime = notificationDate.atTime(notiHour, notiMinute)
 
                     alarmManager.set(
