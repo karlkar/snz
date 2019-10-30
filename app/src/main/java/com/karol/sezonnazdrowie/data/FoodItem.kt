@@ -75,7 +75,7 @@ data class FoodItem(
         return if (start <= end) {
             date in start..end
         } else {
-            date !in start..end
+            date !in end..start
         }
     }
 

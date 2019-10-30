@@ -309,6 +309,43 @@ class SnzAlarmManagerTest {
         verify(alarmManager, times(8)).cancel(anyOrNull<PendingIntent>())
     }
 
+    @Test
+    fun `should not set any alarms when set a preceding period for end notification of month`() {
+        // given
+        whenever(database.allFruits).doReturn(
+            listOf(
+                FoodItem(
+                    true,
+                    "Fruit",
+                    conjugatedName = "fruit",
+                    image = "image",
+                    startDay1 = MonthDay.of(1, 1),
+                    endDay1 = MonthDay.of(2, 1)
+                )
+            )
+        )
+        setupMocks(
+            seasonStartSet = setOf(),
+            seasonEndSet = setOf("MONTH")
+        )
+
+        // when
+        SnzAlarmManager.setAlarms(
+            context,
+            currentDayProvider,
+            sharedPreferences,
+            alarmManager,
+            database
+        )
+
+        // then
+        verify(alarmManager, never()).set(
+            any(),
+            any(),
+            anyOrNull()
+        )
+    }
+
     private fun setupMocks(
         notificationTime: String = "20:00",
         seasonStartSet: Set<String> = setOf("DAY"),

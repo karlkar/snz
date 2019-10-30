@@ -1,10 +1,8 @@
 package com.karol.sezonnazdrowie
 
 import com.karol.sezonnazdrowie.data.FoodItem
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should equal`
 
 import org.junit.Test
 import org.threeten.bp.LocalDate
@@ -16,14 +14,10 @@ class FoodItemTest {
     fun testGetNearestSeasonDay() {
         // check all year items
         var item = FoodItem(true, "WHATEVER", "whatever", "image")
-        assertEquals(
-            LocalDate.of(2016, 3, 14),
-            item.getNearestSeasonDay(LocalDate.of(2016, 3, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 10, 30),
-            item.getNearestSeasonDay(LocalDate.of(2016, 10, 30))
-        )
+        item.getNearestSeasonDay(LocalDate.of(2016, 3, 14)) `should equal`
+                LocalDate.of(2016, 3, 14)
+        item.getNearestSeasonDay(LocalDate.of(2016, 10, 30)) `should equal`
+                LocalDate.of(2016, 10, 30)
 
         item = FoodItem(
             true,
@@ -33,14 +27,10 @@ class FoodItemTest {
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30)
         )
-        assertEquals(
-            LocalDate.of(2016, 2, 15),
-            item.getNearestSeasonDay(LocalDate.of(2016, 2, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 3, 14),
-            item.getNearestSeasonDay(LocalDate.of(2016, 3, 14))
-        )
+        item.getNearestSeasonDay(LocalDate.of(2016, 2, 14)) `should equal`
+                LocalDate.of(2016, 2, 15)
+        item.getNearestSeasonDay(LocalDate.of(2016, 3, 14)) `should equal`
+                LocalDate.of(2016, 3, 14)
 
         //check items with two seasons
         item = FoodItem(
@@ -53,33 +43,19 @@ class FoodItemTest {
             startDay2 = MonthDay.of(10, 1),
             endDay2 = MonthDay.of(1, 10)
         )
-        assertEquals(
-            LocalDate.of(2016, 2, 15),
-            item.getNearestSeasonDay(LocalDate.of(2016, 2, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 3, 14),
-            item.getNearestSeasonDay(LocalDate.of(2016, 3, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 10, 1),
-            item.getNearestSeasonDay(LocalDate.of(2016, 6, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 10, 1),
-            item.getNearestSeasonDay(LocalDate.of(2016, 10, 1))
-        )
-        assertEquals(
-            LocalDate.of(2016, 10, 19),
-            item.getNearestSeasonDay(LocalDate.of(2016, 10, 19))
-        )
+        item.getNearestSeasonDay(LocalDate.of(2016, 2, 14)) `should equal`
+                LocalDate.of(2016, 2, 15)
+        item.getNearestSeasonDay(LocalDate.of(2016, 3, 14)) `should equal`
+                LocalDate.of(2016, 3, 14)
+        item.getNearestSeasonDay(LocalDate.of(2016, 6, 14)) `should equal`
+                LocalDate.of(2016, 10, 1)
+        item.getNearestSeasonDay(LocalDate.of(2016, 10, 1)) `should equal`
+                LocalDate.of(2016, 10, 1)
+        item.getNearestSeasonDay(LocalDate.of(2016, 10, 19)) `should equal`
+                LocalDate.of(2016, 10, 19)
+        item.getNearestSeasonDay(LocalDate.of(2016, 9, 1)) `should equal`
+                LocalDate.of(2016, 10, 1)
 
-        assertEquals(
-            LocalDate.of(2016, 10, 1),
-            item.getNearestSeasonDay(LocalDate.of(2016, 9, 1))
-        )
-
-        // TODO Use kluent
         item = FoodItem(
             true,
             "ROSZPONKA",
@@ -88,22 +64,18 @@ class FoodItemTest {
             startDay1 = MonthDay.of(12, 15),
             endDay1 = MonthDay.of(4, 30)
         )
-        assertEquals(
-            LocalDate.of(2016, 12, 15),
-            item.getNearestSeasonDay(LocalDate.of(2016, 7, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 3, 10),
-            item.getNearestSeasonDay(LocalDate.of(2016, 3, 10))
-        )
+        item.getNearestSeasonDay(LocalDate.of(2016, 7, 14)) `should equal`
+                LocalDate.of(2016, 12, 15)
+        item.getNearestSeasonDay(LocalDate.of(2016, 3, 10)) `should equal`
+                LocalDate.of(2016, 3, 10)
     }
 
     @Test
     fun testGetNearestSeasonStart() {
         // check all year items
         var item = FoodItem(true, "WHATEVER", "whatever", "image")
-        assertNull(item.getNearestSeasonStart(LocalDate.of(2016, 2, 14)))
-        assertNull(item.getNearestSeasonStart(LocalDate.of(2016, 3, 14)))
+        item.getNearestSeasonStart(LocalDate.of(2016, 2, 14)) `should be` null
+        item.getNearestSeasonStart(LocalDate.of(2016, 3, 14)) `should be` null
 
         // check items with one season
         item = FoodItem(
@@ -114,14 +86,10 @@ class FoodItemTest {
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30)
         )
-        assertEquals(
-            LocalDate.of(2016, 2, 15),
-            item.getNearestSeasonStart(LocalDate.of(2016, 2, 14))
-        )
-        assertEquals(
-            LocalDate.of(2017, 2, 15),
-            item.getNearestSeasonStart(LocalDate.of(2016, 3, 14))
-        )
+        item.getNearestSeasonStart(LocalDate.of(2016, 2, 14)) `should equal`
+                LocalDate.of(2016, 2, 15)
+        item.getNearestSeasonStart(LocalDate.of(2016, 3, 14)) `should equal`
+                LocalDate.of(2017, 2, 15)
 
         //check items with two seasons
         item = FoodItem(
@@ -134,34 +102,22 @@ class FoodItemTest {
             startDay2 = MonthDay.of(10, 1),
             endDay2 = MonthDay.of(12, 31)
         )
-        assertEquals(
-            LocalDate.of(2016, 2, 15),
-            item.getNearestSeasonStart(LocalDate.of(2016, 2, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 10, 1),
-            item.getNearestSeasonStart(LocalDate.of(2016, 3, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 10, 1),
-            item.getNearestSeasonStart(LocalDate.of(2016, 9, 13))
-        )
+        item.getNearestSeasonStart(LocalDate.of(2016, 2, 14)) `should equal`
+                LocalDate.of(2016, 2, 15)
+        item.getNearestSeasonStart(LocalDate.of(2016, 3, 14)) `should equal`
+                LocalDate.of(2016, 10, 1)
+        item.getNearestSeasonStart(LocalDate.of(2016, 9, 13)) `should equal`
+                LocalDate.of(2016, 10, 1)
 
         // check days equal as compare days
-        assertEquals(
-            LocalDate.of(2016, 10, 1),
-            item.getNearestSeasonStart(LocalDate.of(2016, 10, 1))
-        )
-        assertEquals(
-            LocalDate.of(2016, 2, 15),
-            item.getNearestSeasonStart(LocalDate.of(2016, 2, 15))
-        )
+        item.getNearestSeasonStart(LocalDate.of(2016, 10, 1)) `should equal`
+                LocalDate.of(2016, 10, 1)
+        item.getNearestSeasonStart(LocalDate.of(2016, 2, 15)) `should equal`
+                LocalDate.of(2016, 2, 15)
 
         //check when date is after second season start
-        assertEquals(
-            LocalDate.of(2017, 2, 15),
-            item.getNearestSeasonStart(LocalDate.of(2016, 10, 15))
-        )
+        item.getNearestSeasonStart(LocalDate.of(2016, 10, 15)) `should equal`
+                LocalDate.of(2017, 2, 15)
 
         // check when end date is before start date
         item = FoodItem(
@@ -172,22 +128,18 @@ class FoodItemTest {
             startDay1 = MonthDay.of(10, 1),
             endDay1 = MonthDay.of(3, 15)
         )
-        assertEquals(
-            LocalDate.of(2016, 10, 1),
-            item.getNearestSeasonStart(LocalDate.of(2016, 10, 1))
-        )
-        assertEquals(
-            LocalDate.of(2017, 10, 1),
-            item.getNearestSeasonStart(LocalDate.of(2016, 10, 10))
-        )
+        item.getNearestSeasonStart(LocalDate.of(2016, 10, 1)) `should equal`
+                LocalDate.of(2016, 10, 1)
+        item.getNearestSeasonStart(LocalDate.of(2016, 10, 10)) `should equal`
+                LocalDate.of(2017, 10, 1)
     }
 
     @Test
     fun testGetNearestSeasonEnd() {
         // check all year items
         var item = FoodItem(true, "WHATEVER", "whatever", "image")
-        assertNull(item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14)))
-        assertNull(item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14)))
+        item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14)) `should be` null
+        item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14)) `should be` null
 
         // check items with one season
         item = FoodItem(
@@ -198,14 +150,10 @@ class FoodItemTest {
             startDay1 = MonthDay.of(2, 15),
             endDay1 = MonthDay.of(4, 30)
         )
-        assertEquals(
-            LocalDate.of(2016, 4, 30),
-            item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14))
-        )
-        assertEquals(
-            LocalDate.of(2017, 4, 30),
-            item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14))
-        )
+        item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14)) `should equal`
+                LocalDate.of(2016, 4, 30)
+        item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14)) `should equal`
+                LocalDate.of(2017, 4, 30)
 
         //check items with two seasons
         item = FoodItem(
@@ -218,32 +166,20 @@ class FoodItemTest {
             startDay2 = MonthDay.of(10, 1),
             endDay2 = MonthDay.of(12, 10)
         )
-        assertEquals(
-            LocalDate.of(2016, 4, 30),
-            item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 12, 10),
-            item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14))
-        )
-        assertEquals(
-            LocalDate.of(2016, 12, 10),
-            item.getNearestSeasonEnd(LocalDate.of(2016, 9, 13))
-        )
-        assertEquals(
-            LocalDate.of(2017, 4, 30),
-            item.getNearestSeasonEnd(LocalDate.of(2016, 12, 13))
-        )
+        item.getNearestSeasonEnd(LocalDate.of(2016, 2, 14)) `should equal`
+                LocalDate.of(2016, 4, 30)
+        item.getNearestSeasonEnd(LocalDate.of(2016, 5, 14)) `should equal`
+                LocalDate.of(2016, 12, 10)
+        item.getNearestSeasonEnd(LocalDate.of(2016, 9, 13)) `should equal`
+                LocalDate.of(2016, 12, 10)
+        item.getNearestSeasonEnd(LocalDate.of(2016, 12, 13)) `should equal`
+                LocalDate.of(2017, 4, 30)
 
         // check days equal as compare days
-        assertEquals(
-            LocalDate.of(2016, 12, 10),
-            item.getNearestSeasonEnd(LocalDate.of(2016, 12, 10))
-        )
-        assertEquals(
-            LocalDate.of(2016, 4, 30),
-            item.getNearestSeasonEnd(LocalDate.of(2016, 4, 30))
-        )
+        item.getNearestSeasonEnd(LocalDate.of(2016, 12, 10)) `should equal`
+                LocalDate.of(2016, 12, 10)
+        item.getNearestSeasonEnd(LocalDate.of(2016, 4, 30)) `should equal`
+                LocalDate.of(2016, 4, 30)
     }
 
     @Test
@@ -255,7 +191,7 @@ class FoodItemTest {
         val hasProximates = foodItem.hasProximates()
 
         // then
-        assertTrue(hasProximates)
+        hasProximates `should be` true
     }
 
     @Test
@@ -267,7 +203,7 @@ class FoodItemTest {
         val hasProximates = foodItem.hasProximates()
 
         // then
-        assertFalse(hasProximates)
+        hasProximates `should be` false
     }
 
     @Test
@@ -279,7 +215,7 @@ class FoodItemTest {
         val hasMinerals = foodItem.hasMinerals()
 
         // then
-        assertTrue(hasMinerals)
+        hasMinerals `should be` true
     }
 
     @Test
@@ -291,7 +227,7 @@ class FoodItemTest {
         val hasMinerals = foodItem.hasMinerals()
 
         // then
-        assertFalse(hasMinerals)
+        hasMinerals `should be` false
     }
 
     @Test
@@ -303,7 +239,7 @@ class FoodItemTest {
         val hasVitamins = foodItem.hasVitamins()
 
         // then
-        assertTrue(hasVitamins)
+        hasVitamins `should be` true
     }
 
     @Test
@@ -315,6 +251,6 @@ class FoodItemTest {
         val hasVitamins = foodItem.hasVitamins()
 
         // then
-        assertFalse(hasVitamins)
+        hasVitamins `should be` false
     }
 }
