@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.SharedPreferences
-import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.data.Database
 import com.karol.sezonnazdrowie.data.FoodItem
 import com.nhaarman.mockitokotlin2.any
@@ -317,28 +316,18 @@ class SnzAlarmManagerTest {
     ) {
         whenever(sharedPreferences.getString(eq("pref_notification_hour"), any()))
             .doReturn(notificationTime)
-        whenever(sharedPreferences.getBoolean(any(), any())).doReturn(true)
+        whenever(sharedPreferences.getBoolean(any(), any()))
+            .doReturn(true)
         whenever(sharedPreferences.getStringSet("pref_season_start", null))
             .doReturn(seasonStartSet)
-        whenever(context.getString(R.string.season_starts_soon))
-            .doReturn("Wkrótce zacznie się sezon na")
-        whenever(context.getString(R.string.season_starts_week))
-            .doReturn("Za tydzień zacznie się sezon na")
-        whenever(context.getString(R.string.season_starts_month))
-            .doReturn("Za miesiąc zacznie się sezon na")
         whenever(sharedPreferences.getStringSet("pref_season_end", null))
             .doReturn(seasonEndSet)
-        whenever(context.getString(R.string.at_the_end_day))
-            .doReturn("w dniu końca")
-        whenever(context.getString(R.string.season_ends_soon))
-            .doReturn("Wkrótce skończy się sezon na")
-        whenever(context.getString(R.string.season_ends_week))
-            .doReturn("Za tydzień skończy się sezon na")
         val sharedPreferencesEditor: SharedPreferences.Editor = mock()
         whenever(sharedPreferencesEditor.putInt(eq("maxReqCode"), any()))
             .doReturn(sharedPreferencesEditor)
         whenever(sharedPreferencesEditor.putBoolean(eq("pref_alarms_set"), any()))
             .doReturn(sharedPreferencesEditor)
-        whenever(sharedPreferences.edit()).doReturn(sharedPreferencesEditor)
+        whenever(sharedPreferences.edit())
+            .doReturn(sharedPreferencesEditor)
     }
 }
