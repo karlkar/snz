@@ -55,7 +55,7 @@ class SnzDatabase: Database {
     }
 
     val incomingItems: List<FoodItem>
-        get() {
+        get() { // TODO: Bug here...
             val today = LocalDate.now()
             incomingCache[today]?.let { return it }
 

@@ -3,7 +3,6 @@ package com.karol.sezonnazdrowie.model
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.SharedPreferences
 import com.karol.sezonnazdrowie.data.Database
 import com.karol.sezonnazdrowie.data.FoodItem
 import com.nhaarman.mockitokotlin2.any
@@ -17,6 +16,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Test
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
 import org.threeten.bp.MonthDay
 import org.threeten.bp.ZoneOffset
 
@@ -27,27 +27,21 @@ class SnzAlarmManagerTest {
         on { getCurrentDay() } doReturn LocalDate.of(2019, 10, 29)
         on { getZoneOffset() } doReturn ZoneOffset.ofHours(1)
     }
-    private val sharedPreferences: SharedPreferences = mock()
+    private val persistentStorage: PersistentStorage = mock()
     private val alarmManager: AlarmManager = mock()
     private val database: Database = mock()
 
     @Test
     fun `should not set any alarm when database is empty`() {
         // given
-        whenever(sharedPreferences.getString(eq("pref_notification_hour"), any()))
-            .doReturn("20:00")
-        val sharedPreferencesEditor: SharedPreferences.Editor = mock()
-        whenever(sharedPreferencesEditor.putInt(eq("maxReqCode"), any()))
-            .doReturn(sharedPreferencesEditor)
-        whenever(sharedPreferencesEditor.putBoolean(eq("pref_alarms_set"), any()))
-            .doReturn(sharedPreferencesEditor)
-        whenever(sharedPreferences.edit()).doReturn(sharedPreferencesEditor)
+        whenever(persistentStorage.notificationTime)
+            .doReturn(LocalTime.of(20, 0))
 
         // when
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -77,7 +71,7 @@ class SnzAlarmManagerTest {
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -111,7 +105,7 @@ class SnzAlarmManagerTest {
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -145,7 +139,7 @@ class SnzAlarmManagerTest {
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -181,7 +175,7 @@ class SnzAlarmManagerTest {
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -217,7 +211,7 @@ class SnzAlarmManagerTest {
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -264,7 +258,7 @@ class SnzAlarmManagerTest {
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -293,14 +287,14 @@ class SnzAlarmManagerTest {
             )
         )
         setupMocks()
-        whenever(sharedPreferences.getInt(eq("maxReqCode"), anyOrNull()))
+        whenever(persistentStorage.lastSetAlarmId)
             .doReturn(10)
 
         // when
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -333,7 +327,7 @@ class SnzAlarmManagerTest {
         SnzAlarmManager.setAlarms(
             context,
             currentDayProvider,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database
         )
@@ -347,24 +341,17 @@ class SnzAlarmManagerTest {
     }
 
     private fun setupMocks(
-        notificationTime: String = "20:00",
+        notificationTime: LocalTime = LocalTime.of(20, 0),
         seasonStartSet: Set<String> = setOf("DAY"),
         seasonEndSet: Set<String> = setOf("DAY")
     ) {
-        whenever(sharedPreferences.getString(eq("pref_notification_hour"), any()))
+        whenever(persistentStorage.notificationTime)
             .doReturn(notificationTime)
-        whenever(sharedPreferences.getBoolean(any(), any()))
+        whenever(persistentStorage.isFoodItemNotificationEnabled(any()))
             .doReturn(true)
-        whenever(sharedPreferences.getStringSet("pref_season_start", null))
+        whenever(persistentStorage.seasonStartPeriods)
             .doReturn(seasonStartSet)
-        whenever(sharedPreferences.getStringSet("pref_season_end", null))
+        whenever(persistentStorage.seasonEndPeriods)
             .doReturn(seasonEndSet)
-        val sharedPreferencesEditor: SharedPreferences.Editor = mock()
-        whenever(sharedPreferencesEditor.putInt(eq("maxReqCode"), any()))
-            .doReturn(sharedPreferencesEditor)
-        whenever(sharedPreferencesEditor.putBoolean(eq("pref_alarms_set"), any()))
-            .doReturn(sharedPreferencesEditor)
-        whenever(sharedPreferences.edit())
-            .doReturn(sharedPreferencesEditor)
     }
 }

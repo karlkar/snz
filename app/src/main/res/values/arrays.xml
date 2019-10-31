@@ -16,12 +16,23 @@
     </string-array>
 
     <string-array name="noti_dates_start">
+        <item>@string/at_the_start_day</item>
+        <item>@string/week_before</item>
+        <item>@string/month_before</item>
+    </string-array>
+
+    <string-array name="noti_dates_start_values">
         <item>DAY</item>
         <item>WEEK</item>
         <item>MONTH</item>
     </string-array>
 
     <string-array name="noti_dates_end">
+        <item>@string/at_the_end_day</item>
+        <item>@string/week_before</item>
+    </string-array>
+
+    <string-array name="noti_dates_end_values">
         <item>DAY</item>
         <item>WEEK</item>
     </string-array>

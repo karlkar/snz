@@ -142,7 +142,7 @@ data class FoodItem(
         }
     }
 
-    private fun isFullYear() = startDay1 == null || endDay1 == null
+    fun isFullYear() = startDay1 == null || endDay1 == null
 
     companion object {
 

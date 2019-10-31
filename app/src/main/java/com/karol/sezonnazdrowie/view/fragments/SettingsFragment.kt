@@ -14,6 +14,8 @@ import com.karol.sezonnazdrowie.model.SnzAlarmManager
 import com.karol.sezonnazdrowie.view.MainActivity
 import com.karol.sezonnazdrowie.view.controls.TimePreference
 import com.karol.sezonnazdrowie.view.controls.TimePreferenceDialogFragmentCompat
+import org.threeten.bp.LocalTime
+import org.threeten.bp.format.DateTimeFormatter
 
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
@@ -29,9 +31,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.prefs, rootKey)
 
-        setPreferenceSummary(preferenceManager.sharedPreferences, "pref_season_start")
-        setPreferenceSummary(preferenceManager.sharedPreferences, "pref_season_end")
-        setTimePreferenceSummary(preferenceManager.sharedPreferences, "pref_notification_hour")
+        setPreferenceSummary(preferenceManager.sharedPreferences, "pref_season_start", true)
+        setPreferenceSummary(preferenceManager.sharedPreferences, "pref_season_end", false)
+        setTimePreferenceSummary(preferenceManager.sharedPreferences, "pref_notification_time")
 
         findPreference<Preference>("pref_notification_fruit")?.let {
             it.onPreferenceClickListener = this
@@ -63,27 +65,47 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         Log.d(TAG, "onSharedPreferenceChanged: key = $key")
         when (key) {
-            "pref_season_start", "pref_season_end" -> setPreferenceSummary(sharedPreferences, key)
-            "pref_notification_hour" -> setTimePreferenceSummary(sharedPreferences, key)
+            "pref_season_start" -> setPreferenceSummary(sharedPreferences, key, true)
+            "pref_season_end" -> setPreferenceSummary(sharedPreferences, key, false)
+            "pref_notification_time" -> setTimePreferenceSummary(sharedPreferences, key)
         }
 
-        if (key != "maxReqCode") {
+        if (key in listOf("pref_season_start", "pref_season_end", "pref_notification_time")) {
             SnzAlarmManager.startSetAlarmsTask(activity!!, mainViewModel.database)
         }
     }
 
-    private fun setPreferenceSummary(sharedPreferences: SharedPreferences, key: String) {
-        val stringSet = sharedPreferences.getStringSet(key, null)
-        if (stringSet.isNullOrEmpty()) {
-            findPreference<Preference>(key)?.setSummary(R.string.no_notification)
-        } else {
-            val summary = stringSet.joinToString()
-            findPreference<Preference>(key)?.summary = summary
-        }
+    private fun setPreferenceSummary(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        seasonStart: Boolean
+    ) {
+        val summary = sharedPreferences.getStringSet(key, null)
+            ?.map { SnzAlarmManager.PreNotiTimePeriod.fromPrefValue(it) }
+            ?.sortedWith(Comparator { lhs, _ ->
+                if (lhs == SnzAlarmManager.PreNotiTimePeriod.AtDay) -1 else if (lhs == SnzAlarmManager.PreNotiTimePeriod.WeekBefore) -1 else 1
+            })
+            ?.map {
+                when (it) {
+                    SnzAlarmManager.PreNotiTimePeriod.AtDay -> {
+                        if (seasonStart) R.string.at_the_start_day else R.string.at_the_end_day
+                    }
+                    SnzAlarmManager.PreNotiTimePeriod.WeekBefore -> R.string.week_before
+                    SnzAlarmManager.PreNotiTimePeriod.MonthBefore -> R.string.month_before
+                }
+            }
+            ?.map { context?.getString(it) }
+            ?.joinToString()
+            ?.takeIf {
+                it.isNotEmpty()
+            } ?: context?.getString(R.string.no_notification)
+        findPreference<Preference>(key)?.summary = summary
     }
 
     private fun setTimePreferenceSummary(sharedPreferences: SharedPreferences, key: String) {
-        val hourStr = sharedPreferences.getString(key, null) ?: "20:00"
+        val timeNano = sharedPreferences.getLong(key, 72000000000000L)
+        val hourStr = LocalTime.ofNanoOfDay(timeNano)
+            .format(DateTimeFormatter.ofPattern("HH:mm"))
         findPreference<Preference>(key)?.let { it.summary = hourStr }
     }
 
@@ -112,14 +134,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
             return
         }
 
-        TimePreferenceDialogFragmentCompat().apply {
-            val bundle = Bundle(1).apply {
-                putString("key", preference.key) // TODO: Export constants
-            }
-            arguments = bundle
-            setTargetFragment(this@SettingsFragment, 0)
-            show(fragmentManager, "DIALOG")
-        }
+        TimePreferenceDialogFragmentCompat.newInstance(preference.key, this)
+            .show(fragmentManager, "DIALOG")
     }
 
     companion object {

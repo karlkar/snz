@@ -14,9 +14,9 @@ class SnzApplication : MultiDexApplication() {
         super.onCreate()
         AndroidThreeTen.init(this)
 
-        val alarmsSet = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                .getBoolean("pref_alarms_set", false)
-        if (!alarmsSet) {
+        val lastAlarmSetTime = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                .getLong("pref_alarms_set", 0L)
+        if (lastAlarmSetTime == 0L) {
             SnzAlarmManager.startSetAlarmsTask(applicationContext, database)
         }
     }

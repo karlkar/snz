@@ -4,17 +4,15 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.annotation.StringRes
-import androidx.preference.PreferenceManager
 import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.data.Database
 import com.karol.sezonnazdrowie.data.FoodItem
 import com.karol.sezonnazdrowie.data.SnzDatabase
-import com.karol.sezonnazdrowie.view.controls.TimePreference
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 import org.threeten.bp.MonthDay
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.ZoneOffset
@@ -25,11 +23,11 @@ object SnzAlarmManager {
 
     fun startSetAlarmsTask(ctx: Context, database: SnzDatabase) {
         val currentDayProvider = TimeDataProviderImpl()
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val persistentStorage: PersistentStorage = SharedPreferencesPersistentStorage(ctx)
         val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         Executors.newSingleThreadExecutor().submit {
-            setAlarms(ctx, currentDayProvider, sharedPreferences, alarmManager, database)
+            setAlarms(ctx, currentDayProvider, persistentStorage, alarmManager, database)
         }
     }
 
@@ -60,29 +58,19 @@ object SnzAlarmManager {
     }
 
     private class StartPrecedingDaysObtainer(
-        private val sharedPreferences: SharedPreferences
+        private val persistentStorage: PersistentStorage
     ) : PrecedingPeriodObtainer {
 
-        override fun getPrecedingPeriod(): List<PreNotiTimePeriod> {
-            val seasonStart = sharedPreferences.getStringSet(
-                "pref_season_start",
-                null
-            ) ?: setOf(PreNotiTimePeriod.MonthBefore.prefValue)
-            return seasonStart.map { PreNotiTimePeriod.fromPrefValue(it) }
-        }
+        override fun getPrecedingPeriod(): List<PreNotiTimePeriod> =
+            persistentStorage.seasonStartPeriods.map { PreNotiTimePeriod.fromPrefValue(it) }
     }
 
     private class EndPrecedingDaysObtainer(
-        private val sharedPreferences: SharedPreferences
+        private val persistentStorage: PersistentStorage
     ) : PrecedingPeriodObtainer {
 
-        override fun getPrecedingPeriod(): List<PreNotiTimePeriod> {
-            val seasonStart = sharedPreferences.getStringSet(
-                "pref_season_end",
-                null
-            ) ?: setOf(PreNotiTimePeriod.MonthBefore.prefValue)
-            return seasonStart.map { PreNotiTimePeriod.fromPrefValue(it) }
-        }
+        override fun getPrecedingPeriod(): List<PreNotiTimePeriod> =
+            persistentStorage.seasonEndPeriods.map { PreNotiTimePeriod.fromPrefValue(it) }
     }
 
     private interface PrecedingPeriodMapper {
@@ -122,7 +110,7 @@ object SnzAlarmManager {
         isStart: Boolean,
         initialAlarmId: Int,
         ctx: Context,
-        sharedPreferences: SharedPreferences,
+        persistentStorage: PersistentStorage,
         alarmManager: AlarmManager
     ): Int {
         val today = timeDataProvider.getCurrentDay()
@@ -130,16 +118,14 @@ object SnzAlarmManager {
 
         var alarmId = initialAlarmId
 
-        val notiTime = sharedPreferences.getString("pref_notification_hour", null) ?: "20:00"
-        val notiHour = TimePreference.getHour(notiTime)
-        val notiMinute = TimePreference.getMinute(notiTime)
+        val notiTime = persistentStorage.notificationTime
 
         val precedingPeriodList = precedingPeriodObtainer.getPrecedingPeriod()
 
         map.entries.forEach {
             val notificationText = it.value
                 .filter { foodItem ->
-                    sharedPreferences.getBoolean("pref_noti_${foodItem.name}", true)
+                    persistentStorage.isFoodItemNotificationEnabled(foodItem)
                 }.joinToString { foodItem -> foodItem.conjugatedName }
 
             if (notificationText.isNotEmpty()) {
@@ -162,8 +148,7 @@ object SnzAlarmManager {
                         precedingPeriod,
                         it.key,
                         today,
-                        notiHour,
-                        notiMinute
+                        notiTime
                     )
 
                     alarmManager.set(
@@ -203,8 +188,7 @@ object SnzAlarmManager {
         preNotiTimePeriod: PreNotiTimePeriod,
         monthDay: MonthDay,
         today: LocalDate,
-        notiHour: Int,
-        notiMinute: Int
+        notiTime: LocalTime
     ): LocalDateTime {
         return when (preNotiTimePeriod) {
             PreNotiTimePeriod.AtDay ->
@@ -219,19 +203,19 @@ object SnzAlarmManager {
             } else {
                 obtainedDate
             }
-        }.atTime(notiHour, notiMinute)
+        }.atTime(notiTime)
     }
 
     internal fun setAlarms(
         ctx: Context,
         currentDayProvider: TimeDataProvider,
-        sharedPreferences: SharedPreferences,
+        persistentStorage: PersistentStorage,
         alarmManager: AlarmManager,
         database: Database
     ) {
         val lastCreatedAlarmId = createAlarms(
             ctx,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             database,
             currentDayProvider
@@ -239,20 +223,18 @@ object SnzAlarmManager {
 
         clearPreviousAlarms(
             ctx,
-            sharedPreferences,
+            persistentStorage,
             alarmManager,
             lastCreatedAlarmId
         )
 
-        sharedPreferences.edit()
-            .putInt("maxReqCode", lastCreatedAlarmId)
-            .putBoolean("pref_alarms_set", true)
-            .apply()
+        persistentStorage.lastSetAlarmId = lastCreatedAlarmId
+        persistentStorage.lastAlarmSetTime = currentDayProvider.getCurrentDay().toEpochDay()
     }
 
     private fun createAlarms(
         ctx: Context,
-        sharedPreferences: SharedPreferences,
+        persistentStorage: PersistentStorage,
         alarmManager: AlarmManager,
         database: Database,
         currentDayProvider: TimeDataProvider
@@ -263,24 +245,24 @@ object SnzAlarmManager {
         var reqCode = createAlarmsFor(
             currentDayProvider,
             startMap,
-            StartPrecedingDaysObtainer(sharedPreferences),
+            StartPrecedingDaysObtainer(persistentStorage),
             StartPrecedingDaysMapper(),
             true,
             1,
             ctx,
-            sharedPreferences,
+            persistentStorage,
             alarmManager
         )
 
         reqCode = createAlarmsFor(
             currentDayProvider,
             endMap,
-            EndPrecedingDaysObtainer(sharedPreferences),
+            EndPrecedingDaysObtainer(persistentStorage),
             EndPrecedingDaysMapper(),
             false,
             reqCode,
             ctx,
-            sharedPreferences,
+            persistentStorage,
             alarmManager
         )
         return reqCode - 1
@@ -288,11 +270,11 @@ object SnzAlarmManager {
 
     private fun clearPreviousAlarms(
         ctx: Context,
-        sharedPreferences: SharedPreferences,
+        persistentStorage: PersistentStorage,
         alarmManager: AlarmManager,
         lastCreatedAlarmId: Int
     ) {
-        val prevMaxReqCode = sharedPreferences.getInt("maxReqCode", 0)
+        val prevMaxReqCode = persistentStorage.lastSetAlarmId
         Log.d(TAG, "setAlarms: Ending with $lastCreatedAlarmId, previous ending $prevMaxReqCode")
 
         val intent = Intent(ctx, Receiver::class.java)

@@ -9,11 +9,14 @@ import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.model.MainViewModel
 import com.karol.sezonnazdrowie.view.MainActivity
 import com.karol.sezonnazdrowie.view.MainActivity.Companion.INTENT_WHAT
+import java.util.concurrent.atomic.AtomicBoolean
 
 class SettingsItemsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var mainViewModel: MainViewModel
+
+    private val listenerRegistered = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -23,11 +26,18 @@ class SettingsItemsFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.prefs_list, rootKey)
 
+        mainViewModel.isSettingsItemChanged = false
+        if (listenerRegistered.compareAndSet(false, true)) {
+            preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        }
+
         val screen = this.preferenceScreen
         val list = when (val intentWhat = arguments?.getString(INTENT_WHAT)
             ?: throw IllegalArgumentException("Missing arguments!")) {
-            MainActivity.INTENT_WHAT_FRUITS -> mainViewModel.database.allFruits
-            MainActivity.INTENT_WHAT_VEGETABLES -> mainViewModel.database.allVegetables
+            MainActivity.INTENT_WHAT_FRUITS ->
+                mainViewModel.database.allFruits.filter { !it.isFullYear() }
+            MainActivity.INTENT_WHAT_VEGETABLES ->
+                mainViewModel.database.allVegetables.filter { !it.isFullYear() }
             else -> throw IllegalArgumentException("Unknown type of page $intentWhat")
         }
 
@@ -44,17 +54,19 @@ class SettingsItemsFragment : PreferenceFragmentCompat(),
                         screen.addPreference(it)
                     }
             }
-
-        mainViewModel.isSettingsItemChanged = false
     }
 
     override fun onResume() {
         super.onResume()
-        preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        if (listenerRegistered.compareAndSet(false, true)) {
+            preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        }
     }
 
     override fun onPause() {
-        preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        if (listenerRegistered.compareAndSet(true, false)) {
+            preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        }
         super.onPause()
     }
 

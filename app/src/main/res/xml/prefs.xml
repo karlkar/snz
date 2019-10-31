@@ -19,15 +19,15 @@
 
         <com.karol.sezonnazdrowie.view.controls.TimePreference
             style="@style/AppPreference.DialogPreference"
-            android:defaultValue="12:00"
-            android:key="pref_notification_hour"
+            android:defaultValue="72000000000000L"
+            android:key="pref_notification_time"
             android:title="@string/notification_hour"
             app:allowDividerAbove="false" />
 
         <MultiSelectListPreference
             android:defaultValue="@array/noti_dates_default"
             android:entries="@array/noti_dates_start"
-            android:entryValues="@array/noti_dates_start"
+            android:entryValues="@array/noti_dates_start_values"
             android:key="pref_season_start"
             android:title="@string/notification_season_start"
             app:iconSpaceReserved="false" />
@@ -35,7 +35,7 @@
         <MultiSelectListPreference
             android:defaultValue="@array/noti_dates_default"
             android:entries="@array/noti_dates_end"
-            android:entryValues="@array/noti_dates_end"
+            android:entryValues="@array/noti_dates_end_values"
             android:key="pref_season_end"
             android:title="@string/notification_season_end"
             app:iconSpaceReserved="false" />
