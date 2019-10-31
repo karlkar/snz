@@ -2,7 +2,7 @@ package com.karol.sezonnazdrowie.data
 
 import org.threeten.bp.LocalDate
 import org.threeten.bp.MonthDay
-import org.threeten.bp.Period
+import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
 class SnzDatabase: Database {
@@ -26,7 +26,7 @@ class SnzDatabase: Database {
         }
 
     private fun isDayDiffSmallerThanLimit(seasonStart: MonthDay, today: LocalDate): Boolean {
-        val daysDiff = Period.between(seasonStart.atYear(today.year), today).days
+        val daysDiff = ChronoUnit.DAYS.between(seasonStart.atYear(today.year), today)
         return daysDiff in 0 until INCOMING_SEASON_DAYS_DIFF
     }
 
@@ -55,7 +55,7 @@ class SnzDatabase: Database {
     }
 
     val incomingItems: List<FoodItem>
-        get() { // TODO: Bug here...
+        get() {
             val today = LocalDate.now()
             incomingCache[today]?.let { return it }
 

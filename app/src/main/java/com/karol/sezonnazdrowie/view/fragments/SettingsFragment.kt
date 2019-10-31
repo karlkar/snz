@@ -81,9 +81,14 @@ class SettingsFragment : PreferenceFragmentCompat(),
         seasonStart: Boolean
     ) {
         val summary = sharedPreferences.getStringSet(key, null)
+            ?.asSequence()
             ?.map { SnzAlarmManager.PreNotiTimePeriod.fromPrefValue(it) }
             ?.sortedWith(Comparator { lhs, _ ->
-                if (lhs == SnzAlarmManager.PreNotiTimePeriod.AtDay) -1 else if (lhs == SnzAlarmManager.PreNotiTimePeriod.WeekBefore) -1 else 1
+                if (lhs == SnzAlarmManager.PreNotiTimePeriod.AtDay) {
+                    -1
+                } else {
+                    if (lhs == SnzAlarmManager.PreNotiTimePeriod.WeekBefore) -1 else 1
+                }
             })
             ?.map {
                 when (it) {
@@ -111,11 +116,11 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onPreferenceClick(preference: Preference): Boolean {
         val bundle = Bundle().apply {
-            if (preference.key == "pref_notification_fruit") {
-                putString(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_FRUITS)
-            } else if (preference.key == "pref_notification_vegetable") {
-                putString(MainActivity.INTENT_WHAT, MainActivity.INTENT_WHAT_VEGETABLES)
-            }
+            when (preference.key) {
+                "pref_notification_fruit" -> MainActivity.INTENT_WHAT_FRUITS
+                "pref_notification_vegetable" -> MainActivity.INTENT_WHAT_VEGETABLES
+                else -> return false
+            }.let { putString(MainActivity.INTENT_WHAT, it) }
         }
 
         Navigation
