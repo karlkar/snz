@@ -10,12 +10,19 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.model.MainViewModel
+import com.karol.sezonnazdrowie.model.PREF_NOTIFICATION_FRUIT
+import com.karol.sezonnazdrowie.model.PREF_NOTIFICATION_TIME
+import com.karol.sezonnazdrowie.model.PREF_NOTIFICATION_VEGETABLE
+import com.karol.sezonnazdrowie.model.PREF_SEASON_END
+import com.karol.sezonnazdrowie.model.PREF_SEASON_START
 import com.karol.sezonnazdrowie.model.SnzAlarmManager
 import com.karol.sezonnazdrowie.view.MainActivity
 import com.karol.sezonnazdrowie.view.controls.TimePreference
 import com.karol.sezonnazdrowie.view.controls.TimePreferenceDialogFragmentCompat
 import org.threeten.bp.LocalTime
 import org.threeten.bp.format.DateTimeFormatter
+
+private const val DIALOG_TAG = "DIALOG"
 
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
@@ -31,14 +38,14 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.prefs, rootKey)
 
-        setPreferenceSummary(preferenceManager.sharedPreferences, "pref_season_start", true)
-        setPreferenceSummary(preferenceManager.sharedPreferences, "pref_season_end", false)
-        setTimePreferenceSummary(preferenceManager.sharedPreferences, "pref_notification_time")
+        setPreferenceSummary(preferenceManager.sharedPreferences, PREF_SEASON_START, true)
+        setPreferenceSummary(preferenceManager.sharedPreferences, PREF_SEASON_END, false)
+        setTimePreferenceSummary(preferenceManager.sharedPreferences, PREF_NOTIFICATION_TIME)
 
-        findPreference<Preference>("pref_notification_fruit")?.let {
+        findPreference<Preference>(PREF_NOTIFICATION_FRUIT)?.let {
             it.onPreferenceClickListener = this
         }
-        findPreference<Preference>("pref_notification_vegetable")?.let {
+        findPreference<Preference>(PREF_NOTIFICATION_VEGETABLE)?.let {
             it.onPreferenceClickListener = this
         }
     }
@@ -65,12 +72,12 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         Log.d(TAG, "onSharedPreferenceChanged: key = $key")
         when (key) {
-            "pref_season_start" -> setPreferenceSummary(sharedPreferences, key, true)
-            "pref_season_end" -> setPreferenceSummary(sharedPreferences, key, false)
-            "pref_notification_time" -> setTimePreferenceSummary(sharedPreferences, key)
+            PREF_SEASON_START -> setPreferenceSummary(sharedPreferences, key, true)
+            PREF_SEASON_END -> setPreferenceSummary(sharedPreferences, key, false)
+            PREF_NOTIFICATION_TIME -> setTimePreferenceSummary(sharedPreferences, key)
         }
 
-        if (key in listOf("pref_season_start", "pref_season_end", "pref_notification_time")) {
+        if (key in listOf(PREF_SEASON_START, PREF_SEASON_END, PREF_NOTIFICATION_TIME)) {
             SnzAlarmManager.startSetAlarmsTask(activity!!, mainViewModel.database)
         }
     }
@@ -117,8 +124,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onPreferenceClick(preference: Preference): Boolean {
         val bundle = Bundle().apply {
             when (preference.key) {
-                "pref_notification_fruit" -> MainActivity.INTENT_WHAT_FRUITS
-                "pref_notification_vegetable" -> MainActivity.INTENT_WHAT_VEGETABLES
+                PREF_NOTIFICATION_FRUIT -> MainActivity.INTENT_WHAT_FRUITS
+                PREF_NOTIFICATION_VEGETABLE -> MainActivity.INTENT_WHAT_VEGETABLES
                 else -> return false
             }.let { putString(MainActivity.INTENT_WHAT, it) }
         }
@@ -134,13 +141,13 @@ class SettingsFragment : PreferenceFragmentCompat(),
         if (preference !is TimePreference) return super.onDisplayPreferenceDialog(preference)
 
         val fragmentManager = fragmentManager ?: return
-        val dialogFragment = fragmentManager.findFragmentByTag("DIALOG")
+        val dialogFragment = fragmentManager.findFragmentByTag(DIALOG_TAG)
         if (dialogFragment != null) {
             return
         }
 
         TimePreferenceDialogFragmentCompat.newInstance(preference.key, this)
-            .show(fragmentManager, "DIALOG")
+            .show(fragmentManager, DIALOG_TAG)
     }
 
     companion object {

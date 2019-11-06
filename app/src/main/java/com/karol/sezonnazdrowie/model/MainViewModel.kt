@@ -12,7 +12,7 @@ import com.karol.sezonnazdrowie.data.SnzDatabase
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    val database: SnzDatabase = (application as SnzApplication).database // TODO: Should be private
+    val database: SnzDatabase = (application as SnzApplication).database
     private val _actionBarTitle =
         MutableLiveData<String>().apply { postValue(application.getString(R.string.app_name)) }
     var isSettingsItemChanged = false

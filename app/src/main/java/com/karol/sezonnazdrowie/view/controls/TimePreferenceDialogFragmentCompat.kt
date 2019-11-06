@@ -60,7 +60,7 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat(),
     companion object {
         fun newInstance(preferenceKey: String, targetFragment: Fragment): TimePreferenceDialogFragmentCompat {
             val bundle = Bundle(1).apply {
-                putString("key", preferenceKey) // TODO: Export constants
+                putString(ARG_KEY, preferenceKey)
             }
             return TimePreferenceDialogFragmentCompat().apply {
                 arguments = bundle

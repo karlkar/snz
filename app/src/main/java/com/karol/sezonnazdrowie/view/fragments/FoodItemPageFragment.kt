@@ -58,7 +58,7 @@ class FoodItemPageFragment : Fragment(), LayoutContainer {
         )
 
         addToShoppingListButton.setOnClickListener {
-            mainViewModel.shoppingList.addItem(foodItem.name) // TODO: shoppingList should be private
+            mainViewModel.shoppingList.addItem(foodItem.name)
             Toast.makeText(view.context, R.string.added_to_shopping_list, Toast.LENGTH_SHORT).show()
         }
 
