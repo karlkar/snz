@@ -9,7 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.data.FoodItem
@@ -22,12 +22,7 @@ import kotlinx.android.synthetic.main.row_incoming_layout.view.*
 class ListFragment : Fragment(), LayoutContainer {
     override lateinit var containerView: View
 
-    private lateinit var mainViewModel: MainViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-    }
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +36,7 @@ class ListFragment : Fragment(), LayoutContainer {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val what = arguments?.getString(MainActivity.INTENT_WHAT)
+        val what = requireArguments().getString(MainActivity.INTENT_WHAT)
             ?: throw IllegalArgumentException("Missing arguments")
         when (what) {
             MainActivity.INTENT_WHAT_FRUITS -> mainViewModel.setActionBarTitle(getString(R.string.season_fruits))
@@ -57,9 +52,9 @@ class ListFragment : Fragment(), LayoutContainer {
         }
 
         val adapter = if (what == MainActivity.INTENT_WHAT_INCOMING) {
-            IncomingAdapter(activity!!, items)
+            IncomingAdapter(requireActivity(), items)
         } else {
-            ArrayAdapter(activity!!, R.layout.row_layout, R.id.rowText, items)
+            ArrayAdapter(requireActivity(), R.layout.row_layout, R.id.rowText, items)
         }
         listView.adapter = adapter
 

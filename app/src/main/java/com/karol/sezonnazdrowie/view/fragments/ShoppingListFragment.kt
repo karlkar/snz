@@ -15,7 +15,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.model.MainViewModel
 import kotlinx.android.extensions.LayoutContainer
@@ -27,15 +27,13 @@ class ShoppingListFragment : Fragment(), LayoutContainer {
 
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var inputMethodManager: InputMethodManager
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-
+        
         inputMethodManager =
-            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
     override fun onCreateView(
@@ -54,13 +52,13 @@ class ShoppingListFragment : Fragment(), LayoutContainer {
         super.onViewCreated(view, savedInstanceState)
 
         val shoppingList = mainViewModel.shoppingList.items
-        adapter = ArrayAdapter(activity!!, R.layout.row_layout, R.id.rowText, shoppingList)
+        adapter = ArrayAdapter(requireActivity(), R.layout.row_layout, R.id.rowText, shoppingList)
         listView.adapter = adapter
 
         listView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 val selectedItem = parent.getItemAtPosition(position) as String
-                AlertDialog.Builder(activity!!)
+                AlertDialog.Builder(requireActivity())
                     .setTitle(getString(R.string.shopping_list_delete_dialog_title))
                     .setMessage(
                         getString(
@@ -83,7 +81,7 @@ class ShoppingListFragment : Fragment(), LayoutContainer {
             }
 
         addToShoppingListButton.setOnClickListener {
-            val builder = AlertDialog.Builder(activity!!)
+            val builder = AlertDialog.Builder(requireActivity())
                 .setTitle(getString(R.string.shopping_list_add_dialog_title))
                 .setMessage(getString(R.string.shopping_list_add_dialog_message))
             val editText = EditText(activity).apply {

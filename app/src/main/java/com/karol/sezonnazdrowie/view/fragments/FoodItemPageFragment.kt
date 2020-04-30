@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.karol.sezonnazdrowie.R
 import com.karol.sezonnazdrowie.data.FoodItem
 import com.karol.sezonnazdrowie.model.FoodItemPageViewModel
@@ -22,15 +22,8 @@ class FoodItemPageFragment : Fragment(), LayoutContainer {
 
     override lateinit var containerView: View
 
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var foodItemPageViewModel: FoodItemPageViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-        foodItemPageViewModel =
-            ViewModelProviders.of(activity!!).get(FoodItemPageViewModel::class.java)
-    }
+    private val mainViewModel: MainViewModel by viewModels()
+    private val foodItemPageViewModel: FoodItemPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +39,7 @@ class FoodItemPageFragment : Fragment(), LayoutContainer {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val itemName = arguments?.getString(MainActivity.INTENT_ITEM)
+        val itemName = requireArguments().getString(MainActivity.INTENT_ITEM)
             ?: throw IllegalArgumentException("Missing arguments")
 
         val foodItem = mainViewModel.database.getItem(itemName)
