@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -27,13 +27,7 @@ private const val DIALOG_TAG = "DIALOG"
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
-    private lateinit var mainViewModel: MainViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-    }
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.prefs, rootKey)
@@ -59,7 +53,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         super.onResume()
         preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         if (mainViewModel.isSettingsItemChanged) { // TODO move logic to viewmodel
-            SnzAlarmManager.startSetAlarmsTask(activity!!, mainViewModel.database)
+            SnzAlarmManager.startSetAlarmsTask(requireActivity(), mainViewModel.database)
         }
         mainViewModel.isSettingsItemChanged = false
     }
@@ -78,7 +72,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
 
         if (key in listOf(PREF_SEASON_START, PREF_SEASON_END, PREF_NOTIFICATION_TIME)) {
-            SnzAlarmManager.startSetAlarmsTask(activity!!, mainViewModel.database)
+            SnzAlarmManager.startSetAlarmsTask(requireActivity(), mainViewModel.database)
         }
     }
 
@@ -131,7 +125,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
 
         Navigation
-            .findNavController(activity!!, R.id.nav_host_fragment)
+            .findNavController(requireActivity(), R.id.nav_host_fragment)
             .navigate(R.id.settingsItemsFragment2, bundle)
 
         return true
@@ -140,14 +134,13 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onDisplayPreferenceDialog(preference: Preference) {
         if (preference !is TimePreference) return super.onDisplayPreferenceDialog(preference)
 
-        val fragmentManager = fragmentManager ?: return
-        val dialogFragment = fragmentManager.findFragmentByTag(DIALOG_TAG)
+        val dialogFragment = parentFragmentManager.findFragmentByTag(DIALOG_TAG)
         if (dialogFragment != null) {
             return
         }
 
         TimePreferenceDialogFragmentCompat.newInstance(preference.key, this)
-            .show(fragmentManager, DIALOG_TAG)
+            .show(parentFragmentManager, DIALOG_TAG)
     }
 
     companion object {

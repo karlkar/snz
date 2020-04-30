@@ -84,7 +84,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
         val bundle = Bundle().apply {
             putString(MainActivity.INTENT_ITEM, foodItem.name)
         }
-        Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             .navigate(R.id.foodItemPageFragment, bundle)
         true
     }
@@ -93,7 +93,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProviders.of(requireActivity()).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -258,7 +258,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
         override fun decorate(view: DayViewFacade) {
             view.setSelectionDrawable(
                 ContextCompat.getDrawable(
-                    activity!!,
+                    requireActivity(),
                     R.drawable.day_normal_selector
                 )!!
             )
@@ -273,7 +273,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
         override fun decorate(view: DayViewFacade) {
             view.setSelectionDrawable(
                 ContextCompat.getDrawable(
-                    activity!!,
+                    requireActivity(),
                     R.drawable.day_season_selector
                 )!!
             )
@@ -288,7 +288,7 @@ class CalendarFragment : Fragment(), LayoutContainer {
         override fun decorate(view: DayViewFacade) {
             view.setSelectionDrawable(
                 ContextCompat.getDrawable(
-                    activity!!,
+                    requireActivity(),
                     R.drawable.day_outer_season_selector
                 )!!
             )

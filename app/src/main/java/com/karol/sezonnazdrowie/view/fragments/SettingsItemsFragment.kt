@@ -2,7 +2,7 @@ package com.karol.sezonnazdrowie.view.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.karol.sezonnazdrowie.R
@@ -14,14 +14,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 class SettingsItemsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
 
     private val listenerRegistered = AtomicBoolean(false)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.prefs_list, rootKey)
